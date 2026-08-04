@@ -1,0 +1,85 @@
+protocol: h39_public_nc_v1
+date: 2026-08-02
+scope: public_counterfactual_representation_aliasing
+
+primary_claim: >-
+  Numerically indistinguishable graph representations can encode physically
+  distinct assets with divergent counterfactual outcomes, while proof-carrying
+  canonicalization rejects harmful transformations and accepts lawful ones.
+
+network_families:
+  development:
+    - IEEE_pandapower
+    - PGLib
+  test:
+    - SimBench
+    - PEGASE_or_GOC
+    - RTE_or_CGMES
+
+conditions:
+  - original
+  - lawful_split
+  - harmful_alias
+  - pcc_gated
+
+baselines:
+  B0: no_validation
+  B1: feature_only
+  B2: schema_only
+  B3: conservation_only
+  B4: id_only
+  B5: provenance_signature_without_semantics
+  B6: full_PCC
+
+tasks:
+  - ac_power_flow
+  - ac_optimal_power_flow
+  - n_minus_1_contingency
+  - temporal_dispatch_or_risk_ranking
+  - model_inference_gate
+
+primary_endpoints:
+  - harmful_alias_false_accept_rate
+  - lawful_transform_false_reject_rate
+  - false_safe_decision_rate
+
+secondary_endpoints:
+  - pf_state_error
+  - opf_cost_regret
+  - constraint_violation_rate
+  - infeasibility_rate
+  - risk_rank_spearman
+  - top_k_overlap
+  - prevented_harmful_inference
+  - verifier_latency_p50_p95_p99_ms
+  - verifier_peak_rss_mb
+  - certificate_bytes
+
+statistics:
+  binary_paired: exact_mcnemar
+  continuous: network_stratified_paired_bootstrap
+  confidence_interval: 95_percent
+  multiple_comparison: holm
+  compute_repeats: 8
+  report_failures: true
+  report_nonconvergence: true
+
+reproducibility:
+  required_fields:
+    - scenario_id
+    - network_family
+    - topology_hash
+    - data_version
+    - split
+    - random_seed
+    - code_commit_or_file_hash
+    - checkpoint_hash
+  source_data: one_machine_readable_file_per_figure_or_table
+  result_rule: raw_input_plus_log_plus_source_data
+
+go_no_go:
+  harmful_tasks_minimum: 3
+  independent_network_families_minimum: 5
+  unseen_attack_family_required: true
+  unseen_network_family_required: true
+  reject_as_nc_ready_if_any_core_gate_fails: true

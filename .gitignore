@@ -1,0 +1,34 @@
+__pycache__/
+*.py[cod]
+*.so
+*.dll
+.venv/
+.venv_*/
+.idea/
+.vscode/
+.DS_Store
+
+# Generated experiment artifacts
+logs/
+results/
+figures/
+outputs/
+tmp/
+*.log
+
+# Downloaded corpora and third-party assets
+downloads/
+extracted/
+validation_packages/
+checkpoints/
+models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.zip
+
+# Local secrets and machine-specific files
+.env
+.env.*
+environment.json

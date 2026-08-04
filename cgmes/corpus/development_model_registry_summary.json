@@ -1,0 +1,21 @@
+{
+  "archive_count": 42,
+  "included_model_bundles": 32,
+  "excluded_archives": 10,
+  "exclusion_reason_counts": {
+    "boundary_reference_only": 9,
+    "official_negative_error_fixture": 1
+  },
+  "included_by_family": {
+    "MicroGrid": 19,
+    "MiniGrid": 6,
+    "RealGrid": 1,
+    "SmallGrid": 6
+  },
+  "included_by_representation": {
+    "BusBranch": 6,
+    "NodeBreaker": 6,
+    "assembled_or_unspecified": 20
+  },
+  "missing_boundary_reference_count": 1
+}

@@ -1,0 +1,18 @@
+{
+  "model_packages": 20,
+  "families": {
+    "MicroGrid": 11,
+    "PST": 3,
+    "MiniGrid": 1,
+    "FullGrid": 1,
+    "PowerFlow": 1,
+    "RealGrid": 1,
+    "SmallGrid": 1,
+    "Svedala": 1
+  },
+  "cgmes_version": "3.0.0",
+  "split": "internal_validation",
+  "packaging_semantic_edit": false,
+  "source_package": "ENTSO-E CGMES CAS Test Configurations 3.0.3",
+  "redistribution_allowed": false
+}

@@ -1,0 +1,48 @@
+protocol: h39_public_nc_v4_opf
+date: 2026-08-03
+scope: public_ac_opf_identity_aliasing_expansion
+
+public_networks:
+  - case9
+  - case14
+  - case24_ieee_rts
+  - case30
+  - case39
+  - case57
+  - case89pegase
+  - case118
+  - case145
+  - case_illinois200
+
+candidate_rule: >-
+  First four unique public load buses in native table order that are not an
+  ext-grid or existing generator bus.
+
+load_multipliers: [0.90, 1.00, 1.10, 1.20, 1.30]
+asset_rule: >-
+  Two identity-distinct, numerically identical fixed active-power generators
+  at the candidate bus. Each contributes 1 percent of stressed total demand
+  times a deterministic local-load heterogeneity multiplier from 0.5 to 2.0.
+
+named_contingency: remove_asset_A
+alias_policies:
+  - aggregate_trip
+  - missed_trip
+  - proportional_trip
+
+primary_endpoints:
+  - paired_opf_convergence
+  - signed_and_absolute_cost_regret
+  - minimum_voltage_delta
+  - maximum_line_loading_delta
+  - security_disagreement
+
+execution:
+  solver: pandapower_pypower_ac_opf
+  initialization_attempts: [pf, flat]
+  preserve_failures: true
+  frozen_before_execution: true
+
+notes:
+  - This experiment tests operational consequence, not natural alias prevalence.
+  - The proportional policy is an oracle numerical control.

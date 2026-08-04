@@ -1,0 +1,16 @@
+cryptography==45.0.6
+matplotlib==3.11.1
+numpy==2.4.6
+pandas==2.3.3
+pandapower==3.5.4
+psutil==7.0.0
+requests==2.34.2
+scipy==1.18.0
+simbench==1.6.1
+
+# CGMES interoperability audit
+pypowsybl==1.13.0
+pyshacl==0.30.1
+rdflib==7.6.0
+VeraGrid==6.4.3
+VeraGridEngine==6.4.3

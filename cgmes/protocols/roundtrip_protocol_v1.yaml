@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+status: frozen_after_exploratory_development_smoke_before_roundtrip_export
+frozen_at: 2026-08-03T23:49:50+08:00
+exploratory_smoke_is_confirmatory_evidence: false
+development_corpus: entsoe_cgmes_2_4_15_test_configurations_4_0_3
+internal_validation_corpus: entsoe_cgmes_cas_test_configurations_3_0_3
+final_holdout_corpus: null
+final_holdout_requirement: later versioned public model release acquired and hashed after code freeze
+minimum_feasibility:
+  model_count: 2
+  tool_count: 2
+  preferred_tools: [pandapower, veragrid]
+  fallback_second_tool: pypowsybl
+  routes:
+    - cgmes_to_tool_a_to_common_asset_table
+    - cgmes_to_tool_b_to_common_asset_table
+    - cgmes_to_exporting_tool_to_cgmes_to_second_tool
+frozen_tasks: [ac_power_flow, named_asset_nminus1, nminus1_risk_ranking, ac_opf]
+paired_valid: both source and target complete the same task under the same frozen solver protocol
+failure_policy: retain all parse, validation, conversion, solver and non-convergence outcomes in denominators
+rerun_policy:
+  allowed: [download_failure, disk_exhaustion, interpreter_crash, syntax_error_before_any_endpoint_is_computed]
+  forbidden: [effect_not_significant, undesirable_direction, threshold_tuning_after_holdout]

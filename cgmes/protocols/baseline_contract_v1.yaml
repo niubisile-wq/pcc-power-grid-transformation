@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+frozen_names:
+  B0: no_validation
+  B1: numeric_feature
+  B2: cgmes_shacl
+  B3: conservation
+  B4: heuristic_identity_match
+  B5: identity_only
+  B6: provenance_signature
+  B7: full_pcc
+decision_values: [accept, reject, unresolved, error]
+mapping_status_values:
+  - exact
+  - renamed
+  - lawful_split
+  - lawful_merge
+  - unsupported_split
+  - unsupported_merge
+  - dropped
+  - created
+  - ambiguous
+  - unresolved
+harmful_primary_endpoint: false_accept_rate
+lawful_primary_endpoint: false_reject_rate
+rules:
+  B0: accept every successfully parsed target
+  B1: require device type, bus/terminal context and numeric parameters within frozen tolerances
+  B2: require the applicable CGMES structural/profile validation to pass
+  B3: require frozen active/reactive-power and count-relation conservation checks
+  B4: use the frozen weighted name, mRID, type, bus, terminal and parameter matcher
+  B5: require an explicit source-target identity relation or verifiable common parent
+  B6: require matching provenance snapshot and valid signature without task-aware identity relation
+  B7: require identity relation, provenance, task scope, snapshot, version, payload and signature
+

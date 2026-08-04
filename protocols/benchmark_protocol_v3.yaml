@@ -1,0 +1,77 @@
+protocol: h39_public_nc_v3
+date: 2026-08-03
+scope: heterogeneous_public_n_minus_1_identity_aliasing
+
+primary_claim: >-
+  Feature-only merging of identity-distinct assets makes a named single-asset
+  contingency ambiguous. Common fallback policies can therefore distort risk
+  ranking or reverse a pre-specified security decision, while an identity-aware
+  gate prevents the ambiguous representation from entering the study.
+
+public_networks:
+  - pandapower_case14
+  - pandapower_case30
+  - pandapower_case57
+  - pandapower_case118
+  - pandapower_case300
+
+candidate_rule: >-
+  Use unique public load buses that are not ext-grid or existing generator
+  buses, in native table order, capped at 30 candidates per network.
+
+controlled_asset_rule:
+  relation: two_identity_distinct_generators_at_same_candidate_bus
+  numerical_attributes: identical
+  p_each_fraction_of_stressed_network_load: >-
+    0.01 times a deterministic local-load heterogeneity multiplier from 0.5 to
+    2.0, with a minimum of 1 MW
+  nominal_alias: one_feature_merged_generator_with_twice_the_power
+
+stress_grid:
+  load_multipliers: [0.80, 0.90, 1.00, 1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00]
+  scale_static_generators_with_load: true
+  voltage_safe_interval_pu: [0.95, 1.05]
+  line_loading_limit_percent: 100.0
+
+named_contingency: remove_asset_A
+
+alias_fallback_policies:
+  aggregate_trip:
+    action: remove_the_merged_aggregate
+    interpretation: conservative_over_removal
+  missed_trip:
+    action: retain_the_merged_aggregate
+    interpretation: contingency_not_resolvable_after_identity_loss
+  proportional_trip:
+    action: reduce_the_merged_aggregate_by_one_original_asset_share
+    interpretation: oracle_numerical_control_without_identity_proof
+
+primary_endpoints:
+  - false_safe_rate
+  - false_alarm_rate
+  - security_disagreement_rate
+  - spearman_rank_correlation
+  - kendall_rank_correlation
+  - top_1_overlap
+  - top_5_overlap
+  - top_10_overlap
+  - ndcg
+
+secondary_endpoints:
+  - continuous_risk_delta
+  - minimum_voltage_delta
+  - maximum_line_loading_delta
+  - convergence_rate
+  - pcc_prevented_decision_disagreements
+
+statistics:
+  binary_confidence_interval: wilson_95_percent
+  rank_unit: network_by_stress_by_alias_policy
+  report_constant_vectors_as_non_rankable: true
+  report_all_failures: true
+
+frozen_before_execution: true
+notes:
+  - This is a controlled public-data counterfactual, not a prevalence estimate.
+  - The proportional policy is an oracle numerical control and does not recover identity.
+  - No parameter may be changed after inspecting results without a new protocol version.
