@@ -1,5 +1,7 @@
 # Proof-Carrying Canonicalization for Power-Grid Model Transformation
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21796488.svg)](https://doi.org/10.5281/zenodo.21796488)
+
 Research code for the manuscript **“Identity Preservation in Power-Grid Model
 Transformation: Proof-Carrying Canonicalization for N–1 Contingency Analysis
 and AC Optimal Power Flow.”**
@@ -79,6 +81,16 @@ the downloaded corpus and generated result tables to have been rebuilt first.
 ## Author
 
 Zixuan Liu, Detroit Green Technology Institute, Hubei University of Technology.
+
+## Citation
+
+Please cite the archived release used in the manuscript:
+
+> Liu, Z. (2026). *Proof-Carrying Canonicalization for Power-Grid Model
+> Transformation* (v1.0.0) [Software]. Zenodo.
+> https://doi.org/10.5281/zenodo.21796488
+
+Machine-readable citation metadata are provided in `CITATION.cff`.
 
 ## License
 
