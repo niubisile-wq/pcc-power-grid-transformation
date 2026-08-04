@@ -1,0 +1,29 @@
+{
+  "title": "Proof-Carrying Canonicalization for Power-Grid Model Transformation",
+  "upload_type": "software",
+  "description": "Research code for a task-bound proof-carrying canonicalization contract and controlled power-grid identity-preservation experiments, including N-1 contingency analysis, AC optimal power flow, and a CGMES interoperability audit.",
+  "creators": [
+    {
+      "name": "Liu, Zixuan",
+      "affiliation": "Detroit Green Technology Institute, Hubei University of Technology",
+      "orcid": "0009-0008-4941-5641"
+    }
+  ],
+  "keywords": [
+    "power grid",
+    "proof-carrying canonicalization",
+    "asset identity",
+    "CGMES",
+    "N-1 contingency analysis",
+    "AC optimal power flow",
+    "cybersecurity",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/niubisile-wq/pcc-power-grid-transformation",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
