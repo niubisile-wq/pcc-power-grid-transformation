@@ -258,6 +258,19 @@ def lollipop(ax, values: dict, color: str, xlabel: str, overall: float, ci: list
     clean(ax)
 
 
+def effect_note(ax, text: str) -> None:
+    ax.text(
+        .98, .94, text,
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
+        fontsize=5.8,
+        linespacing=1.05,
+        bbox=dict(facecolor="white", edgecolor="none", alpha=.90, pad=1.0),
+        zorder=6,
+    )
+
+
 def figure3(app: dict) -> tuple[list[Path], list[Path]]:
     n1 = app["n1"]; opf = app["opf"]
     attempt_rows = [
@@ -406,17 +419,17 @@ def figure4(dc: dict, atlas: dict) -> tuple[list[Path], list[Path]]:
     loading=effects["alias_post_contingency_loading_excess_pu"]
     lollipop(axb,{n:loading["network_medians"][n] for n in nets},COL["harm"],"Loading excess (p.u.)",loading["median"],loading["hierarchical_cluster_bootstrap_median_95"])
     axb.set_title("Hidden loading",loc="left",fontweight="bold"); panel(axb,"b",x=-.12)
-    axb.text(.98,.03,"overall 0.241\n95% CI 0.088-0.382",transform=axb.transAxes,ha="right",fontsize=5.8)
+    effect_note(axb,"overall 0.241\n95% CI 0.088-0.382")
 
     shed=effects["hidden_load_shed_mw"]
     lollipop(axc,{n:shed["network_medians"][n] for n in nets},COL["warn"],"Hidden load shedding (MW)",shed["median"],shed["hierarchical_cluster_bootstrap_median_95"],symlog=True)
     axc.set_title("Corrective requirement",loc="left",fontweight="bold"); panel(axc,"c",x=-.12)
-    axc.text(.98,.03,"overall 5.20 MW\n95% CI 0.60-33.00",transform=axc.transAxes,ha="right",fontsize=5.8)
+    effect_note(axc,"overall 5.20 MW\n95% CI 0.60-33.00")
 
     cost=effects["relative_cost_understatement"]
     lollipop(axd,{n:cost["network_medians"][n] for n in nets},COL["violet"],"Cost understatement (%)",cost["median"],cost["hierarchical_cluster_bootstrap_median_95"],percent=True)
     axd.set_title("Economic distortion",loc="left",fontweight="bold"); panel(axd,"d",x=-.12)
-    axd.text(.98,.03,"overall 1.04%\n95% CI 0.34-11.28%",transform=axd.transAxes,ha="right",fontsize=5.8)
+    effect_note(axd,"overall 1.04%\n95% CI 0.34-11.28%")
 
     clean(axa); clean(axb); clean(axc); clean(axd)
     return save(fig,"fig4_dc_scopf_heterogeneity"),srcs

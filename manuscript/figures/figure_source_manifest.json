@@ -134,12 +134,12 @@
     {
       "path": "manuscript/figures/fig1_pcc_workflow.svg",
       "bytes": 22166,
-      "sha256": "2ebbdc42930df20a13b781b99ef8ecf508def832e337cb18447db969e9bad3c0"
+      "sha256": "47f3bd515ef631dee4f28da9e7c87180c4cd9cd08e0a0d267622163d786c24bb"
     },
     {
       "path": "manuscript/figures/fig1_pcc_workflow.pdf",
       "bytes": 45684,
-      "sha256": "6d23acb648cdb2a2c783289d4628179e99b20e63b7defa35ebe19bb64dd206ad"
+      "sha256": "b14a3fc0c1b2af680744165542dac1cc6ae3ef9ab0214d8392fc9e15d1ab21e2"
     },
     {
       "path": "manuscript/figures/fig1_pcc_workflow.png",
@@ -149,12 +149,12 @@
     {
       "path": "manuscript/figures/fig2_semantic_baseline_ladder.svg",
       "bytes": 22613,
-      "sha256": "fc37ccc761c287d2c089f9536f5c4ac9165d1c76df53504c2ff26a7421788758"
+      "sha256": "5c2a30466fd9b4f6604072d73f380264fe3979c038d7dbdd9ac9ec1ddf326348"
     },
     {
       "path": "manuscript/figures/fig2_semantic_baseline_ladder.pdf",
       "bytes": 45235,
-      "sha256": "492ce77a5a99ba225df6d95aef4bb28cfec4216652c38b0c3058cbc985d32a2b"
+      "sha256": "cf385d0a0efb73b1db436e1dac28e05baafec8d9521ea538cc954b99bf7b5a4b"
     },
     {
       "path": "manuscript/figures/fig2_semantic_baseline_ladder.png",
@@ -164,12 +164,12 @@
     {
       "path": "manuscript/figures/fig3_operational_consequences.svg",
       "bytes": 43903,
-      "sha256": "1cf655d5a145f8be922df4de08b2ad35acfd1a17ab235389b2b071317c5a32a8"
+      "sha256": "5e9097d6eb29a41fef20977bcd0ab36f35d255f74dc64afbd82bc30f4c153883"
     },
     {
       "path": "manuscript/figures/fig3_operational_consequences.pdf",
       "bytes": 56277,
-      "sha256": "1f4410b68c1fa6ad145cb0c35534673f787ea0ae03912d0a508701a758b9fa26"
+      "sha256": "a4747c058755c97f6dae4d4e3c23934329a5400243521650721ef09723152a51"
     },
     {
       "path": "manuscript/figures/fig3_operational_consequences.png",
@@ -178,28 +178,28 @@
     },
     {
       "path": "manuscript/figures/fig4_dc_scopf_heterogeneity.svg",
-      "bytes": 60080,
-      "sha256": "9eda1fab7b6837ce6669d2f44400672b083e98bc8dde59aebd286235186964f7"
+      "bytes": 60663,
+      "sha256": "fcb2b296929c467a15f555f1783d94472eae8192c8e8dda2aea49229783c451f"
     },
     {
       "path": "manuscript/figures/fig4_dc_scopf_heterogeneity.pdf",
-      "bytes": 55108,
-      "sha256": "056aed2db91cdcbad1adfe6aab541b097cea840112b9e60bf093a6b1a56b41c2"
+      "bytes": 55273,
+      "sha256": "b32eca9e194a9259dba419e73c82963e6ade394311ac9f437e4d42cebe8f4ace"
     },
     {
       "path": "manuscript/figures/fig4_dc_scopf_heterogeneity.png",
-      "bytes": 410636,
-      "sha256": "c58f9ef42ea4041bb4190991547e4811195dc0c60a205619a83be3db9b4879d0"
+      "bytes": 402589,
+      "sha256": "283d11d4d6e439f671878ae1f8940d4514eabbcea5ddc634beb32e19a54b33b8"
     },
     {
       "path": "manuscript/figures/fig5_validation_portability_scaling.svg",
       "bytes": 44575,
-      "sha256": "cdf531652bc62dc1deb9b473c1470c53a971a2065d72606f8f7bbc432e0685ff"
+      "sha256": "1ff08acd3f5319a6b91fdb478baed7776fe97c5fe55f78c5a4ee17a1f2d03660"
     },
     {
       "path": "manuscript/figures/fig5_validation_portability_scaling.pdf",
       "bytes": 57635,
-      "sha256": "158eec42c85a3b4ed531c88761021b67db7e50c510ef2987f349b47c033b4423"
+      "sha256": "d0231ec25b3f190f54b5956f9caef48a6a3347b97cbeb95455a3d891e92891f4"
     },
     {
       "path": "manuscript/figures/fig5_validation_portability_scaling.png",
@@ -209,12 +209,12 @@
     {
       "path": "manuscript/figures/fig6_external_tool_blind_roundtrip.svg",
       "bytes": 28729,
-      "sha256": "78341188d6a99764ad212ead46505078555a0afea71cbe454e80bdb6e43394d8"
+      "sha256": "ec144906e559de12bf97fee58af7a8c79dba4ca0d45c2de12e5e9f9a418ccb0c"
     },
     {
       "path": "manuscript/figures/fig6_external_tool_blind_roundtrip.pdf",
       "bytes": 48245,
-      "sha256": "43e74da4ad6689884f1f7da7f4ae75f916bf1644f536434c5d72fd5c32880509"
+      "sha256": "027d924e37079ee9c5f3109f584a4b12855e52f09af69d11a551aaff6963157a"
     },
     {
       "path": "manuscript/figures/fig6_external_tool_blind_roundtrip.png",
