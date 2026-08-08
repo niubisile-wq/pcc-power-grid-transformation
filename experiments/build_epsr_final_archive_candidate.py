@@ -41,6 +41,7 @@ CORE_PATHS = [
     "manuscript/figures/FIGURE_LEGENDS.md",
     "manuscript/figures/FIGURE_CONTRACTS.md",
     "manuscript/figures/figure_source_manifest.json",
+    "manuscript/figures/fig1_pcc_workflow_editable.pptx",
     "manuscript/figures/qa/FIGURE_QA_REPORT.md",
     "manuscript/figures/qa/figure_qa.json",
     "outputs/epsr_submission_manifest/submission_manifest.json",
