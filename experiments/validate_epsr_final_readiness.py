@@ -19,7 +19,7 @@ OUT = ROOT / "outputs" / "epsr_final_readiness"
 AUTHOR_FORM = ROOT / "manuscript" / "EPSR_AUTHOR_INPUT_FORM.md"
 SUBMISSION_MANIFEST = ROOT / "outputs" / "epsr_submission_manifest" / "submission_manifest.json"
 ARCHIVE_MANIFEST = ROOT / "outputs" / "epsr_final_archive_candidate" / "archive_candidate_manifest.json"
-ARCHIVE_ZIP = ROOT / "outputs" / "epsr_final_archive_candidate" / "epsr_pcc_v2_archive_candidate_20260807.zip"
+ARCHIVE_ZIP = ROOT / "outputs" / "epsr_final_archive_candidate" / "epsr_pcc_v2_archive_candidate_20260809.zip"
 
 PLACEHOLDER_PATTERNS = [
     "[required",

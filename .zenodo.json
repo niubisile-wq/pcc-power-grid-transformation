@@ -1,17 +1,22 @@
 {
-  "title": "Proof-Carrying Canonicalization for Power-Grid Model Transformation",
+  "title": "Proof-Carrying Contracts for Task-Preserving Power-System Model Transformation",
   "upload_type": "software",
-  "description": "Research code for a task-bound proof-carrying canonicalization contract and controlled power-grid identity-preservation experiments, including N-1 contingency analysis, AC optimal power flow, and a CGMES interoperability audit.",
+  "description": "Research code and evidence package for task-bound proof-carrying contracts and controlled power-grid model-transformation experiments, including N-1 contingency analysis, AC optimal power flow, DC security-constrained optimal power flow, and CGMES interoperability checks.",
   "creators": [
     {
       "name": "Liu, Zixuan",
       "affiliation": "Detroit Green Technology Institute, Hubei University of Technology",
       "orcid": "0009-0008-4941-5641"
+    },
+    {
+      "name": "Xiong, Wei",
+      "affiliation": "School of Electrical and Electronic Engineering, Hubei University of Technology; Department of Computer Science and Engineering, University of South Carolina"
     }
   ],
   "keywords": [
     "power grid",
-    "proof-carrying canonicalization",
+    "proof-carrying contract",
+    "task-preserving transformation",
     "asset identity",
     "CGMES",
     "N-1 contingency analysis",

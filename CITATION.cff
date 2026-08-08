@@ -1,14 +1,17 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the archived release below."
-title: "Proof-Carrying Canonicalization for Power-Grid Model Transformation"
+title: "Proof-Carrying Contracts for Task-Preserving Power-System Model Transformation"
 type: software
 version: "1.0.0"
-date-released: 2026-08-04
+date-released: 2026-08-09
 authors:
   - family-names: Liu
     given-names: Zixuan
     orcid: "https://orcid.org/0009-0008-4941-5641"
     affiliation: "Detroit Green Technology Institute, Hubei University of Technology"
+  - family-names: Xiong
+    given-names: Wei
+    affiliation: "School of Electrical and Electronic Engineering, Hubei University of Technology; Department of Computer Science and Engineering, University of South Carolina"
 doi: "10.5281/zenodo.21796488"
 repository-code: "https://github.com/niubisile-wq/pcc-power-grid-transformation"
 url: "https://doi.org/10.5281/zenodo.21796488"

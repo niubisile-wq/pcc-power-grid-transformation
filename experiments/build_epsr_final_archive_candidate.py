@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "outputs" / "epsr_final_archive_candidate"
-ARCHIVE_NAME = "epsr_pcc_v2_archive_candidate_20260807.zip"
+ARCHIVE_NAME = "epsr_pcc_v2_archive_candidate_20260809.zip"
 
 
 CORE_PATHS = [
@@ -29,6 +29,9 @@ CORE_PATHS = [
     "EPSR_CLAIM_EVIDENCE_MATRIX_20260807.md",
     "EPSR_COMPETITIVE_LANDSCAPE_20260807.md",
     "manuscript/EPSR_MANUSCRIPT_DRAFT.md",
+    "manuscript/EPSR_template.tex",
+    "manuscript/EPSR_template.pdf",
+    "manuscript/EPSR_template_bibitems.tex",
     "manuscript/EPSR_SUPPLEMENTARY_INFORMATION.md",
     "manuscript/EPSR_PRE_SUBMISSION_REVIEW.md",
     "manuscript/EPSR_SUBMISSION_CHECKLIST.md",
@@ -36,7 +39,10 @@ CORE_PATHS = [
     "manuscript/EPSR_AUTHOR_INPUT_FORM.md",
     "manuscript/EPSR_AUTHOR_METADATA_TEMPLATE.json",
     "manuscript/figures/FIGURE_LEGENDS.md",
+    "manuscript/figures/FIGURE_CONTRACTS.md",
     "manuscript/figures/figure_source_manifest.json",
+    "manuscript/figures/qa/FIGURE_QA_REPORT.md",
+    "manuscript/figures/qa/figure_qa.json",
     "outputs/epsr_submission_manifest/submission_manifest.json",
     "outputs/epsr_author_metadata/author_metadata_validation.json",
     "outputs/epsr_author_metadata/author_metadata_request.json",
@@ -91,6 +97,10 @@ FIGURE_STEMS = [
     "fig6_external_tool_blind_roundtrip",
 ]
 
+FIGURE_SOURCE_GLOBS = [
+    "manuscript/figures/source_data/*.csv",
+]
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -116,7 +126,12 @@ def main() -> int:
         for stem in FIGURE_STEMS
         for suffix in ("pdf", "svg", "png")
     ]
-    paths = sorted(dict.fromkeys(CORE_PATHS + figure_paths))
+    source_paths = [
+        path.relative_to(ROOT).as_posix()
+        for pattern in FIGURE_SOURCE_GLOBS
+        for path in ROOT.glob(pattern)
+    ]
+    paths = sorted(dict.fromkeys(CORE_PATHS + figure_paths + source_paths))
     records = [record(path) for path in paths]
     missing = [item["path"] for item in records if not item["exists"]]
 

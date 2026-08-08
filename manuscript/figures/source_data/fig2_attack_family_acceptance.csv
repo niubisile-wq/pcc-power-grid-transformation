@@ -1,0 +1,7 @@
+attack_family,B0_structural_only,B1_signed_artifact_v1,B2_global_identity,B3_task_footprint,B4_attribute_invariants,B5_full_PCC_v2
+task_asset_drop,1.0,1.0,1.0,0.0,0.0,0.0
+independent_merge,1.0,1.0,1.0,0.0,0.0,0.0
+wrong_one_to_many,1.0,1.0,0.0,0.0,0.0,0.0
+target_id_reuse,1.0,1.0,0.0,0.0,0.0,0.0
+endpoint_parameter_swap,1.0,1.0,1.0,1.0,0.0,0.0
+source_snapshot_mismatch,1.0,1.0,1.0,1.0,1.0,0.0

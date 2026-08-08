@@ -1,0 +1,5 @@
+left,right,absolute_risk_reduction,improvements,regressions,mcnemar_exact_two_sided_log10_p,holm_adjusted_log10_p
+B1_signed_artifact_v1,B2_global_identity,0.33333333333333337,440,0,-132.15216809648774,-131.45319809215172
+B2_global_identity,B3_task_footprint,0.3333333333333333,440,0,-132.15216809648774,-131.45319809215172
+B3_task_footprint,B4_attribute_invariants,0.16666666666666666,220,0,-65.92556905041188,-65.44844779569222
+B4_attribute_invariants,B5_full_PCC_v2,0.16666666666666666,220,0,-65.92556905041188,-65.44844779569222

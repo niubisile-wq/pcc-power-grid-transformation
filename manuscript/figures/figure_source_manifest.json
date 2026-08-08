@@ -1,0 +1,231 @@
+{
+  "manifest_version": "epsr-figure-source-manifest-v1",
+  "backend": "Python/matplotlib",
+  "source_policy": "frozen Layer-B summaries only",
+  "plot_sources": [
+    {
+      "path": "outputs/pcc_v2_semantic_baseline_ladder/summary.json",
+      "sha256": "bbe527c982859abb33eb1da45191d414bbcd99ace8298b8ee0a1de04ca318970"
+    },
+    {
+      "path": "outputs/pcc_v2_application_statistics/summary.json",
+      "sha256": "deb495db85f891be0cac1c4147fb1a294107cf8c7a5c0d57571caf4cbcc78379"
+    },
+    {
+      "path": "outputs/pcc_v2_dc_scopf_statistics/summary.json",
+      "sha256": "9368b270d9dda1276204cd815cd5379dd5233431204a00c8cb75c0fa9aa9ab17"
+    },
+    {
+      "path": "outputs/pcc_v2_scaling/pcc_v2_scaling_summary.json",
+      "sha256": "2030c4bcf797ce4670a4cc10785cb3d1f9b6487a59f47d2ffd22bde724f4370b"
+    },
+    {
+      "path": "outputs/cgmes_apl111_pcc_separation/separation_summary.json",
+      "sha256": "9001284927db18f748e9d7777c1d9c3e6c57bbb812f2cd8e7ea35a82dd95fc9c"
+    },
+    {
+      "path": "outputs/qocdc_414_applicable_subset/summary.json",
+      "sha256": "b7db8b5be1699313873577ddc13ff51da33410a50afcaf24b50ae8e5147c46c0"
+    },
+    {
+      "path": "outputs/cgmes_untouched_holdout/holdout_summary.json",
+      "sha256": "6c80cadc6fb46a5e6677001450442428f8dadd0d55f76930248ac191aed66b47"
+    },
+    {
+      "path": "outputs/cross_solver_validation/cross_solver_summary.json",
+      "sha256": "c7b2e5e076610d3cd5e6b124536868b30a29a4cf8c5b84fe4d431fed6a550cc9"
+    },
+    {
+      "path": "outputs/cross_solver_dcmp_validation/cross_solver_dcmp_summary.json",
+      "sha256": "e600375d75e4d6b5cd1eadcd4db03674e2f8ad69944a36a8e351457c41ca6f52"
+    },
+    {
+      "path": "outputs/dc_scopf_mechanism_atlas/summary.json",
+      "sha256": "e4b9f1d5caa064fc6a313d1b17edf14ba599c684ce026bda64f94ecc417febae"
+    },
+    {
+      "path": "outputs/external_tool_blind_roundtrip/summary.json",
+      "sha256": "211b563ae499ef7f504646dbd6bd23ad4305aeafd591f98de4ef6f17c7fe5082"
+    },
+    {
+      "path": "outputs/external_tool_blind_roundtrip/route_artifacts_manifest.json",
+      "sha256": "f00bee8e9178a3c234208b81b63f48576d6696173de174bd42b6baa2340fb07b"
+    },
+    {
+      "path": "outputs/external_tool_blind_roundtrip/consequence_summary.json",
+      "sha256": "aff453d77a37d8a8814a9bcd07cf96b03809b22a836bf4ab56ac24699f2a564e"
+    }
+  ],
+  "source_data": [
+    {
+      "path": "manuscript/figures/source_data/fig2_attack_family_acceptance.csv",
+      "sha256": "e75b38f9102a9fe7d1b529c13bbd9a71450117266238af2449aa1b6c63a78792"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig3_attempt_accounting.csv",
+      "sha256": "0374f5f609ce5fe8fdaa07bc4f0f7b716a6582515b7895bc19bd50a49c0e9a13"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig3_n1_network_medians.csv",
+      "sha256": "b94460ec20cf5e97c60cf6fdab0e8834b1d2b720107c7b82efe57ef9440b2001"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig3_opf_network_medians.csv",
+      "sha256": "de11fbb0b09940c2175e6c5a310e792db179997ee91f17130e99362249f6b8e3"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig3_prevention.csv",
+      "sha256": "197f400e3291124b841407e70ab2b2b8d2b8a31e547e1b542971498ff4b712b6"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig4_false_secure_state_grid.csv",
+      "sha256": "ab749082184b0c70659ac933add061252fcbfb2f75baad60250e9055d44d836f"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig4_component_accounting.csv",
+      "sha256": "015f08a52746101b79a1be190f424182565065313cf50c3cce746700cdb5b829"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig4_label_accounting.csv",
+      "sha256": "3baaa9fa56b32e4c09f3ce90477ca8391496e652f0c33fb9d329164befab6759"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig4_loading_excess_network_medians.csv",
+      "sha256": "e912cb5260c353d659c9774abc84f22c6de598ea6b62a924dc1b69874dfd9410"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig4_hidden_load_shed_mw_network_medians.csv",
+      "sha256": "db4d97dcd33f43cdf0f008f31018bc755f0f349cc4a37008e847ec1ca4425667"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig4_relative_cost_understatement_network_medians.csv",
+      "sha256": "4db0d75e301d45f5ffa383d3eab72deb7373b20decc2c94d7e898f3a0c233f3d"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig5_structural_pcc_decisions.csv",
+      "sha256": "3e7949ce902238eeacdc4d338a0e66d80a27676a3ff827bf5211cb3656ef968d"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig5_cross_solver_agreement.csv",
+      "sha256": "46ee1bcd78dcc7989a287c2e3eaf5559c5ad39dcfd591500ab75c608de47f059"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig5_holdout_import_counts.csv",
+      "sha256": "5df63be3821a0dca105f1533b5be588bd574a7fa94481748e0e56babab160cc6"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig5_scaling.csv",
+      "sha256": "048bcf50756983bc695ef6a28c476f8588170ac4a66fc69afeaea2d0a6767f81"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig6_external_challenge_accounting.csv",
+      "sha256": "59a9b0fa95ac12896ca1bf7ae1740f305c3a47596d25da7d3f4c15cfe8fd986d"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig6_external_route_terminal_status.csv",
+      "sha256": "79ab40fe2bb96068d26d68cf5a9b727360b3713874ebe5dc11238c3c309f2e2c"
+    },
+    {
+      "path": "manuscript/figures/source_data/fig6_external_success_criteria.csv",
+      "sha256": "a3d5352574922932731d5e9b15cb42c3221e0d5d88678760de3f7a315d494125"
+    }
+  ],
+  "figure_outputs": [
+    {
+      "path": "manuscript/figures/fig1_pcc_workflow.svg",
+      "bytes": 22166,
+      "sha256": "2ebbdc42930df20a13b781b99ef8ecf508def832e337cb18447db969e9bad3c0"
+    },
+    {
+      "path": "manuscript/figures/fig1_pcc_workflow.pdf",
+      "bytes": 45684,
+      "sha256": "6d23acb648cdb2a2c783289d4628179e99b20e63b7defa35ebe19bb64dd206ad"
+    },
+    {
+      "path": "manuscript/figures/fig1_pcc_workflow.png",
+      "bytes": 482642,
+      "sha256": "9dc365c65d892f1ca3210e3c13bedd35dbc5a024ad94c397b928e1b5b3bd0bb2"
+    },
+    {
+      "path": "manuscript/figures/fig2_semantic_baseline_ladder.svg",
+      "bytes": 22613,
+      "sha256": "fc37ccc761c287d2c089f9536f5c4ac9165d1c76df53504c2ff26a7421788758"
+    },
+    {
+      "path": "manuscript/figures/fig2_semantic_baseline_ladder.pdf",
+      "bytes": 45235,
+      "sha256": "492ce77a5a99ba225df6d95aef4bb28cfec4216652c38b0c3058cbc985d32a2b"
+    },
+    {
+      "path": "manuscript/figures/fig2_semantic_baseline_ladder.png",
+      "bytes": 248143,
+      "sha256": "4bfa07869d1c51f7d84bea645df6dddc76d1c2f5003f901b69344e06f514ffc0"
+    },
+    {
+      "path": "manuscript/figures/fig3_operational_consequences.svg",
+      "bytes": 43903,
+      "sha256": "1cf655d5a145f8be922df4de08b2ad35acfd1a17ab235389b2b071317c5a32a8"
+    },
+    {
+      "path": "manuscript/figures/fig3_operational_consequences.pdf",
+      "bytes": 56277,
+      "sha256": "1f4410b68c1fa6ad145cb0c35534673f787ea0ae03912d0a508701a758b9fa26"
+    },
+    {
+      "path": "manuscript/figures/fig3_operational_consequences.png",
+      "bytes": 493544,
+      "sha256": "cff58f8c0e3ff639c64bc1b932f7f7495ede4ab27b86921d50405ee61cd89c3b"
+    },
+    {
+      "path": "manuscript/figures/fig4_dc_scopf_heterogeneity.svg",
+      "bytes": 60080,
+      "sha256": "9eda1fab7b6837ce6669d2f44400672b083e98bc8dde59aebd286235186964f7"
+    },
+    {
+      "path": "manuscript/figures/fig4_dc_scopf_heterogeneity.pdf",
+      "bytes": 55108,
+      "sha256": "056aed2db91cdcbad1adfe6aab541b097cea840112b9e60bf093a6b1a56b41c2"
+    },
+    {
+      "path": "manuscript/figures/fig4_dc_scopf_heterogeneity.png",
+      "bytes": 410636,
+      "sha256": "c58f9ef42ea4041bb4190991547e4811195dc0c60a205619a83be3db9b4879d0"
+    },
+    {
+      "path": "manuscript/figures/fig5_validation_portability_scaling.svg",
+      "bytes": 44575,
+      "sha256": "cdf531652bc62dc1deb9b473c1470c53a971a2065d72606f8f7bbc432e0685ff"
+    },
+    {
+      "path": "manuscript/figures/fig5_validation_portability_scaling.pdf",
+      "bytes": 57635,
+      "sha256": "158eec42c85a3b4ed531c88761021b67db7e50c510ef2987f349b47c033b4423"
+    },
+    {
+      "path": "manuscript/figures/fig5_validation_portability_scaling.png",
+      "bytes": 596503,
+      "sha256": "7a37e52e4713ef4d5c44279bc883f77c0552a996c281378606ca9aa1f983782e"
+    },
+    {
+      "path": "manuscript/figures/fig6_external_tool_blind_roundtrip.svg",
+      "bytes": 28729,
+      "sha256": "78341188d6a99764ad212ead46505078555a0afea71cbe454e80bdb6e43394d8"
+    },
+    {
+      "path": "manuscript/figures/fig6_external_tool_blind_roundtrip.pdf",
+      "bytes": 48245,
+      "sha256": "43e74da4ad6689884f1f7da7f4ae75f916bf1644f536434c5d72fd5c32880509"
+    },
+    {
+      "path": "manuscript/figures/fig6_external_tool_blind_roundtrip.png",
+      "bytes": 432412,
+      "sha256": "b0fd2ed4b4b2372899f653cb5930ee90ffc150a68de2f2414e339fc3a09ebc4e"
+    }
+  ],
+  "export": {
+    "svg_text_editable": true,
+    "pdf_fonttype": 42,
+    "png_dpi": 600,
+    "width_mm": 183
+  }
+}

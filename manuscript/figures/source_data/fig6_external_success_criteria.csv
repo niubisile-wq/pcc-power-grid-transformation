@@ -1,0 +1,6 @@
+criterion,value,met
+harmful_solver_starts,0,True
+lawful_exact_acceptance_rate,1.0,True
+external_task_relevant_anomalies,0,False
+operationally_consequential_anomalies,0,False
+paired_valid_consequence_evaluated,0,False

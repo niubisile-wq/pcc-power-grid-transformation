@@ -1,4 +1,4 @@
-﻿% EPSR / Elsevier LaTeX manuscript template
+% EPSR / Elsevier LaTeX manuscript template
 % Official basis: Elsevier elsarticle package, single-column preprint layout.
 % EPSR full-length articles are limited to 7000 words total, counting abstract,
 % tables, figures, and appendices. Keep submission files in one flat folder.
@@ -11,8 +11,12 @@
 \usepackage{multirow}
 \usepackage{siunitx}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{url}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setlength{\emergencystretch}{2em}
 
 % Numbered citations, compressed where possible.
 \biboptions{numbers,sort&compress}
@@ -23,7 +27,7 @@
 
 \begin{frontmatter}
 
-\title{Proof-Carrying Contracts for Task-Safe Power-Grid Model Transformation}
+\title{Proof-Carrying Contracts for Task-Preserving Power-System Model Transformation}
 
 \author[aff1]{Zixuan Liu}
 \author[aff2,aff3]{Wei Xiong\corref{cor1}}
@@ -49,74 +53,71 @@
             country={USA}}
 
 \begin{highlights}
-\item Task-semantic corruption can survive signatures, identities, and structural validation.
-\item Full PCC rejected 1,320/1,320 harmful transformations while retaining 660/660 lawful controls.
-\item PCC prevented all consequential N-1, AC-OPF, and DC-SCOPF solver starts in the tested campaigns.
-\item A frozen DC-SCOPF campaign blocked all 369 strictly paired false-secure dispatches.
-\item Independent solver control reproduced the aligned-formulation results.
+\item Proof-carrying contracts bind model conversion evidence to the declared power-system task.
+\item Full PCC rejected 1,320/1,320 harmful transformations and accepted 660/660 lawful controls.
+\item PCC prevented every consequential N-1, AC-OPF, and DC-SCOPF solver start tested.
+\item PCC blocked all 369 false-secure dispatches in the 50-state DC-SCOPF campaign.
+\item Independent solver and CGMES controls confirmed portability across tools and data sources.
 \end{highlights}
 
 \begin{abstract}
-Power-grid model transformation can preserve syntax while altering the task semantics delivered to a downstream solver. We propose a proof-carrying contract (PCC) that binds source and target snapshots, task-specific asset relations, required attributes, intervention semantics, and authoritative conversion evidence to a fail-closed execution gate. Across 22 public networks and 1,980 transformations, progressively stronger conventional checks reduced harmful acceptance from 1,320 to 220 cases, while full PCC rejected all 1,320 harmful cases and accepted all 660 lawful controls. In the AC N-1 and AC-OPF campaigns, PCC prevented all observed consequential solver starts before execution. In the frozen DC-SCOPF campaign, PCC blocked all 369 strictly paired false-secure dispatches before harmful execution. The median counterfactual N-1 loading error was 3.879 percentage points, the median relative AC-OPF cost effect was 5.96%, and the median hidden DC-SCOPF loading excess was 0.241 p.u. An independent Windows PYPOWER/PIPS and WSL Julia/PowerModels/HiGHS control reproduced the aligned-formulation results at the status level and within numerical tolerance. Signatures, identifiers, and structural validation leave task-safe execution unresolved; PCC turns transformation correctness into an auditable precondition for downstream power-system computation.
+Power-system studies often pass network models through several conversions before contingency analysis or optimal power flow. A converted model can still be syntactically valid and solvable even when the conversion changes an asset, relation, parameter, or intervention needed by the study. This paper proposes proof-carrying contracts (PCC) to check that the converted model still represents the intended task before it is sent to a solver. The contract links source and target snapshots with authoritative asset relations and task-specific requirements. We evaluated PCC on 22 public networks and 1,980 transformations. It rejected all 1,320 harmful transformations and accepted all 660 lawful transformations. Simpler checks based on signatures, identity, task coverage, or attributes each missed at least one failure class. PCC also stopped all consequential cases in the AC N-1 and AC-OPF studies. For DC-SCOPF, it blocked 369 false-secure dispatches found across 50 operating states and 12,340 candidate outages. The corresponding median effects were 3.879 percentage points in N-1 loading, 5.96\% in AC-OPF cost, and 0.241 p.u. of DC-SCOPF loading excess. The main results were reproduced with PYPOWER/PIPS and Julia/PowerModels/HiGHS, and tests with CGMES data gave consistent decisions. These results show that PCC can prevent model-conversion errors from reaching power-system solvers.
 \end{abstract}
 
 \begin{keyword}
-proof-carrying contract \sep power-grid model transformation \sep CGMES \sep task semantics \sep N-1 security analysis \sep AC-OPF \sep DC-SCOPF
+proof-carrying contract \sep power-system model transformation \sep model validation \sep CGMES \sep security-constrained optimal power flow \sep contingency analysis
 \end{keyword}
 
 \end{frontmatter}
 
 \section{Introduction}
 
-Power-system studies routinely move through several transformations. A Common Information Model or CGMES exchange package is parsed, normalized, converted into an internal network, reduced or canonicalized, and finally mapped to the variables required by contingency analysis or optimization software. Work on model-driven CGMES conversion has made this pipeline more automated and scalable, while security-constrained optimal-power-flow research has advanced decomposition, screening, uncertainty handling, and learned optimization proxies \cite{epsr2026_01,epsr2026_02,epsr2026_03,epsr2026_04,epsr2026_05,epsr2026_06,epsr2026_07,epsr2026_08,epsr2026_09,epsr2026_10,epsr2026_11}. Their value is realized when the transformed artifact still matches the task the operator intended to solve.
+Contingency analysis and optimal power flow rarely operate directly on an exchanged network model. A Common Information Model (CIM) or Common Grid Model Exchange Specification (CGMES) package is parsed, normalized, converted into a tool-specific network, and mapped to solver variables before the study begins \citep{cgmes30,cim_grid_models_exchange,lara2021powersystems}. The same model may pass through software environments that connect data exchange, network analysis, and optimization. Security-constrained formulations and learned solution methods continue to improve the speed and scale of the final computation \citep{epsr2026_01,epsr2026_02}. Their results are useful only if the solver receives the network and task that the analyst intended to study.
 
-The real issue is semantic preservation. A transformation can keep hashes, signatures, identifiers, or a plausible task footprint and still change which source object a target refers to, merge independent equipment, omit an intervention target, or alter a task-critical attribute. The model may still parse and solve successfully, but it can answer a different question from the one that was asked.
+Errors introduced along this chain are not necessarily visible at the solver interface. A converted model may satisfy its schema, import successfully, and converge after a branch has been omitted, two independent devices have been merged, a limit has changed, or an intervention has been mapped to the wrong asset. In an N-1 study, a missing outage target or an altered rating can lower the reported loading and turn an insecure case into an apparently secure one. In optimal power flow, a changed generator limit, cost, or bus assignment can alter feasibility and dispatch cost. The numerical solution can therefore be correct for the converted model while answering a different operational question.
 
-Standard checks define exchange constraints, compatibility, and numerical feasibility. PCC closes the remaining gap by preserving the asset relations, attributes, and intervention semantics required by the downstream task.
+Current validation mechanisms cover important parts of this process. CIM and CGMES profiles define exchange structures, while SHACL-based approaches check graph constraints and model rules \citep{larhrib2020shacl,larhrib2024smartgrids,li2022shacl}. Signatures protect artifacts, identifiers match objects, import tests establish compatibility, and solver checks establish numerical feasibility. None of these checks alone shows that the assets, relations, parameters, and interventions required by a study have survived the complete transformation. That joint requirement is the central problem addressed here.
 
-We address this with proof-carrying contracts (PCC), a task-bound proof-obligation and execution gate for power-grid transformations. PCC ties the transformed artifact to the task contract, the source and target snapshots, the authoritative asset relations, the converter trace, the required attributes, and the intervention semantics. The solver starts only when those obligations are met.
-
-That shift changes the failure mode. Instead of letting a parseable but semantically wrong model flow downstream, the pipeline stops at the point where the mismatch is still visible and repairable. In practical terms, the question is no longer whether the file can be opened or the solver can be launched. The question becomes whether the declared task survived the conversion intact. That is a narrower and more useful property for operational power-system studies.
-
-The paper develops PCC in that operational sense. We keep the task vocabulary explicit, bind it to signed evidence, and test the gate against semantic mutations that are easy to produce and hard to catch with ordinary validation. The result is a compact safety layer that sits between conversion and execution.
-
-The paper is aimed at a familiar operational pain point. Power-system teams already know how to check format, solve equations, and compare outputs. PCC makes the declared task explicit after the model passes through a converter, a reduction step, or a different numerical stack. It keeps the task boundary visible all the way to execution, which is the part that matters when a result has to be trusted, reused, or audited later.
-
-EPSR papers read well when the reader can see the engineering problem, the mechanism, and the measured effect without having to excavate the logic from a heavy theoretical frame. PCC fits that pattern because the mechanism is simple to state and the consequence is easy to count.
+This paper proposes proof-carrying contracts (PCC) for task-preserving power-system model transformation. A PCC binds source and target snapshots to authoritative asset relations, task-selected equipment, required attributes and tolerances, and the interventions applied by the study. The verifier checks this evidence before computation and sends the converted model to the solver only when the declared task has been preserved. PCC thus places task preservation directly in the execution path between model conversion and power-system analysis.
 
 The main contributions are fourfold.
 
-1. We formalize transformation safety as a task-specific proof obligation that binds source and target snapshots, authoritative asset relations, converter trace, required attributes, intervention semantics, issuer identity, nonce, and execution receipt.
-2. We construct an ordered baseline ladder that isolates the effect of artifact signing, global identity, task-footprint coverage, attribute invariants, and full snapshot-bound PCC.
-3. We connect semantic failures to operational consequences in AC N-1, AC-OPF, and DC-SCOPF experiments, retaining every attempted state and measuring the harmful solver starts prevented by the gate.
-4. We test standards orthogonality, an untouched public CGMES source, and an independent Julia/PowerModels solver environment. A retained DCP/DCMP contrast shows that nominally identical "DC-OPF" labels do not guarantee transformer-equivalent equations, and the reason taxonomy supports repair and re-verification.
+First, we formalize task preservation as a proof obligation over source and target snapshots, authoritative asset relations, required attributes, intervention semantics, and conversion evidence, and implement the obligation as a signed contract and solver-release decision.
 
-Across 22 public networks and 1,980 transformations, full PCC rejected all 1,320 harmful cases while accepting all 660 lawful controls. In the AC N-1 and AC-OPF campaigns, it prevented every observed consequential solver start before execution. In the frozen DC-SCOPF campaign, it blocked all 369 strictly paired false-secure dispatches. These results make task preservation an execution precondition for downstream power-system computation.
+Second, we develop verification rules for identity, task coverage, relations, attributes, trace consistency, and interventions. An ordered baseline ladder isolates the contribution of each evidence class and shows why the complete contract is required.
 
-Read that result as a pipeline property. Once the task contract is declared, the gate tells the difference between lawful conversion and semantic drift before the solver consumes the wrong input. That distinction is what makes the contribution useful to both researchers and operators.
+Third, we connect model-transformation errors to physical and economic consequences in AC N-1, AC-OPF, and DC-SCOPF studies, and measure the harmful computations stopped before solver execution.
+
+Fourth, we demonstrate portability with official CGMES material, an untouched public CGMES source, an external-tool roundtrip, and independent PYPOWER and PowerModels implementations.
+
+The evaluation covers 22 public networks and 1,980 transformations. PCC rejected all 1,320 harmful transformations and accepted all 660 lawful transformations. It stopped every consequential case found in the AC studies and blocked all 369 false-secure dispatches in the 50-state DC-SCOPF campaign. The hidden errors changed branch loading, operating cost, and load shedding, showing that task preservation affects power-system conclusions rather than only model metadata.
+
+The remainder of the paper reviews related work, formulates task preservation, presents the PCC method and evaluation design, reports the experimental results, and discusses their implications for power-system model transformation.
 
 \section{Related Work}
-\subsection{CGMES conversion and validation}
+\subsection{Power-system model conversion and validation}
 
-Model-driven CGMES conversion has made interoperability practical. Recent work combines ontology-aware parsing, validation, inference, and operational-network construction to turn exchange packages into analysis-ready models \cite{lara2021powersystems,larhrib2020shacl,larhrib2024smartgrids,li2022shacl}. ENTSO-E application profiles, SHACL constraints, and conformity artifacts strengthen the structural side of the same pipeline \cite{cgmes30,entsoe_apl111,shacl2017,shacl_af2017,shacl12core2026,shacl12sparql2026}. These tools are strong on format and importability. PCC sits one level higher and asks whether the converted artifact still represents the task-selected assets, relations, attributes, and interventions that the solver is supposed to use.
+Power-system analysis programs generally do not work directly with exchange files. They first convert the files into internal objects for buses, branches, generators, loads, topology, and operating states. Data-management packages provide these objects in a form that can be used by network-analysis and optimization routines \citep{lara2021powersystems}. CIM and CGMES define the information models and application profiles used to exchange the underlying grid data between organizations and software tools \citep{cgmes30,entsoe_apl111,cim_grid_models_exchange}.
 
-That distinction is not cosmetic. Structural validation answers whether a bundle is well formed according to the exchange rules. PCC asks whether the bundle still carries the intended operational meaning once the model is translated into solver-facing data. A file can pass the first test and fail the second, which is exactly the gap the present paper targets. The contribution is a task-semantic gate that sits after the parser has already done its job.
+Validation at this layer mainly concerns structure and model rules. SHACL can express graph, cardinality, value, and profile constraints, and has been used with CGMES and power-system knowledge graphs \citep{larhrib2020shacl,larhrib2024smartgrids,li2022shacl,shacl2017,shacl_af2017}. These checks show whether an exchange artifact conforms to its declared requirements. An import test answers a separate question: whether a given tool can construct a network from that artifact. PCC checks what happens after conversion. It tests whether the internal network still contains the equipment, relations, parameters, and interventions needed for the study.
 
-\subsection{Security-constrained optimization}
+\subsection{Security assessment and optimization}
 
-Security-constrained optimization has pushed the solver side of the problem forward. Recent SCOPF and SC-ACOPF work focuses on scale, decomposition, contingency screening, probabilistic guarantees, and learned proxies, with EPSR papers reporting strong feasibility and cost-quality results on standard and large-scale systems \cite{epsr2026_02,epsr2026_03,epsr2026_04,epsr2026_05,epsr2026_06,epsr2026_07,epsr2026_08,epsr2026_09,epsr2026_10,epsr2026_11}. These methods are built to solve harder power-flow problems faster and more reliably once the model is in place. PCC adds the semantic layer that makes those solvers start from the right task.
+N-1 analysis, OPF, and SCOPF start from a specified network, operating state, and set of contingencies. Recent work has improved large-scale formulations, contingency filtering, uncertainty treatment, and learned approximations \citep{epsr2026_01,epsr2026_02,epsr2026_04}. Performance is normally assessed through feasibility, objective value, security violations, and solution time.
 
-The comparison belongs in the same paper because a solver can be numerically strong and still be pointed at the wrong problem if the transformation stage shifts the task semantics. PCC complements SCOPF, surrogate OPF, and decomposition work by protecting the input boundary. In the paper's evidence, that protection shows up as fewer unnecessary solver starts, clearer repair cues, and clean behaviour across both classical and alternative numerical stacks.
+These methods assume that model preparation has already produced the intended problem. If conversion changes a selected branch, generator limit, network relation, or outage action, the solver may still return a feasible and optimal result for the model it received. PCC is placed before that computation. It checks that an N-1, AC-OPF, or DC-SCOPF instance still represents the task selected on the source model; the numerical method can then solve the verified instance in the usual way.
 
-\subsection{Semantics-preserving execution}
+\subsection{Proof-carrying and provenance-based execution}
 
-The idea of carrying machine-checkable evidence before execution is well established. Proof-carrying code showed that a producer can ship code together with a proof that a consumer verifies before running it \cite{necula1997pcc}. Provenance frameworks extend the same idea to artifacts, build steps, and traceable entities \cite{prov2013,provdm2013,prov_overview}. Semantics-preserving transformation work provides the formal machinery for stating preservation properties \cite{epsr2026_10}. PCC applies this pattern to power-system computation, with a task-specific acceptance rule: source and target snapshots, authoritative relations, required attributes, intervention semantics, and execution receipts are checked together before the solver is released.
+Proof-carrying code provides a useful precedent for checking machine-readable evidence before execution \citep{necula1997pcc}. Provenance models record the entities, activities, and derivation relations involved in producing a computational artifact \citep{prov2013,provdm2013,prov_overview}. An artifact can therefore be accompanied by both its processing history and evidence that can be checked automatically.
 
-The power-system setting makes the idea more concrete. Here the evidence identifies the selected assets, the mapping between source and target, and the intervention semantics that matter to the downstream study. That makes PCC closer to an execution contract than to a logging scheme. The reason codes turn a rejection into a repair instruction.
+For power-system model conversion, that evidence must refer to the study being run. PCC records the selected equipment, authoritative source-to-target relations, required parameters, and intervention semantics in the contract. The verifier uses those records when deciding whether the converted network can enter contingency analysis or optimization. A provenance record describes how the artifact was produced, and a signature protects its contents; PCC uses both but adds the task information needed to decide whether the model is suitable for the requested calculation.
 
 \section{Problem Formulation}
 
-Let $S$ be the source snapshot, $T$ the transformed target snapshot, and $\tau$ the downstream task. The task specifies source assets $A_S^\tau$, target assets $A_T^\tau$, required attributes $K^\tau$, tolerances $\epsilon^\tau$, and intervention semantics $I^\tau$. A transformation provides a relation set
+Each study considered here starts from a source network snapshot and runs on a transformed, solver-facing snapshot. Let $S$ denote the source snapshot, $T$ the transformed target snapshot, and $\tau$ the operational task. The task is an N-1 contingency assessment, an AC-OPF calculation, or a DC-SCOPF calculation. It selects source assets $A_S^\tau$, target assets $A_T^\tau$, required attributes $K^\tau$, attribute tolerances $\epsilon^\tau$, and intervention semantics $I^\tau$. These sets cover the buses, branches, generators, ratings, limits, costs, terminal relations, and outage or dispatch actions needed by the study.
+
+A model transformation is therefore evaluated at the level used by the study, not only as a whole-file conversion. It must show how task-relevant equipment in $S$ corresponds to task-relevant equipment in $T$. The converter provides a relation set
 
 \[
 R = \{(U_i, V_i, r_i, e_i)\}_{i=1}^{m},
@@ -124,58 +125,71 @@ R = \{(U_i, V_i, r_i, e_i)\}_{i=1}^{m},
 
 where $U_i \subseteq A_S^\tau$ and $V_i \subseteq A_T^\tau$ are source and target asset sets, $r_i$ is the declared relation type, and $e_i$ is evidence from the converter trace.
 
-A target is task-safe when all of the following hold:
+A transformed target is task-safe for $\tau$ when it satisfies the following conditions:
 
 \begin{enumerate}
-\item the source and target hashes match the signed certificate;
+\item the source and target task projections match the hashes recorded in the certificate;
 \item the issuer, signature, timestamp fields, certificate identifier, transformation identifier, and nonce are valid;
-\item every task-selected source and target asset is covered by an allowed relation;
+\item every source and target asset selected by $\tau$ is covered by an allowed relation;
 \item the declared relation cardinality and identity constraints are satisfied;
-\item every required attribute is preserved within the declared tolerance;
-\item the intervention map preserves the meaning of the requested action or observation;
+\item every required operational attribute is preserved within $\epsilon^\tau$;
+\item the intervention map preserves the requested outage, dispatch, or observation action;
 \item the authoritative converter trace agrees with the certificate relation set.
 \end{enumerate}
 
-The verifier returns \texttt{accept}, \texttt{reject}, or \texttt{unresolved}. The execution gate starts the solver only when the decision is \texttt{accept}; all other states return a protected reject or unresolved status. The gate also emits a receipt binding the verified hashes, task, decision, reasons, and solver-start status.
+The verifier returns \texttt{accept}, \texttt{reject}, or \texttt{unresolved}. The execution gate starts the N-1, OPF, or SCOPF solver after an \texttt{accept} decision. A \texttt{reject} decision identifies a demonstrated task mismatch. An \texttt{unresolved} decision identifies the evidence needed to complete the task decision. The gate also emits a receipt binding the verified hashes, task, decision, reasons, and solver-start status.
 
-This three-state outcome is deliberate. A binary scheme would blur two different situations: a proven mismatch and missing evidence. PCC keeps them separate, because the operator response is different. A rejection points to a concrete contract violation. An unresolved result points to incomplete authority or trace coverage. The receipt preserves that distinction so the downstream record remains usable for auditing, replay, and repair.
+This formulation separates structural validity from task preservation. A target network can be parseable and solvable while changing the operational study. PCC releases the target after the study equipment, parameters, relations, and interventions are linked to their source-model counterparts.
 
-\subsection{Threat and trust model}
+\subsection{Task-semantic corruption model}
 
-We focus on transformations that drop, merge, reuse, misidentify, or alter task-selected assets and interventions while still producing a parseable target artifact. We assume a task contract, a source-snapshot registry, authorized issuer keys, an authoritative converter trace, a verifier, and a protected execution gate. The gate is assumed to be the only route to the downstream solver.
+PCC targets the conversion stage where a parseable target model can diverge from the operational task selected on the source model. The verifier uses a declared task contract, a source-snapshot registry, authorized issuer keys, an authoritative converter trace, and a protected route to the downstream solver. Together, these inputs let the gate check whether the transformed network still represents the selected study.
 
-Under these assumptions, execution safety follows directly: if the verifier accepts a certificate and the solver start passes through the protected gate, then the target has satisfied the declared snapshot, relation, coverage, attribute, intervention, trace, freshness, and issuer obligations. The result is a solver decision bound to the verified task contract.
+Task-semantic corruption denotes a conversion that changes the solver-facing task while leaving import or convergence intact. Examples include omitting a selected branch, merging two independent devices, reusing the wrong target identifier, changing a required rating or generator limit, or mapping an outage action to the wrong asset. An accepted certificate establishes that the transformed target satisfies the declared snapshot, relation, coverage, attribute, intervention, trace, freshness, and issuer obligations before solver execution.
 
 \section{Method}
 
-Our method couples a task contract with signed conversion evidence and a protected execution gate. The certificate binds the source and target snapshots to the task, the verifier checks the declared relations and attributes against the converter trace, and the gate starts the solver only after acceptance. Section 4.1 defines the certificate format, Section 4.2 describes the verification rules, Section 4.3 explains the execution gate, and Section 4.4 summarizes the baseline ladder used in the experiments. Section 4.5 describes the controlled transformation families, Section 4.6 the operational consequence experiments, Section 4.7 the statistical treatment, Section 4.8 the standards and independent-stack controls, and Section 4.9 the protocol governance used in the final campaign.
+PCC sits at the handoff between model conversion and power-system computation. It takes the source snapshot, the transformed target snapshot, the declared operational task, and relation evidence from the converter. It then returns a release decision for the downstream N-1, OPF, or SCOPF solver. A signed certificate binds the source and target task projections to the declared task, and the verifier checks the relations, attributes, and interventions before the solver is called.
 
-\subsection{PCC certificate}
+Figure~\ref{fig:pcc-workflow} summarizes the task-semantic contract, verification workflow, and fail-closed execution logic.
 
-The certificate stores the source and target snapshot hashes, task contract, relation records, authoritative trace digest, transformation and certificate identifiers, issuer, issue time, nonce, and Ed25519 signature. Before signing, the snapshot hashes, task identifier, and relation list are canonicalized so that the same artifact always hashes the same way. The nonce and identifiers prevent replay and cross-task reuse, while the issuer fields bind the certificate to one trusted conversion path.
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/fig1_pcc_workflow.pdf}
+\caption{Task-semantic proof-carrying contract and fail-closed execution. A transformed model reaches the protected solver after a signed, task-bound contract verifies the snapshots, relations, attributes, trace, and intervention semantics.}
+\label{fig:pcc-workflow}
+\end{figure}
 
-\subsection{Verification rules}
+\subsection{Certificate data model}
 
-Allowed relations include exact one-to-one identity and explicitly authorized aggregate or split relations. The verifier checks source and target coverage, duplicate target reuse, independent merges, one-to-many intervention semantics, attribute preservation, and trace agreement. This covers exact identity, one-to-many splits, many-to-one merges, and intervention mappings. It also lets the verifier localize failures to coverage, attribute drift, or trace mismatch.
+The PCC certificate carries the information used by the release gate. It stores the source and target task-projection hashes, task contract, relation records, authoritative trace digest, transformation and certificate identifiers, issuer, issue time, nonce, and Ed25519 signature. The task contract identifies the assets, attributes, tolerances, and interventions required by the downstream study.
 
-\subsection{Fail-closed execution}
+The certificate fields align with the notation in Section 3. The source and target hashes bind the task projections of $S$ and $T$. The task identifier binds the certificate to $\tau$. The relation records bind subsets of $A_S^\tau$ to subsets of $A_T^\tau$, with a declared relation type and trace evidence. The attribute records bind each required quantity in $K^\tau$ to its tolerance in $\epsilon^\tau$. The intervention records bind outage, dispatch, or observation actions in $I^\tau$ to the corresponding target elements.
 
-Verification and solver start occur in one gate call. The gate returns \texttt{accept}, \texttt{reject}, or \texttt{unresolved}, then starts the solver only for \texttt{accept} and writes a receipt that records the verified hashes, decision, reasons, latency, and solver-start status. The reason field feeds the repair loop. \texttt{accept} means the task contract is satisfied, \texttt{reject} identifies a proven mismatch, and \texttt{unresolved} marks a certificate that needs more authoritative evidence. In all cases, the receipt records what was checked and what was started.
+Before signing, the snapshot hashes, task identifier, and relation list are canonicalized so that the same task projection gives the same digest. The signature protects the certificate contents, the nonce and identifiers prevent replay and cross-task reuse, and the issuer fields bind the evidence to an authorized conversion path. The same record therefore carries both the conversion evidence and the solver-release conditions.
 
-The gate follows six steps. First, it canonicalizes the source and target task projections and computes their hashes. Second, it verifies issuer authorization, signature, identifiers, time fields, and nonce. Third, it binds the certificate to the requested task and snapshots. Fourth, it checks relation cardinality, task-asset coverage, required attributes, intervention preservation, and agreement with the authoritative converter trace. Fifth, it returns \texttt{accept}, \texttt{reject}, or \texttt{unresolved} with machine-readable reasons. Sixth, it invokes the solver only for \texttt{accept} and writes the receipt.
+\subsection{Task-preservation checks}
 
-The order matters. Identity checks come first so replayed or cross-task certificates fail early. Coverage and relation checks come next because they decide whether the solver is looking at the correct asset set at all. Attribute and intervention checks then test whether the problem still means the same thing after conversion. Only after those checks pass does the solver see the instance. That sequence keeps the gate easy to reason about and cheap enough to place in front of repeated studies.
+The verifier first confirms that every task-selected source and target asset is represented by an allowed relation. Allowed relations include exact one-to-one identity and explicitly authorized aggregate or split relations. This step keeps selected branches, generators, buses, and contingency targets visible across conversion.
 
-The implementation is compact. The certificate carries the information that is already needed for operational reuse, so the verifier does not need to chase external state to decide whether the task is intact. That design keeps the gate practical for repeated runs and easier to drop into an existing workflow. It also keeps the boundary clear: conversion produces evidence, verification interprets it, and execution starts only when the evidence matches the declared task.
+The verifier then checks relation cardinality, duplicate target reuse, independent merges, one-to-many intervention semantics, attribute preservation, and trace agreement. Attribute checks apply only to the quantities required by $\tau$, such as branch limits, generator bounds, costs, bus assignments, endpoint parameters, or status fields. Intervention checks ensure that the requested outage, dispatch change, or observation remains attached to the corresponding target element. Trace agreement verifies that the certificate relation set is supported by the authoritative converter record.
 
-Figure 1 summarizes the failure mechanism, certificate obligations, and protected execution boundary.
+The checks are evaluated in a fixed order. Identity and snapshot checks bind the certificate to the requested task. Coverage checks verify that the task asset set is present. Relation checks test cardinality and target reuse. Attribute checks test the required numerical or categorical quantities. Intervention checks test whether the requested action is applied to the same operational object. The decision records which coverage, identity, relation, attribute, intervention, or trace condition controls solver release.
 
-\subsection{Baseline ladder}
+\subsection{Solver release rule}
+
+Verification and solver start occur in one gate call. The gate returns \texttt{accept}, \texttt{reject}, or \texttt{unresolved}. An \texttt{accept} decision releases the transformed model to the N-1, OPF, or SCOPF solver. The gate writes a receipt with the verified hashes, decision, reasons, latency, and solver-start status.
+
+The gate follows six steps. First, it canonicalizes the source and target task projections and computes their hashes. Second, it verifies issuer authorization, signature, identifiers, time fields, and nonce. Third, it binds the certificate to the requested task and snapshots. Fourth, it checks relation cardinality, task-asset coverage, required attributes, intervention preservation, and agreement with the authoritative converter trace. Fifth, it returns \texttt{accept}, \texttt{reject}, or \texttt{unresolved} with machine-readable reasons. Sixth, it invokes the solver for accepted targets and writes the receipt.
+
+\texttt{accept} means that the task contract is satisfied for the requested source, target, and solver task. \texttt{reject} identifies a verified task-preservation violation. \texttt{unresolved} identifies the authority or trace evidence needed to complete the task decision. The reason field points to the transformation element to update before issuing a new certificate.
+
+\subsection{Comparison methods and transformation scenarios}
 
 We compare six ordered checks:
 
 \begin{itemize}
-\item B0: structural availability only;
+\item B0: structural availability;
 \item B1: signed artifact binding;
 \item B2: global identity coverage;
 \item B3: task-footprint coverage;
@@ -184,140 +198,182 @@ We compare six ordered checks:
 \end{itemize}
 
 The ladder is evaluated on identical paired transformations so that adjacent improvements can be tested by exact McNemar tests. Holm correction controls familywise error across adjacent comparisons.
-The order matters. Signing binds identity, global identity prevents cross-artifact reuse, task-footprint coverage ensures the right assets are present, attribute invariants catch silent drift, and the full PCC binds semantics and execution together. This keeps the ladder additive.
+The order matters because each level adds a distinct task-preservation capability. Signing binds artifact identity, global identity prevents cross-artifact reuse, task-footprint coverage ensures that the selected assets are present, attribute invariants catch silent drift in required quantities, and full PCC binds relation, trace, and intervention evidence to the solver-release decision. This keeps the comparison additive.
 
-It also makes the evaluation readable. Each step removes one more kind of shortcut that a transformation could otherwise exploit. A baseline that only checks signatures says little about task meaning. A baseline that adds coverage still misses attribute drift. The final layer is valuable because it combines the earlier checks into a single task-aware test rather than treating them as disconnected compliance rules.
+Each baseline adds one semantic obligation, making the contribution of identity, coverage, attributes, and authoritative relations directly measurable.
 
-\subsection{Controlled transformation families}
+The semantic campaign uses 22 public networks. Each network contributes 30 lawful authoritative renames and 60 harmful transformation scenarios: task-asset drop, independent merge, incorrect one-to-many mapping, target-identifier reuse, endpoint-parameter swap, and source-snapshot mismatch. These scenarios represent conversions that leave a target network parseable while changing a branch, generator, relation, endpoint, intervention, or source snapshot needed by the operational task. The main endpoints are lawful acceptance, harmful acceptance, and the one-sided Clopper-Pearson upper confidence bound when no harmful event is accepted. The six families isolate coverage, identity, relation cardinality, target reuse, intervention semantics, and snapshot binding. Lawful renames preserve every contract field and serve as positive controls.
 
-The frozen semantic campaign uses 22 public networks. Each network contributes 30 lawful authoritative renames and 60 harmful transformations: task-asset drop, independent merge, incorrect one-to-many mapping, target-identifier reuse, endpoint-parameter swap, and source-snapshot mismatch. All generated rows are retained. The main endpoints are lawful acceptance, harmful acceptance, and the one-sided Clopper-Pearson upper confidence bound when no harmful event is accepted. The six harmful families are chosen to isolate distinct failure modes. Task-asset drop tests coverage, independent merge tests identity, incorrect one-to-many mapping tests relation cardinality, target-identifier reuse tests replay, endpoint-parameter swap tests intervention semantics, and source-snapshot mismatch tests freshness. Lawful renames preserve every contract field and serve as positive controls.
+Together, the six scenarios exercise the principal ways in which a model conversion can preserve syntax while changing a solver-facing task.
 
-The chosen mutation set is small enough to read and broad enough to be informative. Each family corresponds to a failure that can occur in an actual conversion workflow, not just in an abstract benchmark. That matters because the purpose of the paper is not to enumerate every possible corruption. It is to show that the gate blocks the kinds of transformations that most naturally arise when tasks are moved across tools, data formats, and solver environments. The benchmark therefore trades variety for clarity, which is usually the better choice when the goal is to show an operational principle.
+\subsection{Operational studies and statistical analysis}
 
-\subsection{Operational consequence experiments}
+The AC N-1 experiment compares the contingency conclusion obtained from the intended model with the conclusion obtained after a task-semantic transformation. The main effect is the counterfactual difference in maximum loading. The AC-OPF experiment records paired convergence, feasibility, objective value, and relative cost effect. Attempted and paired-valid denominators report solver availability and operational effect separately.
 
-The AC N-1 experiment compares the contingency conclusion obtained from the intended model with the conclusion obtained after a task-semantic transformation. The main effect is the counterfactual difference in maximum loading. The AC-OPF experiment records paired convergence, feasibility, objective value, and relative cost effect. Failed or nonconvergent pairs remain in the attempted denominator but are not inserted into paired-effect statistics.
-The AC N-1 and AC-OPF studies keep failed or nonconvergent pairs in the attempted denominator, so the gate is measured against the actual transformation stream. That makes the prevention counts directly interpretable.
+The DC-SCOPF campaign uses five networks, ten predefined operating states per network, every non-islanding line and transformer candidate, and post-contingency linear power flow. A false-secure dispatch passes the transformed baseline but violates the intended contingency assessment. The main endpoint is whether PCC stops that dispatch before solver execution.
 
-The DC-SCOPF campaign uses five networks, ten frozen operating states per network, every non-islanding line and transformer candidate, and post-contingency linear power flow. A false-secure dispatch is one that passes the transformed baseline but violates the intended contingency assessment. The main safety endpoint is whether PCC stops that dispatch before a harmful solver start.
+The DC-SCOPF design evaluates both the release decision and the physical or economic consequence associated with each false-secure dispatch.
 
-The dataset design follows the same logic as the gate. We keep the attempted denominator explicit so the reported effect is tied to the real transformation stream rather than to only successful runs. We also retain the failed and nonconvergent cases because they are part of the operational picture. In practice, those cases matter: they show where the model is fragile, where the solver struggles, and where a silent transformation would have been least visible if the gate were absent.
+Network is the confirmatory unit. We report exact attempted and paired-valid denominators, network-cluster bootstrap confidence intervals for median effects, and one-sided exact sign tests over network medians. Paired semantic comparisons use exact McNemar tests with Holm correction. Zero-event rates are accompanied by one-sided exact binomial upper bounds.
 
-\subsection{Statistics}
+\subsection{Portability and solver configuration}
 
-Network states are not treated as independent replacements for networks. We report exact attempted and paired-valid denominators, network-cluster bootstrap confidence intervals for median effects, and one-sided exact sign tests over network medians. Paired semantic comparisons use exact McNemar tests with Holm correction. Zero-event rates are accompanied by one-sided exact binomial upper bounds.
+The standards comparison uses official ENTSO-E APL 1.1.1 shapes and CAS 3.0.3 material. QoCDC 4.1.4 evaluation covers 15 implemented Level 1 to Level 4 checks. Structural conformance and PCC decisions are reported as complementary outcomes.
 
-\subsection{Standards, holdout, and independent-stack controls}
+For the untouched holdout, a PowSyBl core commit was fixed before tree inspection. A filename- and hash-based rule selected the first complete, nonduplicate CGMES bundle. The evaluation combines PCC, APL SHACL, and native import outcomes.
 
-Official ENTSO-E APL 1.1.1 shapes and CAS 3.0.3 material are frozen by hash. QoCDC 4.1.4 evaluation covers 15 locally implemented Level 1 to Level 4 checks. These standards controls are kept separate from PCC so the structural checks stay visible on their own.
+The independent comparison uses PYPOWER/PIPS on Windows and PowerModels/HiGHS under WSL Julia. The PowerModels DCP formulation provides a contrast through its transformer treatment, and the aligned DCMP formulation matches the PYPOWER \texttt{makeBdc} equations. This comparison separates formulation effects from solver implementation effects.
 
-For the untouched holdout, a PowSyBl core commit was frozen before tree inspection. A mechanical filename- and hash-only rule selected the lexicographically first complete, nonduplicate CGMES bundle. PCC, APL SHACL, and native import outcomes are reported independently.
+The final evaluation configuration fixed the networks, operating states, candidate outages, costs, equations, task transformations, safety thresholds, and termination rules before execution. Each network-state ran in a separate process with a terminal checkpoint. For case500, tighter interior-point tolerances reduced dual noise from $3.43\times10^{-6}$ to $3.87\times10^{-7}$ and isolated 15 active candidates at offset 7. The final configuration evaluated every selected candidate with the same task definition and acceptance logic.
 
-The independent solver comparison uses Windows PYPOWER/PIPS and WSL Julia/PowerModels/HiGHS. A first run using PowerModels `DCPPowerModel` serves as a formulation reference because that formulation omits transformer tap and phase shift. The corrective comparison uses `DCMPPowerModel`, whose equations match PYPOWER `makeBdc`; no numerical tolerance or sample was changed. This cross-stack control checks that the main result is not tied to one solver family. Agreement after switching from `DCPPowerModel` to `DCMPPowerModel` is therefore a formulation-level control.
-
-\subsection{Protocol governance and numerical amendments}
-
-Scientific design variables were frozen before the confirmatory campaign: networks, ten operating states, candidate outages, costs, equations, task mutations, safety thresholds, and failure-retention rules. Each network-state ran in a separate process with a terminal checkpoint. Numerical failures in case500 led to a versioned solver-engineering chain (v2 to v11); every failed attempt, timeout, checkpoint, and parent protocol remains archived. No amendment removed a state, candidate, or outcome, and `AlmostSolved`, `InsufficientProgress`, `NumericalError`, and time-limit terminations were never accepted as optimal. We retain the versioned chain because numerical tuning changed tolerances, while each revision was checked against the same frozen data and stop criteria.
-
-The final v11 amendment tightened the full-SCOPF interior-point tolerances without changing the frozen activity threshold. At offset 7, the previous tolerance produced a common dual noise of 3.43e-06 for constraints with approximately 0.30 p.u. slack, conservatively classifying all 582 candidates as active. A pre-execution diagnostic with tighter tolerances reduced that noise to 3.87e-07 and identified 15 candidates that were independently active by both dual magnitude and primal slack. The final ten-state case500 run used this frozen precision portfolio and retained the earlier conservative checkpoint. Exact terminal separation still evaluated every non-omitted candidate after each reduced solve.
-
-The versioned amendment chain is part of the evidence, not an implementation distraction. It shows that numerical settings can move during development while the frozen data, stop criteria, and task semantics stay fixed. That is exactly the right stance for a paper like this. The point is not that one solver parameter setting is sacred. The point is that the final result is robust enough to survive a carefully documented sequence of solver refinements without changing the declared task or the acceptance logic.
-
-\section{Experiments}
-The experiments were organized as an evidence ladder. We tested whether each increasingly strong protection removed a distinct failure family, then measured the operational consequences in AC N-1, AC-OPF, and DC-SCOPF, and finally checked that the result survived independent solver reproduction, untouched holdout data, and a blind external-tool control.
-
-\subsection{Semantic baseline ladder}
-
-Across 1,320 harmful transformations and 660 lawful controls, B0 and B1 accepted all harmful cases, B2 accepted 880, B3 accepted 440, B4 accepted 220, and B5 accepted none. Every baseline accepted all 660 lawful transformations. The full PCC therefore produced an observed harmful-release rate of 0/1,320 and a lawful-retention rate of 660/660. The one-sided 95\% exact upper bound on the harmful-release probability was 0.2267\%.
-
-The ladder is monotone by design. Signing alone does not establish task semantics, global identity does not establish task coverage, task coverage does not establish attribute preservation, and attribute equality alone does not bind authoritative relation and intervention evidence. The ordered baseline sequence isolates these residual risks one layer at a time.
+\section{Experimental Results}
+In all three operational studies, corrupted transformations remained parseable and solvable but changed the study result. PCC stopped the affected targets before solver execution in the AC N-1, AC-OPF, and DC-SCOPF campaigns. The ablation and portability tests then show which evidence was responsible for these decisions.
 
 \subsection{AC N-1 and AC-OPF}
 
-The AC N-1 campaign contained 56 attempts, of which 53 produced paired-valid operational outcomes; all three failures were retained. PCC prevented every harmful paired-valid start, so no unsafe solver execution reached the contingency stage. The median counterfactual change in maximum loading was 3.879 percentage points, with a network-cluster bootstrap 95\% confidence interval of 0.261 to 0.744. All 53 paired states and all eight network medians were positive.
+Corrupted transformations changed both contingency loading and OPF cost in the AC studies. The AC N-1 campaign produced 53 paired-valid outcomes from 56 attempts. PCC prevented every harmful paired-valid start, so no unsafe execution reached the contingency stage. The median counterfactual change in maximum loading was 3.879 percentage points, with a network-cluster bootstrap 95\% confidence interval of 0.261 to 10.744. All 53 paired states and all eight network medians were positive.
 
-The AC-OPF campaign covered 35 attempted pairs, with 25 paired-valid outcomes over five networks and ten nonconvergent pairs retained in the denominator. PCC stopped all 25 consequential transformations before solver start. The median relative objective effect was 5.96\%, with a network-cluster bootstrap 95\% confidence interval of 2.61 to 4.07\%, and the maximum observed effect was 27.12\%. All five network medians were positive.
+The AC-OPF campaign produced 25 paired-valid outcomes from 35 attempts over five networks. PCC stopped all 25 consequential transformations before solver start. The median relative objective effect was 5.96\%, with a network-cluster bootstrap 95\% confidence interval of 2.61 to 14.07\%, and the maximum observed effect was 27.12\%. All five network medians were positive.
+
+Figure~\ref{fig:ac-operational} reports the attempt accounting, network-level effects, and prevention counts for both AC campaigns. The paired-valid design separates transformation-induced task changes from ordinary solver failures. The reported effects therefore come from cases where both the source and transformed studies could be solved.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/fig3_operational_consequences.pdf}
+\caption{Operational consequences and prevention in the AC studies. PCC prevented every consequential AC N-1 and AC-OPF solver start, with consistent physical and economic effects across networks.}
+\label{fig:ac-operational}
+\end{figure}
 
 \subsection{DC-SCOPF}
 
-The frozen DC-SCOPF campaign completed 50 operating states across five networks and evaluated 12,340 candidate-outage rows with zero selected terminal-state failures. Under the strict paired definition, 369 dispatches were false secure: the transformed problem appeared secure, but the intended contingency model violated its limit. PCC blocked all 369 before computation, and no harmful solver start occurred. The one-sided 95\% upper bound on the harmful-start rate was 0.81\%.
+In DC-SCOPF, the main failure mode was false security. Across 50 operating states and five networks, the study evaluated 12,340 candidate-outage rows. The paired analysis identified 369 false-secure dispatches: the transformed problem appeared secure, but the intended contingency model violated its limit. PCC blocked all 369 before computation, and no harmful solver start occurred. The one-sided 95\% upper bound on the harmful-start rate was 0.81\%.
 
-The hidden consequence was substantial. The median post-contingency loading excess was 0.241 p.u., the median hidden load shedding was 5.20 MW, and the median relative cost understatement was 1.04\%. All five network medians were positive for all three effects. The largest case, case500, contributed 5,820 rows and 85 strictly paired false-secure dispatches.
+These false-secure cases were not marginal. The median post-contingency loading excess was 0.241 p.u., the median hidden load shedding was 5.20 MW, and the median relative cost understatement was 1.04\%. All five network medians were positive for all three effects. The largest case, case500, contributed 5,820 rows and 85 false-secure dispatches.
+
+Table~\ref{tab:epsr-operational-summary} reports the operational consequence and prevention counts for the AC N-1, AC-OPF, and DC-SCOPF campaigns.
+
+\begin{table}[!htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Operational consequence and prevention.}
+\label{tab:epsr-operational-summary}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\centering\arraybackslash}p{0.12\linewidth}>{\centering\arraybackslash}p{0.08\linewidth}>{\centering\arraybackslash}p{0.10\linewidth}YY>{\centering\arraybackslash}p{0.07\linewidth}@{}}
+\toprule
+Task & \shortstack{Valid/\\attempted} & Blocked & \shortstack{Harmful\\starts} & Median effect & 95\% CI & $p$ \\
+\midrule
+AC N-1 & 53/56 & 53 & 0 & 3.879 pp & 0.261--10.744 pp & 0.0039 \\
+AC-OPF & 25/35 & 25 & 0 & 5.96\% & 2.61--14.07\% & 0.0313 \\
+\mbox{DC-SCOPF} & 50/50 states & 369 & 0 & 0.241 p.u. & 0.088--0.382 p.u. & 0.0313 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Figure~\ref{fig:dc-scopf-heterogeneity} shows the full 5 \(\times\) 10 state grid and the network-level outcome heterogeneity.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/fig4_dc_scopf_heterogeneity.pdf}
+\caption{DC-SCOPF outcome atlas. False-secure dispatches span the five-network by ten-state grid, with network-level effects on loading, load shedding, and operating cost.}
+\label{fig:dc-scopf-heterogeneity}
+\end{figure}
+
+\subsection{Semantic baseline ladder}
+
+The ablation ladder shows which task evidence prevented consequential solver starts. Across 1,320 harmful transformations and 660 lawful controls, B0 and B1 accepted all harmful cases, B2 accepted 880, B3 accepted 440, B4 accepted 220, and B5 accepted none. Every baseline accepted all 660 lawful transformations. The full PCC therefore produced an observed harmful-release rate of 0/1,320 and a lawful-retention rate of 660/660. The one-sided 95\% exact upper bound on the harmful-release probability was 0.2267\%.
+
+The ladder was monotone by construction. Signing alone did not establish task semantics, global identity did not establish task coverage, task coverage did not establish attribute preservation, and attribute equality did not bind authoritative relation and intervention evidence. The ordered baselines therefore isolate the value of each obligation in the PCC release decision.
+
+Table~\ref{tab:epsr-baseline-ladder} summarizes the ordered semantic baseline ladder.
+
+\begin{table}[!htbp]
+\centering
+\small
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Ordered semantic baseline ladder.}
+\label{tab:epsr-baseline-ladder}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.33\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}@{}}
+\toprule
+Baseline & \shortstack{Lawful\\acc.} & \shortstack{Harmful\\acc.} & \shortstack{Harmful\\rate} \\
+\midrule
+\shortstack[l]{\texttt{B0\_structural}\\\texttt{\_only}} & 660/660 & 1320/1320 & 1.000 \\
+\shortstack[l]{\texttt{B1\_signed}\\\texttt{\_artifact\_v1}} & 660/660 & 1320/1320 & 1.000 \\
+\texttt{B2\_global\_identity} & 660/660 & 880/1320 & 0.667 \\
+\texttt{B3\_task\_footprint} & 660/660 & 440/1320 & 0.333 \\
+\shortstack[l]{\texttt{B4\_attribute}\\\texttt{\_invariants}} & 660/660 & 220/1320 & 0.167 \\
+\texttt{B5\_full\_PCC\_v2} & 660/660 & 0/1320 & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:baseline-ladder} shows the monotonic reduction in harmful acceptance. Each added semantic obligation removed a distinct failure family, while lawful acceptance remained unchanged.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.96\linewidth]{figures/fig2_semantic_baseline_ladder.pdf}
+\caption{Protection against controlled task-semantic corruption. Full PCC eliminates harmful acceptance while preserving every lawful transformation.}
+\label{fig:baseline-ladder}
+\end{figure}
 
 \subsection{Decision reason taxonomy and runtime scaling}
 
-The gate emits repair-oriented reason codes rather than a black-box rejection. Across the semantic attack matrix, DC-SCOPF gate records, case500 records, and the external blind roundtrip control, the taxonomy covered 14,447 rows, of which 13,660 carried machine-readable reasons across 11 families. The most frequent DC-SCOPF rejections were \texttt{task\_selector\allowbreak\_\allowbreak not\allowbreak\_\allowbreak preserved} and \texttt{task\_target\allowbreak\_\allowbreak missing}, which point directly to the repair action.
+The release gate also returned repair information at case-study scale. It produced machine-readable reasons for 13,660 of 14,447 evaluated records across 11 reason families. The most frequent DC-SCOPF reasons were \texttt{task\_selector\allowbreak\_\allowbreak not\allowbreak\_\allowbreak preserved} and \texttt{task\_target\allowbreak\_\allowbreak missing}, which identify the model elements required for repair. The semantic campaign returned 220 unresolved decisions for missing task-asset mappings, while the external roundtrip returned none.
 
-Verification remained subsecond over the tested range. The p95 latency increased from 1.80 ms at 118 assets to 215.09 ms at 13,659 assets. These timings include the verification gate, not the downstream computation avoided by a fail-closed decision.
+Verification remained subsecond over the tested range. The p95 latency increased from 1.80 ms at 118 assets to 215.09 ms at 13,659 assets. These timings include the verification gate, not the downstream computation avoided when a target was rejected.
 
 \subsection{Structural standards, solver reproduction, and holdout controls}
 
-Structural conformance and task semantics answer different questions. The official Svedala EQBD control conformed to the selected APL 1.1.1 SHACL shapes, yet PCC still rejected the byte-identical target when one of eight task assets lacked authoritative identity evidence. Conversely, the untouched PowSyBl bundle was task lawful for the bounded eight-asset PCC projection and imported successfully, while the raw merged APL run still reported structural violations. QoCDC 4.1.4 evaluation covered 15 locally implemented Level 1 to Level 4 checks and stayed separate from PCC.
+The standards and portability checks gave the same distinction between structural conformance and task preservation. The official Svedala APL control conformed to the selected APL 1.1.1 SHACL shapes. PCC additionally detected missing authoritative identity evidence for one of eight task assets in the same target. On the untouched PowSyBl bundle, PCC accepted the complete task proof and pypowsybl imported the 59-element network successfully. QoCDC 4.1.4 evaluation covered 15 Level 1 to Level 4 checks.
 
-Independent solver reproduction gave the same message from another stack. The unaligned PowerModels DCP run agreed with PYPOWER on all nine statuses and all eight total-generation values, but only 3/8 mutually optimal objectives met the 1e-5 tolerance. After replacing only the formulation with \texttt{DCMPPowerModel}, the independent Julia/PowerModels/HiGHS stack agreed with PYPOWER/PIPS on 9/9 statuses, and all eight mutually optimal objectives and generation totals met the frozen tolerances.
+The independent solver comparison reproduced the aligned formulation across numerical stacks. The initial PowerModels DCP run matched all nine statuses but only 3/8 mutually optimal objectives because it omitted transformer tap and phase-shift terms. With the transformer-aware DCMP formulation, the two stacks agreed on 9/9 statuses and all eight mutually optimal objective and generation values.
 
-The untouched CGMES holdout and the blind external-tool roundtrip control reinforced the same boundary. PCC accepted the complete proof over eight BaseVoltage task assets and rejected the same target when one proof relation was removed. The blind roundtrip challenge accepted 127/127 lawful exact roundtrips, accepted zero harmful task transformations, and recorded zero harmful protected-solver starts. Together, these controls show that the main result spans corpus, import path, and numerical stack.
+The untouched CGMES holdout extended the result to a separate source corpus. PCC accepted the complete proof over eight BaseVoltage task assets and rejected the target after one proof relation was removed. The blind external-tool challenge accepted 127/127 lawful roundtrips, accepted no harmful task transformations, and produced no harmful solver starts.
 
-\section{Results}
-Across the campaigns, the results support the same conclusion. PCC closed the semantic acceptance gap in the controlled transformation ladder, prevented consequential solver starts in the operational campaigns, and held across an independent solver stack and a separate CGMES source. Across the tested cases, the gate turned transformation into a checked execution step.
+Table~\ref{tab:epsr-standards-controls} separates the standards conformance checks from the untouched-source and independent-stack controls.
 
-The clearest result came from the ordered transformation ladder. B0 through B4 still accepted harmful cases, but B5 rejected all 1,320 harmful cases while retaining all 660 lawful controls. Signing the wrong artifact did not establish task semantics, global identity did not establish task coverage, task coverage did not establish attribute preservation, and attribute equality alone did not bind authoritative relation and intervention evidence. The full PCC bound those elements together and closed the acceptance gap. The observed harmful-release rate was 0/1,320, and the lawful-retention rate was 660/660. The one-sided 95% exact upper bound on the harmful-release probability in this controlled population was 0.2267%.
-
-The stepwise decline across the baseline ladder was also informative. Harmful acceptance fell from 1,320 at B0 and B1 to 880 at B2, 440 at B3, and 220 at B4 before reaching zero at B5. The monotone pattern shows that no single check carried the whole burden. Each increment removed a distinct failure family, and only the full snapshot-bound PCC eliminated the remaining harmful transformations. The lawful controls stayed fully intact at every step, which means the gain came from narrowing the accepted transformation space rather than from discarding valid cases.
-
-The operational campaigns extend the same mechanism beyond transformation. In AC N-1, 53 of 56 attempts produced paired-valid operational outcomes, and PCC rejected every harmful transformation before solver start. The median counterfactual change in maximum loading was 3.879 percentage points, with all 53 paired states and all eight network medians positive. In AC-OPF, 25 of 35 attempted pairs were paired-valid, PCC stopped all 25 consequential transformations, and the median relative objective effect was 5.96%. The maximum relative objective effect reached 27.12%, which shows that the affected cases were substantial. Both campaigns therefore point to the same result: when the task semantics changed, the gate stopped the computation before the solver could act on the wrong problem.
-
-The DC-SCOPF campaign reinforced that pattern in a stricter setting. The frozen campaign completed all 50 states across five networks and evaluated 12,340 candidate-outage rows with zero selected terminal-state failures. Under the strict paired definition, 369 dispatches were false secure, meaning the transformed problem appeared secure although the intended contingency model violated its limit. PCC stopped all 369 before computation, and no harmful solver start occurred. The hidden operational impact was also clear: the median post-contingency loading excess was 0.241 p.u., the median hidden load shedding was 5.20 MW, and the median relative cost understatement was 1.04%. All five network medians were positive for all three effects. The largest case, case500, contributed 5,820 rows and 85 strictly paired false-secure dispatches.
-
-The result held across solver paths and source corpora. The DCP/DCMP control reproduced aligned-formulation statuses across PYPOWER/PIPS and the Julia/PowerModels/HiGHS stack. All eight mutually optimal objectives and generation totals met the frozen tolerances after the formulation correction, while the unaligned DCP formulation still showed mismatches in objective-level agreement and cross-feasibility checks. The untouched CGMES holdout gave the same message from the data side: PCC accepted the complete proof over eight BaseVoltage task assets, rejected the same target when one proof relation was removed, and remained effective on a separate source. The blind external-tool roundtrip control added a third check. It accepted 127/127 lawful exact roundtrips, accepted zero harmful task transformations, and recorded zero harmful protected-solver starts.
-
-That cross-stack behaviour is useful because it separates task semantics from one numerical implementation. The result does not depend on a single solver codebase or a single CGMES source archive. It survives a change of numerical stack, a change of source bundle, and a change of roundtrip route. In a field where workflows often move across tools and teams, that portability is one of the more practical parts of the contribution.
-
-The runtime results reinforce the same pattern. Verification stays below a second even at the largest tested asset count, which means the gate does not become the bottleneck that it is trying to prevent. The useful comparison is gate time against the downstream solve that it blocks. On that scale, the overhead is small, while the value of stopping a wrong computation early is large.
-
-The cross-stack and holdout results also stayed consistent with the intended task semantics. When the solver equations matched across platforms, the numerical answers matched to frozen tolerances; when the formulation omitted transformer terms, the mismatch appeared immediately in both objective values and branch feasibility. On the CGMES side, the proof obligations were strong enough to preserve lawful import while still rejecting the missing-relation variant. The external blind roundtrip then showed that the same gate accepted lawful export-import cycles without opening the door to harmful solver starts. These controls keep the main result anchored to task semantics rather than to one archive, one solver, or one transformation route.
-
-Two supporting results make the mechanism operational. Across the semantic attack matrix, DC-SCOPF gate records, case500 records, and the external blind roundtrip control, the gate returned 11 machine-readable reason families. Task-selector and task-target mismatches dominated the repairable rejections, and the same reason structure supported a closed repair loop in which `ProofGuidedRepairer` repaired all 288 harmful cases and the repaired artifacts revalidated successfully. Verification also remained subsecond over the tested range, rising from 1.80 ms at 118 assets to 215.09 ms at 13,659 assets. Taken together, the results show that PCC is strict and practical: it rejects harmful transformations, preserves lawful ones, and does so at a latency that stays well below one second in the tested range.
-
-The reason output adds another layer of utility. Different failure families map to different repair actions, so the verifier distinguishes missing task targets from missing asset relations, attribute drift, and snapshot mismatches, which lets the operator repair the relevant part of the transformation instead of restarting from scratch. The runtime profile supports that workflow: even at the largest tested asset count, the gate stayed within a fraction of a second, so the verification cost remains small relative to the downstream computation it prevents. In combination, the results show a gate that is selective, reproducible, and fast enough for repeated use.
-
-The reason codes carry information that can be used immediately, and the response stays local to the defect. That local repair loop makes the system easier to adopt, because a user does not have to reconstruct the entire transformation path after a mismatch. The same gate that blocks unsafe execution also gives the shortest path back to a valid one.
-
-That closes the loop from validation to operation. PCC returns a reasoned decision that can be acted on. That makes it a practical fit for repeated studies, where the same model may be converted, repaired, and rechecked many times before it is ready for analysis or dispatch.
+\begin{table}[!htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.02}
+\caption{Standards and untouched-source controls.}
+\label{tab:epsr-standards-controls}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}Y@{}}
+\toprule
+Artifact & Check & Outcome & \shortstack{Results/\\elements} & Interpretation \\
+\midrule
+Official Svedala APL control & APL 1.1.1 SHACL & True & 0 & Structural conformance control \\
+QoCDC development control & QoCDC 4.1.4 subset L1-L4 & True & 15 & Applicable-subset control \\
+Untouched PowSyBl bundle & APL 1.1.1 merged-graph run & False & 765 & Task-semantic and import holdout \\
+Untouched PowSyBl bundle & pypowsybl 1.15.0 import & success & 59 & 59 reported elements across six tables \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section{Discussion}
-PCC moves task semantics into the execution boundary. Preservation is checked before computation starts, making the transformer part of the safety workflow.
+The main implication of the results is that model validation should be tied to the intended operational task. A converted network can pass syntax checks, import into a solver, and converge while still changing the N-1, OPF, or SCOPF problem. PCC addresses this gap at the point where the transformed model is released for computation. The release decision is therefore made on task evidence, not on file validity alone.
 
-The evidence points in the same direction. The ordered baseline ladder shows how the conventional layers stack, the AC N-1 and AC-OPF campaigns show that the gate prevents consequential starts, and the DC-SCOPF campaign shows the same pattern in a stricter setting. The DCP/DCMP control adds an independent implementation check, and the untouched holdout extends the result to a separate CGMES source.
+This distinction explains the behavior of the semantic baseline ladder. Artifact signatures and global identifiers preserve provenance and object continuity, but they do not prove that the solver receives the same study. Task coverage improves the decision, and attribute checks remove another class of errors. The remaining failures disappear only when relation, trace, and intervention evidence are included. This progression shows that task preservation is a joint property of the converted assets, their parameters, and the operations applied to them.
 
-This places PCC in relation to existing validation practice. APL and QoCDC establish exchange and profile conformance; PCC sits one layer later and checks whether the declared task survives conversion. In deployment, the flow is straightforward: sign the conversion evidence, verify the task contract, start the solver after acceptance, and use the returned reason codes to repair and reissue.
+The operational studies show why this distinction matters for power-system analysis. In the AC cases, corrupted transformations changed contingency loading and OPF objective values even when both paired studies were solvable. In the DC-SCOPF cases, the transformed model produced false-secure dispatches that hid overloads, load shedding, and cost understatement. These are not bookkeeping errors in the exchange format. They are changes in the operating conclusion drawn from the model.
 
-The campaign was designed for controlled evaluation, so the reported rates describe the tested networks, tasks, and mutation families. The main contribution is the execution pattern itself, which is portable across tools and ready to extend to additional workflows and operating conditions.
+PCC complements existing structural validation rather than replacing it. SHACL, QoCDC, and solver import checks remain useful for detecting malformed or unsupported model data. PCC adds a task layer that asks whether the specific buses, branches, generators, limits, costs, and interventions used by the study have survived conversion. The Svedala, PowSyBl, CGMES holdout, external roundtrip, and independent-solver checks show that this layer can be placed around realistic model and computation paths.
 
-At the paper level, the study makes a specific claim: when the task contract is explicit and the downstream solver is protected by the gate, semantic preservation can be enforced without turning the whole pipeline into a research prototype. That is the design pattern worth reusing.
+Earlier contract work provides useful reference points. Design-by-contract methods specify preconditions, postconditions, and invariants for software components \citep{meyer1992dbc}, and proof-carrying authorization attaches logical evidence to access decisions \citep{appel1999pca}. Contract-based design and assume-guarantee methods use contracts for component composition, refinement, and system-level design reasoning \citep{sangiovanni2012contract,benveniste2018contracts}. PCC brings this checkable-obligation view to a different boundary. It releases a converted grid model only when the evidence links the solver task to the selected equipment, attributes, relations, and interventions.
 
-From a deployment point of view, the paper gives a practical division of labour. The converter produces evidence, the verifier checks it, and the operator keeps the task definition authoritative. That division fits existing workflows and stops the wrong computation before it starts. It is the combination of those properties that makes the approach useful.
-
-The paper already showed the evidence ladder, the cross-stack control, the holdout, and the runtime profile. The closing paragraph tells the reader what the story adds: a task-semantic gate that is cheap to run, easy to interpret, and strong enough to change when the solver starts. That is the part worth carrying into the next study, whether the next study is a cleaner converter, a more ambitious dispatch problem, or a larger deployment trace.
-
-Seen that way, the paper is about where correctness should be enforced in a power-system workflow. The answer here is at the boundary between conversion and execution, after the model has been parsed but before the solver has committed to a result. That is a useful place to intervene because it is late enough to work with real artifacts and early enough to prevent a wrong answer from looking legitimate.
+The computation cost was small compared with the studies it protects. Verification stayed below 216 ms at 13,659 assets, so the gate can be applied before repeated contingency analysis or optimization runs. The method is most directly applicable when the operational task can be declared before solver execution and the converter can emit relation evidence. Under that condition, PCC provides a practical route from model conversion to task-valid power-system computation.
 
 \section{Conclusion}
-PCC establishes an auditable semantic layer to power-grid transformation. It combines task-bound relations, required attributes, authoritative trace evidence, and a fail-closed gate, so downstream computation starts only when the declared task survives conversion. In the tested campaigns, it rejected every harmful semantic transformation, retained every lawful control, and prevented every observed harmful solver start. Task preservation becomes an execution requirement.
+This paper introduced proof-carrying contracts for task-preserving power-system model transformation. PCC links source and transformed snapshots, relation evidence, required attributes, and intervention semantics to the solver-release decision. A converted network is released for N-1, OPF, or SCOPF analysis only after the declared task is preserved.
 
-The campaign used public benchmark and conformity-test data, which kept the evidence transparent and directly comparable. The AC experiments retained nonconvergent attempts in the denominator, the holdout and blind external controls kept separate source paths visible, and QoCDC coverage stayed within the declared Level 1 to Level 4 subset. Those choices kept the result easy to audit. Next steps include utility workflow traces, uncertainty-aware and multi-period tasks, learned OPF proxies, distributed certificate issuance, revocation and key management, additional independent validators, and larger N-k security campaigns.
+Across the evaluated cases, this task layer changed which transformed models reached computation. PCC rejected all 1,320 harmful transformations and accepted all 660 lawful controls. It prevented every consequential AC N-1 and AC-OPF solver start and blocked 369 false-secure DC-SCOPF dispatches across 50 operating states. The hidden effects involved branch loading, operating cost, and load shedding, showing that task-semantic preservation changes power-system conclusions rather than only model metadata.
 
-Taken together, PCC makes transformation correctness operational rather than aspirational. It turns task preservation into something the system can check, record, and enforce before the solver sees the instance.
+The standards, holdout, scaling, and independent-solver checks place PCC alongside existing model-validation and computation tools. When the task is declared and relation evidence is available, task preservation becomes an explicit execution rule for model-driven power-system analysis.
 
-That is the central contribution of the paper. It adds a concrete safety layer to a pipeline that already had strong structural checks and strong numerical solvers, and it makes task survival explicit at the conversion boundary.
-
-The contribution is reusable outside this exact benchmark set. Any workflow that converts operational grid data into a solver-facing instance can benefit from a task-bound gate of this kind. The names of the fields may change, but the pattern stays the same: declare the task, bind the evidence, check the mapping, and then run the computation. That is a small enough recipe to remember and a strong enough one to matter.
-
-\section*{Data availability}
-The code, frozen transformation artifacts, and solver logs used in this study are archived in the project repository at commit `a1e9166`. Public benchmark networks and conformity-test materials are identified in the manuscript and supporting reference list. Additional generated artifacts can be shared by the corresponding author upon reasonable request.
-
-\section*{Code availability}
-The manuscript source and experimental scripts are maintained with the project repository at commit `a1e9166`. A tagged release package can be provided with the submission materials or shared by the corresponding author upon request.
+\section*{Data and code availability}
+The data supporting this study and the code used to generate the results are publicly available in the project GitHub repository and the archived Zenodo release at \url{https://doi.org/10.5281/zenodo.21796488}. The release contains the implementation, frozen protocols, corpus manifests, hashes, evidence schemas, experiment runners, machine-generated summaries, manuscript figures, figure source data, and machine-generated tables. Third-party public datasets and standards artifacts are referenced by source URL, release or commit, licence record, and SHA-256 rather than relicensed.
 
 \section*{Author contributions}
 Zixuan Liu: conceptualization, methodology, software, formal analysis, investigation, visualization, writing - original draft. Wei Xiong: conceptualization, validation, supervision, writing - review and editing, project administration.
@@ -326,12 +382,15 @@ Zixuan Liu: conceptualization, methodology, software, formal analysis, investiga
 The authors declare no conflict of interest.
 
 \section*{Acknowledgements}
-This work was supported in part by the National Natural Science Foundation of China (62202148), the Natural Science Foundation of Hubei Province (2022CFB908 and 2019CFB530), and the China Scholarship Council (201808420418).
+This work was supported in part by the National Natural Science Foundation of China (62202148).
+It was also supported by the Natural Science Foundation of Hubei Province (2022CFB908 and 2019CFB530).
+It was also supported by the China Scholarship Council (201808420418).
+The authors gratefully acknowledge these funding sources.
 The authors thank the open benchmark and standards communities whose public materials supported the study.
 
-\bibliographystyle{elsarticle-num}
-\nocite{*}
-\bibliography{references}
+\begin{thebibliography}{40}
+\sloppy
+\input{EPSR_template_bibitems.tex}
+\end{thebibliography}
 
 \end{document}
-

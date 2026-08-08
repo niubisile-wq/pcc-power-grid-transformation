@@ -32,10 +32,10 @@ No item below may be marked complete from an interim result.
 - [x] Abstract below 250 words.
 - [x] Five highlights, each <=85 characters.
 - [x] No more than seven keywords.
-- [ ] Final title page: author names, affiliations, corresponding-author email.
-- [ ] Author-confirmed CRediT statement.
-- [ ] Author-confirmed funding statement.
-- [ ] Author-confirmed competing-interest declaration.
-- [ ] Data/code availability statement with the final immutable archive DOI/version.
+- [x] Final title page: author names, affiliations, corresponding-author email.
+- [x] Author-confirmed CRediT statement.
+- [x] Author-confirmed funding statement.
+- [x] Author-confirmed competing-interest declaration.
+- [x] Data/code availability statement with the final immutable archive DOI/version.
 - [x] Main manuscript, editable figures, source-data manifest, and supplement prepared; graphical abstract only if requested by the journal.
-- [ ] Cover letter stating problem, method, successful solution, and practical value.
+- [x] Cover letter stating problem, method, successful solution, and practical value.

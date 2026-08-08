@@ -1,0 +1,3 @@
+formulation,status,objective,generation,max_objective_relative_error
+DCP (unaligned),1.0,0.375,1.0,0.0016773987423244951
+DCMP (transformer-aware),1.0,1.0,1.0,4.696276714948887e-12

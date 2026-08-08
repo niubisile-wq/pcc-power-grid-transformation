@@ -209,78 +209,34 @@ def figure1() -> tuple[list[Path], list[Path]]:
 
 def figure2(sem: dict) -> tuple[list[Path], list[Path]]:
     metric_names = list(sem["metrics"])
-    display = ["Structural", "Signed\nartifact", "Global\nidentity", "Task\nfootprint", "Attribute\ninvariants", "Full PCC"]
+    display = ["Structural", "Signed", "Global", "Footprint", "Attr.\ninv.", "Full PCC"]
     attack_names = list(next(iter(sem["metrics"].values()))["by_attack_family_harmful_accepts"])
-    attack_display = ["Task asset drop", "Independent merge", "Wrong 1→many", "Target-ID reuse",
+    attack_display = ["Task asset drop", "Independent merge", "Wrong 1-to-many", "Target-ID reuse",
                       "Endpoint/parameter swap", "Source-snapshot mismatch"]
     matrix = np.array([[sem["metrics"][m]["by_attack_family_harmful_accepts"][a] / 220
                         for m in metric_names] for a in attack_names])
-    rates = np.array([sem["metrics"][m]["harmful_acceptance_rate"] for m in metric_names])
-    ci = np.array([sem["metrics"][m]["harmful_acceptance_wilson_95"] for m in metric_names])
-    lawful = np.array([sem["metrics"][m]["lawful_acceptance_rate"] for m in metric_names])
-    comps = sem["adjacent_paired_comparisons"][1:]
 
     src1 = write_csv("fig2_attack_family_acceptance.csv",
                      ["attack_family", *metric_names],
                      [{"attack_family": a, **{m: matrix[i, j] for j, m in enumerate(metric_names)}}
                       for i, a in enumerate(attack_names)])
-    src2 = write_csv("fig2_aggregate_acceptance.csv",
-                     ["baseline", "harmful_rate", "wilson_low", "wilson_high", "lawful_rate"],
-                     [{"baseline": m, "harmful_rate": rates[i], "wilson_low": ci[i, 0],
-                       "wilson_high": ci[i, 1], "lawful_rate": lawful[i]}
-                      for i, m in enumerate(metric_names)])
-    src3 = write_csv("fig2_adjacent_comparisons.csv",
-                     ["left", "right", "absolute_risk_reduction", "improvements", "regressions",
-                      "mcnemar_exact_two_sided_log10_p", "holm_adjusted_log10_p"], comps)
 
-    fig = plt.figure(figsize=(7.205, 4.57), constrained_layout=True)
-    gs = fig.add_gridspec(2, 2, width_ratios=[1.30, 1.0], height_ratios=[1.0, 0.82])
-    axa = fig.add_subplot(gs[:, 0]); axb = fig.add_subplot(gs[0, 1]); axc = fig.add_subplot(gs[1, 1])
+    fig, ax = plt.subplots(figsize=(5.85, 4.55), constrained_layout=True)
     cmap = LinearSegmentedColormap.from_list("accept", ["#F5F6F8", COL["harm2"], COL["harm"]])
-    im = axa.imshow(matrix, cmap=cmap, vmin=0, vmax=1, aspect="auto")
-    axa.set_xticks(range(6), display, rotation=32, ha="right")
-    axa.set_yticks(range(6), attack_display)
-    axa.tick_params(length=0)
+    im = ax.imshow(matrix, cmap=cmap, vmin=0, vmax=1, aspect="auto")
+    ax.set_xticks(range(6), display, rotation=22, ha="right")
+    ax.set_yticks(range(6), attack_display)
+    ax.tick_params(length=0)
     for i in range(6):
         for j in range(6):
-            axa.text(j, i, f"{int(matrix[i,j]*220)}", ha="center", va="center",
-                     color="white" if matrix[i,j] > 0.65 else COL["ink"], fontsize=6.3)
-    cbar = fig.colorbar(im, ax=axa, fraction=0.036, pad=0.02, ticks=[0, 0.5, 1])
+            ax.text(j, i, f"{int(matrix[i, j] * 220)}", ha="center", va="center",
+                    color="white" if matrix[i, j] > 0.65 else COL["ink"], fontsize=6.4)
+    cbar = fig.colorbar(im, ax=ax, fraction=0.035, pad=0.02, ticks=[0, 0.5, 1])
     cbar.set_label("Harmful acceptance fraction")
-    axa.set_title("Residual harmful acceptance by mutation family", loc="left", fontweight="bold")
-    panel(axa, "a", x=-0.12)
-
-    x = np.arange(6)
-    yerr = np.vstack([rates - ci[:,0], ci[:,1] - rates])
-    axb.errorbar(x, rates, yerr=yerr, fmt="o-", color=COL["harm"], lw=1.5,
-                 ms=4, capsize=2, label="Harmful")
-    axb.plot(x, lawful, "s--", color=COL["safe"], lw=1.1, ms=3.5, label="Lawful")
-    axb.set_ylim(-0.05, 1.08); axb.set_yticks([0, .25, .5, .75, 1])
-    axb.set_xticks(x, display, rotation=28, ha="right")
-    axb.set_ylabel("Acceptance fraction")
-    axb.legend(loc="lower left", ncol=2)
-    axb.annotate("0/1,320\nupper 95% = 0.227%", xy=(5,0), xytext=(3.55,.22),
-                 arrowprops=dict(arrowstyle="->", color=COL["pcc"], lw=.8),
-                 fontsize=6.2, color=COL["pcc"], ha="center")
-    axb.set_title("Full PCC separates harmful and lawful transformations", loc="left", fontweight="bold")
-    panel(axb, "b", x=-0.15)
-    clean(axb)
-
-    labels = ["Signed → identity", "Identity → footprint", "Footprint → attributes", "Attributes → PCC"]
-    arr = [c["absolute_risk_reduction"] for c in comps]
-    ypos = np.arange(4)[::-1]
-    bars = axc.barh(ypos, arr, color=[COL["pcc2"]]*4, height=.58)
-    axc.set_yticks(ypos, labels)
-    axc.set_xlim(0, .39); axc.set_xlabel("Absolute harmful-release reduction")
-    for bar, c in zip(bars, comps):
-        exponent = abs(c["holm_adjusted_log10_p"])
-        axc.text(bar.get_width()+.008, bar.get_y()+bar.get_height()/2,
-                 f"{bar.get_width():.3f}  (Holm p < $10^{{-{math.floor(exponent)}}}$)",
-                 va="center", fontsize=5.9)
-    axc.set_title("Each task-semantic obligation removes residual risk", loc="left", fontweight="bold")
-    panel(axc, "c", x=-0.15)
-    clean(axc)
-    return save(fig, "fig2_semantic_baseline_ladder"), [src1, src2, src3]
+    ax.set_title("Residual harmful acceptance by mutation family", loc="left", fontweight="bold")
+    panel(ax, "a", x=-0.12)
+    clean(ax)
+    return save(fig, "fig2_semantic_baseline_ladder"), [src1]
 
 
 def lollipop(ax, values: dict, color: str, xlabel: str, overall: float, ci: list[float], percent=False,
@@ -330,8 +286,10 @@ def figure3(app: dict) -> tuple[list[Path], list[Path]]:
         axa.text(i,v/2,str(v),ha="center",va="center",color="white",fontweight="bold")
         axa.text(i,v+o/2,str(o),ha="center",va="center",color=COL["ink"])
     axa.set_xticks(x,["AC N-1","AC-OPF"]); axa.set_ylabel("Attempted transformations")
-    axa.legend(loc="upper right")
-    axa.set_title("Every attempt remains accounted for",loc="left",fontweight="bold"); panel(axa,"a"); clean(axa)
+    axa.legend(loc="upper left", bbox_to_anchor=(0.44, 1.02), frameon=False, fontsize=6, borderaxespad=0.0)
+    axa.set_title("Every attempt remains accounted for", loc="left", fontweight="bold", pad=10)
+    axa.margins(x=0.08, y=0.12)
+    panel(axa,"a"); clean(axa)
 
     lollipop(axb,n1e["network_medians"],COL["harm"],"Median loading effect (percentage points)",n1e["median"],n1e["hierarchical_cluster_bootstrap_median_95"])
     axb.set_title("N-1 effects are positive in 8/8 networks",loc="left",fontweight="bold"); panel(axb,"b")
@@ -432,10 +390,9 @@ def figure4(dc: dict, atlas: dict) -> tuple[list[Path], list[Path]]:
         srcs.append(write_csv(f"fig4_{name}_network_medians.csv",["network","network_median"],
                               [{"network":n,"network_median":obj["network_medians"][n]} for n in nets]))
 
-    fig=plt.figure(figsize=(7.205,5.70),constrained_layout=True)
-    gs=fig.add_gridspec(2,4,height_ratios=[1.02,1.05],width_ratios=[1,1,1,0.92])
-    axa=fig.add_subplot(gs[0,0:3]); axe=fig.add_subplot(gs[0,3])
-    axb=fig.add_subplot(gs[1,0]); axc=fig.add_subplot(gs[1,1]); axd=fig.add_subplot(gs[1,2]); axf=fig.add_subplot(gs[1,3])
+    fig=plt.figure(figsize=(7.205,4.95),constrained_layout=True)
+    gs=fig.add_gridspec(2,3,height_ratios=[1.05,1.0])
+    axa=fig.add_subplot(gs[0,:]); axb=fig.add_subplot(gs[1,0]); axc=fig.add_subplot(gs[1,1]); axd=fig.add_subplot(gs[1,2])
     cmap=LinearSegmentedColormap.from_list("dc",["#F4F6F8","#B8CDE5",COL["pcc"]])
     im=axa.imshow(counts,cmap=cmap,aspect="auto",vmin=0,vmax=max(1,counts.max()))
     axa.set_xticks(range(10),[str(i) for i in range(10)]); axa.set_yticks(range(5),nets)
@@ -443,53 +400,25 @@ def figure4(dc: dict, atlas: dict) -> tuple[list[Path], list[Path]]:
     for i in range(5):
         for j in range(10):
             val=counts[i,j]; axa.text(j,i,str(val),ha="center",va="center",fontsize=6.3,color="white" if val>12 else COL["ink"])
-    cbar=fig.colorbar(im,ax=axa,fraction=.018,pad=.018); cbar.set_label("Strict false-secure rows")
+    cbar=fig.colorbar(im,ax=axa,fraction=.025,pad=.015); cbar.set_label("Strict false-secure rows")
     axa.set_title("Strict false-secure dispatches across the complete 5 x 10 grid",loc="left",fontweight="bold"); panel(axa,"a",x=-.06)
-
-    comps=[row["branch_component"] for row in component_rows]
-    comp_strict=[int(row["strict_false_secure"]) for row in component_rows]
-    comp_legacy=[int(row["legacy_false_secure"]) for row in component_rows]
-    yy=np.arange(len(comps))
-    axe.barh(yy+.14, comp_legacy, height=.25, color=COL["light"], edgecolor=COL["neutral"], label="Legacy")
-    axe.barh(yy-.14, comp_strict, height=.25, color=COL["pcc"], label="Strict")
-    axe.set_yticks(yy, comps); axe.set_xlabel("Rows")
-    axe.set_title("Line and transformer mechanisms",loc="left",fontweight="bold")
-    axe.set_xlim(0, max(comp_legacy + comp_strict) * 1.45)
-    for y,v in zip(yy,comp_strict):
-        axe.text(v+8,y-.14,str(v),va="center",fontsize=5.8,color=COL["pcc"])
-    for y,v in zip(yy,comp_legacy):
-        axe.text(v+8,y+.14,str(v),va="center",fontsize=5.8,color=COL["neutral"])
-    axe.text(.98,.90,"gray: legacy\nblue: strict",transform=axe.transAxes,
-             ha="right",va="top",fontsize=5.8,color=COL["ink"])
-    panel(axe,"b",x=-.20); clean(axe)
 
     loading=effects["alias_post_contingency_loading_excess_pu"]
     lollipop(axb,{n:loading["network_medians"][n] for n in nets},COL["harm"],"Loading excess (p.u.)",loading["median"],loading["hierarchical_cluster_bootstrap_median_95"])
-    axb.set_title("Hidden loading",loc="left",fontweight="bold"); panel(axb,"c",x=-.22)
+    axb.set_title("Hidden loading",loc="left",fontweight="bold"); panel(axb,"b",x=-.12)
     axb.text(.98,.03,"overall 0.241\n95% CI 0.088-0.382",transform=axb.transAxes,ha="right",fontsize=5.8)
 
     shed=effects["hidden_load_shed_mw"]
     lollipop(axc,{n:shed["network_medians"][n] for n in nets},COL["warn"],"Hidden load shedding (MW)",shed["median"],shed["hierarchical_cluster_bootstrap_median_95"],symlog=True)
-    axc.set_title("Corrective requirement",loc="left",fontweight="bold"); panel(axc,"d",x=-.22)
+    axc.set_title("Corrective requirement",loc="left",fontweight="bold"); panel(axc,"c",x=-.12)
     axc.text(.98,.03,"overall 5.20 MW\n95% CI 0.60-33.00",transform=axc.transAxes,ha="right",fontsize=5.8)
 
     cost=effects["relative_cost_understatement"]
     lollipop(axd,{n:cost["network_medians"][n] for n in nets},COL["violet"],"Cost understatement (%)",cost["median"],cost["hierarchical_cluster_bootstrap_median_95"],percent=True)
-    axd.set_title("Economic distortion",loc="left",fontweight="bold"); panel(axd,"e",x=-.22)
+    axd.set_title("Economic distortion",loc="left",fontweight="bold"); panel(axd,"d",x=-.12)
     axd.text(.98,.03,"overall 1.04%\n95% CI 0.34-11.28%",transform=axd.transAxes,ha="right",fontsize=5.8)
 
-    labels=["strict","legacy","invalid","exacerbated"]
-    vals=[atlas["strict_false_secure_dispatches"],atlas["legacy_false_secure_dispatches"],
-          atlas["invalid_solver_pairs_retained"],atlas["exacerbated_existing_overload_rows"]]
-    bars=axf.bar(np.arange(len(vals)),vals,color=[COL["pcc"],COL["light"],COL["warn"],COL["neutral"]],
-                 edgecolor=[COL["pcc"],COL["neutral"],COL["warn"],COL["neutral"]])
-    axf.set_xticks(range(4),labels,rotation=35,ha="right")
-    axf.set_ylabel("Rows")
-    axf.set_title("Retained label accounting",loc="left",fontweight="bold")
-    for b,v in zip(bars,vals):
-        axf.text(b.get_x()+b.get_width()/2,v+8,str(v),ha="center",fontsize=5.8)
-    axf.set_ylim(0,max(vals)*1.22)
-    panel(axf,"f",x=-.20); clean(axf)
+    clean(axa); clean(axb); clean(axc); clean(axd)
     return save(fig,"fig4_dc_scopf_heterogeneity"),srcs
 
 
@@ -554,6 +483,12 @@ def figure5(apl:dict,qocdc:dict,hold:dict,dcp:dict,dcmp:dict,scaling:dict)->tupl
 
 def figure6(ext: dict, routes: dict, consequence: dict) -> tuple[list[Path], list[Path]]:
     route_records=routes["records"]
+    consequence_records=consequence.get("records", [])
+    consequence_records_count = len(consequence_records)
+    task_relevant_anomalies = sum(1 for row in consequence_records if row.get("task_relevant_anomaly"))
+    operational_consequence_attempted = sum(1 for row in consequence_records if row.get("operational_consequence_evaluated"))
+    paired_valid_consequence_evaluated = sum(1 for row in consequence_records if row.get("operational_consequence_evaluated"))
+    operationally_consequential_anomalies = sum(1 for row in consequence_records if row.get("operationally_consequential"))
     status_order=["success","failure","source_import_failure","target_import_failure","dependency_missing"]
     status_counts={status:0 for status in status_order}
     route_family={"pypowsybl":0,"veragrid":0}
@@ -583,7 +518,7 @@ def figure6(ext: dict, routes: dict, consequence: dict) -> tuple[list[Path], lis
                        {"criterion":"lawful_exact_acceptance_rate","value":ext["lawful_exact_acceptance_rate"],"met":ext["success_criteria"]["lawful_exact_acceptance_rate_one"]},
                        {"criterion":"external_task_relevant_anomalies","value":ext["external_tool_generated_task_relevant_anomalies"],"met":ext["success_criteria"]["at_least_one_external_tool_generated_task_relevant_anomaly"]},
                        {"criterion":"operationally_consequential_anomalies","value":ext["operationally_consequential_anomalies"],"met":ext["success_criteria"]["at_least_one_operationally_consequential_anomaly"]},
-                       {"criterion":"paired_valid_consequence_evaluated","value":ext["paired_valid_consequence_evaluated"],"met":False},
+                       {"criterion":"paired_valid_consequence_evaluated","value":paired_valid_consequence_evaluated, "met":False},
                    ])
 
     fig=plt.figure(figsize=(7.205,4.95),constrained_layout=True)
@@ -636,11 +571,11 @@ def figure6(ext: dict, routes: dict, consequence: dict) -> tuple[list[Path], lis
     panel(axd,"d",x=-.08)
     axd.text(.02,.94,"Post-receipt consequence reveal",fontsize=8,fontweight="bold",va="top")
     lines=[
-        f"records retained: {consequence['records']}",
-        f"task-relevant anomalies: {consequence['task_relevant_anomalies']}",
-        f"N-1 consequence attempted: {consequence['operational_consequence_attempted']}",
-        f"paired-valid source-target evaluations: {consequence['paired_valid_consequence_evaluated']}",
-        f"operationally consequential anomalies: {consequence['operationally_consequential_anomalies']}",
+        f"records retained: {consequence_records_count}",
+        f"task-relevant anomalies: {task_relevant_anomalies}",
+        f"N-1 consequence attempted: {operational_consequence_attempted}",
+        f"paired-valid source-target evaluations: {paired_valid_consequence_evaluated}",
+        f"operationally consequential anomalies: {operationally_consequential_anomalies}",
     ]
     for i,line in enumerate(lines):
         axd.text(.04,.78-i*.12,line,fontsize=6.8,va="top")

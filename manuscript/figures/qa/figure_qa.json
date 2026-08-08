@@ -1,0 +1,270 @@
+{
+  "qa_version": "epsr-figure-qa-v1",
+  "backend": "Python",
+  "status": "pass",
+  "figure_checks": [
+    {
+      "stem": "fig1_pcc_workflow",
+      "formats": {
+        "svg": {
+          "exists": true,
+          "bytes": 22166,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "pdf": {
+          "exists": true,
+          "bytes": 45684,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "png": {
+          "exists": true,
+          "bytes": 482642,
+          "sha256_matches_manifest": true,
+          "pass": true
+        }
+      },
+      "pass": true,
+      "png_dimensions": [
+        4320,
+        2649
+      ],
+      "png_minimum_resolution_pass": true,
+      "grayscale_extrema": [
+        0,
+        255
+      ],
+      "grayscale_contrast_pass": true,
+      "svg_text_nodes": 41,
+      "svg_editable_text_pass": true,
+      "pdf_font_records": [
+        "ELUGPM+ArialMT                       CID TrueType      Identity-H       yes yes yes     15  0",
+        "ELUGPM+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     22  0"
+      ],
+      "pdf_fonts_embedded_pass": true
+    },
+    {
+      "stem": "fig2_semantic_baseline_ladder",
+      "formats": {
+        "svg": {
+          "exists": true,
+          "bytes": 52002,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "pdf": {
+          "exists": true,
+          "bytes": 58144,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "png": {
+          "exists": true,
+          "bytes": 610446,
+          "sha256_matches_manifest": true,
+          "pass": true
+        }
+      },
+      "pass": true,
+      "png_dimensions": [
+        4654,
+        2739
+      ],
+      "png_minimum_resolution_pass": true,
+      "grayscale_extrema": [
+        0,
+        255
+      ],
+      "grayscale_contrast_pass": true,
+      "svg_text_nodes": 95,
+      "svg_editable_text_pass": true,
+      "pdf_font_records": [
+        "ELUGPM+ArialMT                       CID TrueType      Identity-H       yes yes yes     19  0",
+        "ELUGPM+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     26  0",
+        "BMQQDV+DejaVuSans                    CID TrueType      Identity-H       yes yes yes     33  0"
+      ],
+      "pdf_fonts_embedded_pass": true
+    },
+    {
+      "stem": "fig3_operational_consequences",
+      "formats": {
+        "svg": {
+          "exists": true,
+          "bytes": 43450,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "pdf": {
+          "exists": true,
+          "bytes": 56266,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "png": {
+          "exists": true,
+          "bytes": 488422,
+          "sha256_matches_manifest": true,
+          "pass": true
+        }
+      },
+      "pass": true,
+      "png_dimensions": [
+        4320,
+        3027
+      ],
+      "png_minimum_resolution_pass": true,
+      "grayscale_extrema": [
+        0,
+        255
+      ],
+      "grayscale_contrast_pass": true,
+      "svg_text_nodes": 75,
+      "svg_editable_text_pass": true,
+      "pdf_font_records": [
+        "ELUGPM+ArialMT                       CID TrueType      Identity-H       yes yes yes     16  0",
+        "ELUGPM+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     23  0"
+      ],
+      "pdf_fonts_embedded_pass": true
+    },
+    {
+      "stem": "fig4_dc_scopf_heterogeneity",
+      "formats": {
+        "svg": {
+          "exists": true,
+          "bytes": 67799,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "pdf": {
+          "exists": true,
+          "bytes": 58170,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "png": {
+          "exists": true,
+          "bytes": 538798,
+          "sha256_matches_manifest": true,
+          "pass": true
+        }
+      },
+      "pass": true,
+      "png_dimensions": [
+        4812,
+        3417
+      ],
+      "png_minimum_resolution_pass": true,
+      "grayscale_extrema": [
+        0,
+        255
+      ],
+      "grayscale_contrast_pass": true,
+      "svg_text_nodes": 147,
+      "svg_editable_text_pass": true,
+      "pdf_font_records": [
+        "ELUGPM+ArialMT                       CID TrueType      Identity-H       yes yes yes     17  0",
+        "ELUGPM+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     24  0"
+      ],
+      "pdf_fonts_embedded_pass": true
+    },
+    {
+      "stem": "fig5_validation_portability_scaling",
+      "formats": {
+        "svg": {
+          "exists": true,
+          "bytes": 44575,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "pdf": {
+          "exists": true,
+          "bytes": 57635,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "png": {
+          "exists": true,
+          "bytes": 596503,
+          "sha256_matches_manifest": true,
+          "pass": true
+        }
+      },
+      "pass": true,
+      "png_dimensions": [
+        4320,
+        3177
+      ],
+      "png_minimum_resolution_pass": true,
+      "grayscale_extrema": [
+        0,
+        255
+      ],
+      "grayscale_contrast_pass": true,
+      "svg_text_nodes": 63,
+      "svg_editable_text_pass": true,
+      "pdf_font_records": [
+        "ELUGPM+ArialMT                       CID TrueType      Identity-H       yes yes yes     17  0",
+        "ELUGPM+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     24  0"
+      ],
+      "pdf_fonts_embedded_pass": true
+    },
+    {
+      "stem": "fig6_external_tool_blind_roundtrip",
+      "formats": {
+        "svg": {
+          "exists": true,
+          "bytes": 28732,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "pdf": {
+          "exists": true,
+          "bytes": 48510,
+          "sha256_matches_manifest": true,
+          "pass": true
+        },
+        "png": {
+          "exists": true,
+          "bytes": 431963,
+          "sha256_matches_manifest": true,
+          "pass": true
+        }
+      },
+      "pass": true,
+      "png_dimensions": [
+        4320,
+        2967
+      ],
+      "png_minimum_resolution_pass": true,
+      "grayscale_extrema": [
+        0,
+        255
+      ],
+      "grayscale_contrast_pass": true,
+      "svg_text_nodes": 71,
+      "svg_editable_text_pass": true,
+      "pdf_font_records": [
+        "ELUGPM+ArialMT                       CID TrueType      Identity-H       yes yes yes     15  0",
+        "ELUGPM+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     22  0"
+      ],
+      "pdf_fonts_embedded_pass": true
+    }
+  ],
+  "source_assertions": {
+    "full_pcc_harmful_rate_is_zero": true,
+    "full_pcc_lawful_rate_is_one": true,
+    "dc_state_grid_sums_to_369": true,
+    "holdout_import_counts_sum_to_59": true,
+    "source_table_count_is_20": true
+  },
+  "grayscale_previews": [
+    "qa/fig1_pcc_workflow_grayscale.png",
+    "qa/fig2_semantic_baseline_ladder_grayscale.png",
+    "qa/fig3_operational_consequences_grayscale.png",
+    "qa/fig4_dc_scopf_heterogeneity_grayscale.png",
+    "qa/fig5_validation_portability_scaling_grayscale.png",
+    "qa/fig6_external_tool_blind_roundtrip_grayscale.png"
+  ],
+  "visual_review_required": true
+}

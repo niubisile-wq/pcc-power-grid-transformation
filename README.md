@@ -183,17 +183,18 @@ audit must pass before any result is promoted into the manuscript.
 ## Author
 
 Zixuan Liu, Detroit Green Technology Institute, Hubei University of Technology.
+Wei Xiong, School of Electrical and Electronic Engineering, Hubei University of Technology; Department of Computer Science and Engineering, University of South Carolina.
 
 ## Citation
 
 Please cite the archived release used in the manuscript:
 
-> Liu, Z. (2026). *Proof-Carrying Canonicalization for Power-Grid Model
-> Transformation* (v1.0.0) [Software]. Zenodo.
+> Liu, Z. & Xiong, W. (2026). *Proof-Carrying Contracts for Task-Preserving Power-System
+> Model Transformation* (v1.0.0) [Software]. Zenodo.
 > https://doi.org/10.5281/zenodo.21796488
 
 Machine-readable citation metadata are provided in `CITATION.cff`.
 
 ## License
 
-No open-source license has yet been assigned. Copyright remains with the author.
+No open-source license has yet been assigned. Copyright remains with the authors.

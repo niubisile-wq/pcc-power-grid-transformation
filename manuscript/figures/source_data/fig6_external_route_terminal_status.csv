@@ -1,0 +1,6 @@
+status,count
+success,7
+failure,8
+source_import_failure,2
+target_import_failure,1
+dependency_missing,0

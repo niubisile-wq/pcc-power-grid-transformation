@@ -16,6 +16,10 @@ outputs/
 tmp/
 *.log
 
+# Keep manuscript figures and figure source data in release archives.
+!manuscript/figures/
+!manuscript/figures/**
+
 # Downloaded corpora and third-party assets
 downloads/
 extracted/
@@ -37,4 +41,8 @@ environment.json
 manuscript/*.aux
 manuscript/*.bbl
 manuscript/*.blg
+manuscript/*.fdb_latexmk
+manuscript/*.fls
 manuscript/*.spl
+manuscript/*.synctex.gz
+manuscript/pdflatex*.fls

@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,14 @@ def record(relative: str) -> dict:
 
 def load_json(relative: str) -> dict:
     return json.loads((ROOT / relative).read_text(encoding="utf-8-sig"))
+
+
+def resolved_field(text: str, label: str) -> bool:
+    match = re.search(rf"{re.escape(label)}:\s*(.+)", text)
+    if not match:
+        return False
+    value = match.group(1).strip()
+    return bool(value) and "[" not in value and "]" not in value
 
 
 def main() -> int:
@@ -81,6 +90,8 @@ def main() -> int:
             complete_figure_stems.append(stem)
 
     author_form = (ROOT / author_paths[1]).read_text(encoding="utf-8")
+    release_doi_ready = resolved_field(author_form, "Final release/version DOI")
+    release_tag_ready = resolved_field(author_form, "Release tag/version")
     unresolved_author_markers = [
         marker for marker in (
             "[required", "[Author]", "[roles", "[confirm", "[yes/no]"
@@ -104,7 +115,7 @@ def main() -> int:
         and all(item["exists"] for item in figure_support)
     )
     author_metadata_ready = not unresolved_author_markers
-    final_archive_ready = author_metadata_ready and "[required after" not in author_form
+    final_archive_ready = author_metadata_ready and release_doi_ready and release_tag_ready
     submission_package_ready = (
         scientific_package_ready
         and figures_ready
@@ -120,7 +131,10 @@ def main() -> int:
     if not author_metadata_ready:
         missing.append("author-confirmed title-page metadata and declarations")
     if not final_archive_ready:
-        missing.append("final immutable archive version DOI and release tag")
+        if not release_doi_ready:
+            missing.append("final immutable archive version DOI")
+        if not release_tag_ready:
+            missing.append("final immutable archive release tag")
 
     result = {
         "manifest_version": "epsr-submission-manifest-v1",
@@ -147,6 +161,8 @@ def main() -> int:
         "complete_figure_stems": complete_figure_stems,
         "author_artifacts": author_records,
         "unresolved_author_markers": unresolved_author_markers,
+        "release_doi_ready": release_doi_ready,
+        "release_tag_ready": release_tag_ready,
     }
     OUT.mkdir(parents=True, exist_ok=True)
     target = OUT / "submission_manifest.json"
