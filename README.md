@@ -2,23 +2,40 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21796488.svg)](https://doi.org/10.5281/zenodo.21796488)
 
-Research code and evidence package for the manuscript **“Task-semantic
+Research code and evidence package for the manuscript *Task-semantic
 proof-carrying validation prevents unsafe execution of transformed power-system
-models.”**
+models.*
 
 The repository implements a task-bound proof-carrying contract (PCC), a
 fail-closed solver gate, and the controlled experiments used to study semantic
 loss across power-grid transformations. It also contains the CGMES structural
 and task-semantic validation evidence reported in the manuscript.
 
+## What this repository is for
+
+- Reproducing the main claims, tables, and figures in the EPSR submission.
+- Providing a reviewer-facing evidence bundle with the scripts that generate
+  the reported statistics.
+- Keeping the manuscript source, bibliography, and frozen protocols in one
+  place.
+
+## What is intentionally not included
+
+- Local virtual environments such as `.venv_pcc_v2/` and `.venv_pypowsybl/`.
+- Transient caches such as `.pytest_cache/` and `tmp/`.
+- Regenerable output directories such as `outputs/`.
+- Private checkpoints or external research assets that cannot be redistributed.
+
 ## Repository layout
 
 - `pcc/`: reference PCC contract and signed canonicalizer.
 - `protocols/`: frozen benchmark protocols for the main experiments.
-- `experiments/`: semantic-gate, mutation, N–1, AC-OPF, model-interface,
+- `experiments/`: semantic-gate, mutation, N-1, AC-OPF, model-interface,
   boundary, replay, serialization, and performance audits.
 - `cgmes/`: adapters, validation workers, analysis scripts, corpus registries,
   protocols, and tests for the CGMES interoperability audit.
+- `manuscript/`: LaTeX manuscript source, bibliography, submission checklist,
+  and author-facing submission notes.
 
 ## Environment
 
@@ -38,6 +55,8 @@ not redistributed here.
 ## Running the core checks
 
 From the repository root, expose the two source directories on `PYTHONPATH`.
+These are the quickest reviewer checks for the core contract and CGMES mapping
+logic.
 
 PowerShell:
 
@@ -78,6 +97,27 @@ final archive release will freeze the submission figures and source-data bundle.
 The remaining CGMES tests are evidence-integrity checks and therefore expect
 the downloaded corpus and generated result tables to have been rebuilt first.
 
+## Reproducibility checklist
+
+For a fresh machine, a reviewer can use this order:
+
+1. Create a Python 3.12 environment and install `requirements.txt`.
+2. Run the core contract and mapping tests from the repository root.
+3. Rebuild the EPSR evidence dashboard and manuscript tables:
+
+```powershell
+$env:PYTHONPATH=(Resolve-Path cgmes).Path
+py -3.12 experiments/run_dc_scopf_confirmatory_statistics.py
+py -3.12 experiments/build_epsr_evidence_dashboard.py
+py -3.12 experiments/build_epsr_manuscript_tables.py
+py -3.12 experiments/build_epsr_submission_manifest.py
+```
+
+4. Compile the manuscript in `manuscript/` with `pdflatex` and `bibtex`.
+
+If you only want to inspect the submission logic, start with the scripts above
+and the manuscript source in `manuscript/EPSR_template.tex`.
+
 ## PCC v2 task-semantic gate
 
 The PCC v2 implementation adds a three-state task contract (`accept`, `reject`,
@@ -104,9 +144,10 @@ the exhaustive confirmatory mode is `--candidate-mode all`.
 ## EPSR evidence package
 
 The submission-oriented evidence chain is machine checked. The semantic
-confirmatory corpus is protected by `protocols/semantic_confirmatory_lock_v2.json`.
-After the frozen five-network by ten-state DC-SCOPF campaign is complete, build
-its statistics, dashboard, and manuscript tables with:
+confirmatory corpus is protected by
+`protocols/semantic_confirmatory_lock_v2.json`. After the frozen five-network
+by ten-state DC-SCOPF campaign is complete, build its statistics, dashboard,
+and manuscript tables with:
 
 ```powershell
 $env:PYTHONPATH=(Resolve-Path cgmes).Path
@@ -128,7 +169,7 @@ figure triplets, figure source manifest, author declarations, and final archive
 version are present.
 
 Standards claims are intentionally separated: APL 1.1.1 SHACL results, the
-locally implemented QoCDC 4.1.4 Level 1--4 subset, PCC task-semantic decisions,
+locally implemented QoCDC 4.1.4 Level 1-4 subset, PCC task-semantic decisions,
 and native PowSyBl import results are reported as distinct evidence families.
 
 ## Current evidence status

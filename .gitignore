@@ -32,3 +32,9 @@ models/
 .env
 .env.*
 environment.json
+
+# Manuscript build artifacts
+manuscript/*.aux
+manuscript/*.bbl
+manuscript/*.blg
+manuscript/*.spl
