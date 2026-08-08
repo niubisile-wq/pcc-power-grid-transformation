@@ -1,0 +1,67 @@
+protocol: qocdc_4_1_4_applicable_subset_v1
+frozen_at: 2026-08-07
+authority: ENTSO-E Quality of CGMES Datasets and Calculations 4.1.4
+source_pdf: cgmes/corpus/standards/entsoe/Quality_Of_CGMES_Datasets_and_Calculations_v4.1.4_clean.pdf
+source_sha256: 0374009d97a459a5bb7dd675ab572825c6ab2081ec189e3f4434c6744942d0af
+applicability:
+  cgmes_version: 2.4.15
+  interpretation: applicable_subset_only
+  forbidden_claim: full_QoCDC_compliance
+  eqdiff_policy: merge_before_validation_when_EQDIFF_is_present
+  optional_numeric_policy: absent_optional_values_are_not_checked
+  numeric_tolerance: 0.0005
+  publication_blocking_policy:
+    levels_1_to_6: ERROR_findings_block_OPDM_publication
+    levels_7_to_8: findings_do_not_block_OPDM_publication
+
+development_positive_control:
+  case_id: dev_microgrid_basecase_bc_cgmes_v2_4_15_microgridtestconfiguration_bc_assembled_v2_859e1b6a
+  path: cgmes/corpus/extracted/cgmes24_testconfig/MicroGrid/BaseCase_BC/CGMES_v2.4.15_MicroGridTestConfiguration_BC_Assembled_v2.zip
+  sha256: 859e1b6af3d3fd7db4cf1e031c6f2675994367b3101d97fdb7448596e5c749f6
+  provenance: ENTSO-E CGMES 2.4.15 test configuration
+  role: development_control_not_untouched_holdout
+
+levels:
+  - level: 1
+    official_scope: filenames_and_packaging
+    local_status: implemented_subset
+    checks: [archive_readable, xml_members_present, duplicate_member_names_absent, supported_member_extensions]
+  - level: 2
+    official_scope: instance_syntax_and_header
+    local_status: implemented_subset
+    checks: [rdf_xml_parse, one_FullModel_per_member, unique_FullModel_ids, required_header_fields, IGM_modeling_authority_set, consistent_scenario_time]
+  - level: 3
+    official_scope: basic_IGM_CGM_constraints
+    local_status: implemented_subset
+    checks: [unique_mRID, BaseVoltage_nominalVoltage, Terminal_ConductingEquipment]
+  - level: 4
+    official_scope: model_assembly
+    local_status: implemented_subset
+    checks: [Model_DependentOn_resolution, core_profile_coverage]
+  - level: 5
+    official_scope: assembled_model_consistency
+    local_status: not_implemented
+    reason: requires the complete QoCDC rule catalogue and reference data, not only public profile syntax
+  - level: 6
+    official_scope: IGM_CGM_plausibility
+    local_status: not_implemented
+    reason: requires complete plausibility rules, limits, and current QoCDC reference data
+  - level: 7
+    official_scope: coordination
+    local_status: not_implemented
+    reason: requires multi-party coordination inputs unavailable in the public test package
+  - level: 8
+    official_scope: convergence_and_plausibility
+    local_status: not_implemented
+    reason: requires a declared load-flow setup and complete numerical rule catalogue
+
+negative_controls:
+  - id: missing_model_profile
+    expected_detection: L2_required_header_fields
+  - id: unresolved_model_dependency
+    expected_detection: L4_Model_DependentOn_resolution
+
+reporting_contract:
+  pass_label: passed_all_locally_implemented_applicable_subset_checks
+  non_pass_label: failed_one_or_more_locally_implemented_applicable_subset_checks
+  disclaimer: This result is not a full QoCDC compliance assessment or OPDM publication decision.

@@ -1,0 +1,11 @@
+protocol: pcc_v2_opf_case9_extension_v1
+frozen_at: 2026-08-07T03:58:00+08:00
+purpose: increase independent convergent-network count without outcome-dependent selection
+network: case9
+source: pandapower.networks.case9
+stress_factors: [0.005, 0.01, 0.02, 0.03, 0.05]
+required_retention: all_five_terminal_records
+paired_valid_definition: correct_and_alias_AC_OPF_both_converge
+primary_effect: relative_cost_regret
+gate_policy: harmful_identity_merge_must_not_start_solver
+output: outputs/pcc_v2_opf_gate_case9_extension

@@ -1,0 +1,22 @@
+{
+  "lockbox_type": "public_deterministic_ieee_pf_substitute",
+  "seed": 20260801,
+  "n_scenarios": 3000,
+  "cases": {
+    "case14": 1000,
+    "case30": 1000,
+    "case57": 1000
+  },
+  "elapsed_seconds": 106.31903759999841,
+  "pf_converged": 3000,
+  "pf_failed": 0,
+  "lawful_split_accepts": 3000,
+  "feature_only_merge_rejects": 3000,
+  "max_numeric_merge_conservation_error": 0.0,
+  "sha256_csv": "5dd6433d05c8957483fdba6d63a7ad187150b9f8a7a7b41d2ded9087ad494f06",
+  "limitations": [
+    "public IEEE/pandapower substitute, not H39 original lockbox",
+    "PF only, no OPF or model inference",
+    "feature-only merge is a controlled semantic witness"
+  ]
+}

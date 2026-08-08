@@ -1,0 +1,68 @@
+protocol: pcc_v2_dc_scopf_case500_top1_constraint_generation_v5
+frozen_date: 2026-08-07
+status: frozen_before_top1_case500_execution
+parent_amendment: protocols/dc_scopf_case500_clarabel_adjudication_v4.yaml
+
+trigger:
+  retained_v5_attempt: case500_offset0_branch_00407_add_all_master2
+  outcome: clarabel_numerical_error_three_attempts_rejected
+  v5_runner_sha256_before_v6_edit: a6b41d9bc58f65aea89e20a84dd748d68ac2b5c043db1edcb9d41b317af7cbb2
+  parent_amendment_sha256: f0f5ff6a741ff19df9528f9b4ebed18faf238a3af026c128f3036a060325f0d3
+  archived_attempt_log: outputs/pcc_v2_dc_scopf_case500_clarabel/aborted_v5_clarabel_add_all_numerical_error_attempts.jsonl
+  archived_checkpoint: outputs/pcc_v2_dc_scopf_case500_clarabel/aborted_v5_clarabel_add_all_offset0_checkpoint.json
+
+diagnostic_before_freeze:
+  script: experiments/diagnose_case500_clarabel_top1.py
+  summary: outputs/case500_clarabel_top1_diagnostic/summary.json
+  summary_sha256: 14dc8f4d730193f1d258da264a9d92462b525f919138e954c5fc6e1370a066dd
+  omitted_candidate: Line:branch-00407
+  initial_enforced_outages: 3
+  iterations_to_terminal_feasibility: 3
+  added_outages:
+    - Line:branch-00492
+    - Line:branch-00344
+  terminal_max_non_omitted_loading_pu: 0.9999999999999699
+
+unchanged_scientific_design:
+  all_case500_states_and_582_candidates_unchanged: true
+  finite_leave_one_out_constraint_set_unchanged: true
+  omitted_candidate_never_enforced: true
+  all_other_581_candidates_checked_after_every_master: true
+  costs_network_equations_gate_and_thresholds_unchanged: true
+  full_model_and_activity_solver: HiGHS_1_11_0
+  restricted_master_solver: Clarabel_0_11_1
+  thresholds_relaxed: false
+
+exact_constraint_generation:
+  formulation: convex_PyPSA_security_constrained_linear_OPF
+  initial_enforced_outages: full_solution_binding_or_nonzero_dual_groups_except_omitted
+  separation_oracle: PyPSA_BODF_post_contingency_loading_for_every_non_omitted_candidate
+  violation_threshold_pu: 1.000001
+  update: add_exactly_one_currently_unenforced_outage_with_maximum_loading
+  tie_break: lexicographically_greatest_candidate_id_when_loading_is_exactly_equal
+  maximum_iterations: 100
+  termination:
+    - solver_status_ok
+    - solver_condition_optimal
+    - zero_non_omitted_candidate_violations
+  mathematical_basis: >-
+    Adding one violated constraint per iteration preserves exact finite convex
+    constraint generation. Each restricted optimum is a lower bound; at
+    termination that optimum is feasible for every constraint in the original
+    leave-one-out model and is therefore globally optimal for that model.
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v6
+  protocol_version: pcc_v2_native_dc_scopf_case500_clarabel_top1_cg_v6
+  output_directory: outputs/pcc_v2_dc_scopf_case500_clarabel_top1
+  checkpoint_granularity: one_candidate_row
+  every_master_attempt_separation_and_added_constraint_logged: true
+  superseded_v2_v3_v4_v5_failures_retained: true
+
+promotion_requirements:
+  completed_states: 10
+  rows_per_state: 582
+  terminal_non_omitted_loading_max_pu: 1.000001
+  harmful_solver_starts: 0
+  historical_active_screening_recall: 1.0
+  clarabel_vs_highs_validation_pairs: 10

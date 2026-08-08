@@ -1,0 +1,118 @@
+{
+  "experiment": "frozen_B0_B6_validator_baseline_audit_v2",
+  "date": "20260802",
+  "harmful_cases": 32,
+  "lawful_cases": 90,
+  "baselines": [
+    {
+      "baseline": "B0_no_validation",
+      "harmful_n": 32,
+      "harmful_accepts": 32,
+      "harmful_FAR": 1.0,
+      "harmful_FAR_95CI_low": 0.8911188393206471,
+      "harmful_FAR_95CI_high": 1.0,
+      "lawful_n": 90,
+      "lawful_rejects": 0,
+      "lawful_FRR": 0.0,
+      "lawful_FRR_95CI_low": 0.0,
+      "lawful_FRR_95CI_high": 0.04015891961577467
+    },
+    {
+      "baseline": "B1_feature_only",
+      "harmful_n": 32,
+      "harmful_accepts": 32,
+      "harmful_FAR": 1.0,
+      "harmful_FAR_95CI_low": 0.8911188393206471,
+      "harmful_FAR_95CI_high": 1.0,
+      "lawful_n": 90,
+      "lawful_rejects": 0,
+      "lawful_FRR": 0.0,
+      "lawful_FRR_95CI_low": 0.0,
+      "lawful_FRR_95CI_high": 0.04015891961577467
+    },
+    {
+      "baseline": "B2_schema_only",
+      "harmful_n": 32,
+      "harmful_accepts": 32,
+      "harmful_FAR": 1.0,
+      "harmful_FAR_95CI_low": 0.8911188393206471,
+      "harmful_FAR_95CI_high": 1.0,
+      "lawful_n": 90,
+      "lawful_rejects": 0,
+      "lawful_FRR": 0.0,
+      "lawful_FRR_95CI_low": 0.0,
+      "lawful_FRR_95CI_high": 0.04015891961577467
+    },
+    {
+      "baseline": "B3_conservation_only",
+      "harmful_n": 32,
+      "harmful_accepts": 32,
+      "harmful_FAR": 1.0,
+      "harmful_FAR_95CI_low": 0.8911188393206471,
+      "harmful_FAR_95CI_high": 1.0,
+      "lawful_n": 90,
+      "lawful_rejects": 0,
+      "lawful_FRR": 0.0,
+      "lawful_FRR_95CI_low": 0.0,
+      "lawful_FRR_95CI_high": 0.04015891961577467
+    },
+    {
+      "baseline": "B4_id_only",
+      "harmful_n": 32,
+      "harmful_accepts": 0,
+      "harmful_FAR": 0.0,
+      "harmful_FAR_95CI_low": 0.0,
+      "harmful_FAR_95CI_high": 0.10888116067935294,
+      "lawful_n": 90,
+      "lawful_rejects": 90,
+      "lawful_FRR": 1.0,
+      "lawful_FRR_95CI_low": 0.9598410803842253,
+      "lawful_FRR_95CI_high": 1.0
+    },
+    {
+      "baseline": "B5_provenance_signature_without_semantics",
+      "harmful_n": 32,
+      "harmful_accepts": 32,
+      "harmful_FAR": 1.0,
+      "harmful_FAR_95CI_low": 0.8911188393206471,
+      "harmful_FAR_95CI_high": 1.0,
+      "lawful_n": 90,
+      "lawful_rejects": 0,
+      "lawful_FRR": 0.0,
+      "lawful_FRR_95CI_low": 0.0,
+      "lawful_FRR_95CI_high": 0.04015891961577467
+    },
+    {
+      "baseline": "B6_full_PCC",
+      "harmful_n": 32,
+      "harmful_accepts": 0,
+      "harmful_FAR": 0.0,
+      "harmful_FAR_95CI_low": 0.0,
+      "harmful_FAR_95CI_high": 0.10888116067935294,
+      "lawful_n": 90,
+      "lawful_rejects": 90,
+      "lawful_FRR": 1.0,
+      "lawful_FRR_95CI_low": 0.9598410803842253,
+      "lawful_FRR_95CI_high": 1.0
+    }
+  ],
+  "capability": {
+    "has_identity_match_field": true,
+    "has_pcc_pass_field": true,
+    "separates_b4_from_b6_on_current_inputs": false,
+    "required_missing_fields": [
+      "attack_family",
+      "identity_relation",
+      "certificate_status",
+      "graph_signature_hash",
+      "semantic_target"
+    ]
+  },
+  "claim_status": "insufficient_to_separate_id_only_from_full_PCC",
+  "scope_limit": "semantic decision-layer audit; current inputs do not yet prove B4/B6 separability",
+  "inputs": [
+    "counterfactual_n1_aliasing_results_20260802.csv",
+    "physical_split_invariance_results_20260801.csv"
+  ],
+  "primary_evidence": "validator_baseline_audit_v2_results_20260802.csv"
+}

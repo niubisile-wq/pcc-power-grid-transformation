@@ -1,0 +1,49 @@
+protocol: pcc_v2_dc_scopf_case500_constraint_generation_v3
+frozen_date: 2026-08-07
+status: frozen_before_constraint_generation_execution
+parent_amendment: protocols/dc_scopf_case500_screening_amendment_v2.yaml
+
+trigger:
+  retained_v3_attempt: case500_offset0_active_outage_branch_00081
+  outcome: highs_time_limit_300_seconds_with_suboptimal_primal_rejected
+  v3_runner_sha256_before_v4_edit: 49450fdbcb3c3e6ffc260f9a1918c1578ffa6cdbbc11f2f21c60c3ab7de0ded9
+  parent_amendment_sha256: 0acacedf8cc26aad2efcdebc3913d26535c61f092e09223b39070874b766a791
+  archived_attempt_log: outputs/pcc_v2_dc_scopf_case500_screened/aborted_v3_exact_alias_timeout_attempts.jsonl
+  archived_checkpoint: outputs/pcc_v2_dc_scopf_case500_screened/aborted_v3_exact_alias_timeout_offset0_checkpoint.json
+
+unchanged_scientific_design:
+  all_case500_network_states_and_candidates_unchanged: true
+  omitted_candidate_is_never_enforced_in_alias_model: true
+  all_other_581_candidates_checked_at_every_terminal_alias_solution: true
+  objective_costs_loader_gate_and_thresholds_unchanged: true
+  strict_optimality_required: true
+  thresholds_relaxed: false
+
+exact_constraint_generation:
+  formulation: convex_PyPSA_security_constrained_linear_OPF
+  initial_enforced_outages: full_solution_binding_or_nonzero_dual_groups_except_omitted
+  separation_oracle: PyPSA_BODF_post_contingency_loading_for_every_non_omitted_candidate
+  violation_threshold_pu: 1.000001
+  update: add_all_currently_violated_outage_groups
+  maximum_iterations: 20
+  termination:
+    - solver_status_ok
+    - solver_condition_optimal
+    - zero_non_omitted_candidate_violations
+  mathematical_basis: >-
+    Constraint generation is exact for this finite convex formulation: each
+    restricted master supplies a lower bound, every violated original
+    constraint is added, and termination occurs only when the optimum is
+    feasible for the complete leave-one-out constraint set.
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v4
+  protocol_version: pcc_v2_native_dc_scopf_case500_constraint_generation_v4
+  checkpoint_granularity: one_candidate_row
+  every_master_attempt_and_separation_iteration_logged: true
+  original_v2_failure_and_v3_timeout_retained: true
+
+validation:
+  historical_active_screening_recall_required: 1.0
+  small_network_BODF_vs_explicit_LPF_test_required: true
+  terminal_alias_full_constraint_check_required: true

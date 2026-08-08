@@ -1,0 +1,36 @@
+protocol: cross_solver_powermodels_v1
+frozen_at: 2026-08-07
+inputs:
+  cases: [case39, case73, case118]
+  load_scales: [0.9, 1.0, 1.1]
+  source: frozen PGLib/MATPOWER files already hashed in the confirmatory corpus
+stacks:
+  reference: Windows Python 3.12 + PYPOWER/PIPS DC-OPF
+  independent: WSL Ubuntu 24.04 + Julia 1.12.6 + PowerModels + Ipopt
+endpoints:
+  - status_agreement_over_all_planned_pairs
+  - objective_relative_error_over_mutually_optimal_pairs
+  - total_generation_relative_error_over_mutually_optimal_pairs
+tolerances:
+  objective_relative: 1.0e-5
+  total_generation_relative: 1.0e-6
+gate:
+  required_pairs: 9
+  mutually_optimal_pairs_min: 8
+  status_agreement_min: 1.0
+  objective_agreement_min: 0.995
+  total_generation_agreement_min: 0.995
+  unexplained_differences_max: 0
+amendment_before_julia_execution:
+  recorded_at: 2026-08-07T05:00:00+08:00
+  reason: >-
+    The frozen Windows reference run identified case39 at load scale 1.1 as
+    nonoptimal. Status is therefore compared over all nine planned pairs,
+    while numerical objective and generation comparisons are defined only for
+    pairs for which both solvers report an optimal solution. A pair that both
+    stacks classify as nonoptimal is a status agreement and is not converted
+    into a numerical NaN disagreement.
+  information_available: Windows PYPOWER reference statuses only
+  information_unavailable: all Julia PowerModels statuses and numerical results
+  exclusions_added: 0
+scope: independent DC-OPF consequence-stack confirmation; PCC fail-closed decisions are assessed separately

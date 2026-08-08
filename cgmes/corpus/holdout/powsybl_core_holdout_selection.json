@@ -1,0 +1,91 @@
+{
+  "protocol": "cgmes_untouched_holdout_powsybl_core_v1",
+  "frozen_commit": "4e8024eaf07a43673c68226aefc8b57dae4c4ffb",
+  "source_archive_sha256": "c1e651fbdcf52791b0c654b3624d8ef1f4ba49c552901382de29a61c21fd107b",
+  "complete_directories_discovered": 31,
+  "selection_rule": "lexicographically_first_complete_bundle_not_entirely_byte_duplicate",
+  "preselection_audit": [
+    {
+      "directory": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid",
+      "xml_members": 10,
+      "byte_duplicate_members": 0,
+      "all_members_byte_duplicate": false
+    }
+  ],
+  "selected_directory": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid",
+  "selected_members": [
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20171002T0930Z_ENTSO-E_EQ_BD_2.xml",
+      "output_name": "20171002T0930Z_ENTSO-E_EQ_BD_2.xml",
+      "bytes": 20865,
+      "sha256": "b89e568c17ce8ccf8c0e32e770e00eac5ecf8fc61d40d01dfc1c19ccbbd78052",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_ASSEMBLED_DL_9.xml",
+      "output_name": "20210209T1930Z_1D_ASSEMBLED_DL_9.xml",
+      "bytes": 504477,
+      "sha256": "bb402d2a02fb6643dfd4e54559d131b11914bb65b5e0425eb5b3fd8aab1146d2",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_ASSEMBLED_SV_9.xml",
+      "output_name": "20210209T1930Z_1D_ASSEMBLED_SV_9.xml",
+      "bytes": 62510,
+      "sha256": "d5d8331721a3598d1ee12bbb0f51d904a9869cffe14c35030b61b47ff2318537",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_BE_EQ_9.xml",
+      "output_name": "20210209T1930Z_1D_BE_EQ_9.xml",
+      "bytes": 172569,
+      "sha256": "eb622383d28a336ca0c344aaa21ca44f504283254969c96b89589f7a999fdd4c",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_BE_GL_9.xml",
+      "output_name": "20210209T1930Z_1D_BE_GL_9.xml",
+      "bytes": 15657,
+      "sha256": "11c7e14262c436770013a135680d199cc10edefdfcb867bee5d73006ec225c87",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_BE_SSH_9.xml",
+      "output_name": "20210209T1930Z_1D_BE_SSH_9.xml",
+      "bytes": 51834,
+      "sha256": "75382301c78c085cf84fb82f5350f1405b305e8407d390475ad9ea16c0d0746b",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_NL_EQ_9.xml",
+      "output_name": "20210209T1930Z_1D_NL_EQ_9.xml",
+      "bytes": 166385,
+      "sha256": "3aa84aa9a27b62b7818582a9bd5391d938106e57a9c38491fb04f3ba7d105cd5",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_NL_GL_9.xml",
+      "output_name": "20210209T1930Z_1D_NL_GL_9.xml",
+      "bytes": 11514,
+      "sha256": "ce07d640417137579378e7544519cf8b003b78a020e35838cb5a3b79257ba0d4",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T1930Z_1D_NL_SSH_9.xml",
+      "output_name": "20210209T1930Z_1D_NL_SSH_9.xml",
+      "bytes": 37953,
+      "sha256": "0b4738ae0e74b2a68fc9ffbc76b26edbd06b17141d3eb7bffc8aa8a30ce3e6bc",
+      "previously_seen_byte_identical": false
+    },
+    {
+      "source_path": "powsybl-core-4e8024eaf07a43673c68226aefc8b57dae4c4ffb/cgmes/cgmes-conformity/src/main/resources/cgmes3-test-models/MicroGrid/20210209T2323Z_1D_ASSEMBLED_TP_9.xml",
+      "output_name": "20210209T2323Z_1D_ASSEMBLED_TP_9.xml",
+      "bytes": 60413,
+      "sha256": "2acb9be39a754d813d8d2347a762b5626d89cdb3b0a14c5cbb130093b798915a",
+      "previously_seen_byte_identical": false
+    }
+  ],
+  "bundle_path": "cgmes/corpus/holdout/powsybl_core_holdout_bundle.zip",
+  "bundle_sha256": "75209b547c796dfb4404b389e0b7b6f6e613f29fdec35f1f848d56ec3a70fe81",
+  "validation_executed_during_selection": false
+}

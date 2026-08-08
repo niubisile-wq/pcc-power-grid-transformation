@@ -1,0 +1,50 @@
+protocol: pcc_v2_dc_scopf_clarabel_optimal_face_validation_v6
+frozen_date: 2026-08-07
+status: frozen_before_optimal_face_validation_rerun
+parent_execution_amendment: protocols/dc_scopf_case500_top1_constraint_generation_v5.yaml
+
+trigger:
+  retained_validation: outputs/clarabel_highs_scopf_validation/failed_dispatch_identity_summary_v1.json
+  retained_validation_sha256: cf32dc39516020bf6a9c3458b75790dbdb5a97a5a686629b8285e6948978797f
+  parent_execution_amendment_sha256: 517547ce06afdc205597011076ca50848d9767a8229cd37a861c73dfd343a0cb
+  validation_v1_script_sha256_before_v2_edit: 05f1f8a1ee4190e886acde946c20bff34034e8c40743c060d6a7ef7a7dd68b8d
+  v1_result:
+    pairs: 10
+    maximum_objective_relative_difference: 1.22189822604957e-10
+    maximum_clarabel_constraint_violation: 1.40971678774804e-10
+    maximum_component_dispatch_absolute_difference_mw: 33.89617522118558
+    dispatch_identity_gate: failed
+
+rationale:
+  issue: >-
+    A linear or semidefinite-quadratic dispatch problem can have a non-singleton
+    optimal face. Two solvers may return different generator vectors that are
+    both feasible and have the same globally optimal objective. Componentwise
+    dispatch identity is therefore not a necessary solver-equivalence condition.
+  correction: >-
+    Promote only when both solvers report optimality, relative objectives agree,
+    the independently assembled Clarabel solution satisfies every original
+    Linopy constraint and bound, and aggregate generation and load shedding agree.
+    Componentwise dispatch distance remains reported as an optimal-face
+    diagnostic and is not deleted.
+  confirmatory_case500_execution_changed: false
+  objective_network_equations_costs_and_thresholds_changed: false
+  result_rows_recomputed_or_filtered: false
+
+validation_v2:
+  pairs:
+    - case39_offsets_0_5_9
+    - case73_offsets_0_5_9
+    - case118_offsets_0_5_9
+    - case300_offset_0
+  objective_relative_difference_max: 1.0e-6
+  clarabel_original_model_constraint_violation_max: 1.0e-5
+  aggregate_generation_absolute_difference_mw_max: 1.0e-4
+  aggregate_load_shed_absolute_difference_mw_max: 1.0e-4
+  component_dispatch_difference: descriptive_optimal_face_diagnostic
+  required_equivalent_pairs: 10
+
+promotion:
+  protocol_version_required: clarabel_0_11_1_vs_highs_1_11_0_scopf_optimal_face_validation_v2
+  all_ten_pairs_must_pass: true
+  failed_v1_dispatch_identity_result_must_remain_archived: true

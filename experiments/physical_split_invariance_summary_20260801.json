@@ -1,0 +1,26 @@
+{
+  "n": 90,
+  "n_valid_pairs": 90,
+  "elapsed_seconds": 67.29215809999732,
+  "max_vm_delta_pu": 0.0,
+  "max_line_loading_delta_percent": 0.0,
+  "by_case": {
+    "case14": {
+      "n": 30,
+      "valid": 30
+    },
+    "case30": {
+      "n": 30,
+      "valid": 30
+    },
+    "case57": {
+      "n": 30,
+      "valid": 30
+    }
+  },
+  "limitations": [
+    "same-bus load split only",
+    "public IEEE/pandapower substitute",
+    "does not prove OPF or model-level invariance"
+  ]
+}

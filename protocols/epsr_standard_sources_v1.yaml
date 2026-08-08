@@ -1,0 +1,98 @@
+registry: epsr_standard_sources_v1
+checked_at: 2026-08-07
+policy: retain_downloaded_bytes_sha256_license_and_access_date
+
+sources:
+  - id: entsoe_cgmes_library
+    authority: ENTSO-E
+    role: canonical_release_index
+    url: https://www.entsoe.eu/data/cim/cim-for-grid-models-exchange/
+    facts_used:
+      - Application Profiles Library 1.1.1 was approved by the CIM Working Group on 2025-10-07
+      - Quality of CGMES Datasets and Calculations 4.1.4 was published on 2025-11-10
+      - Network Code Profiles 2.4.2 was agreed on 2026-06-10
+  - id: entsoe_apl_1_1_1_readme
+    authority: ENTSO-E
+    role: machine_readable_rdfs_and_shacl_baseline
+    url: https://eepublicdownloads.entsoe.eu/clean-documents/CIM_documents/Grid_Model_CIM/APL/1.1.1/ApplicationProfilesLibrary_ReadMe_r1-1-1_clean.pdf
+    license: Apache-2.0
+    local_path: cgmes/corpus/standards/entsoe/ApplicationProfilesLibrary_ReadMe_r1-1-1_clean.pdf
+    sha256: 0e3cda18aaeae6d76ded1aea09434fe9ffb1c0289315f812687f490e1962adb6
+  - id: entsoe_apl_1_1_1_release_notes
+    authority: ENTSO-E
+    role: release_and_patch_provenance
+    url: https://eepublicdownloads.entsoe.eu/clean-documents/CIM_documents/Grid_Model_CIM/APL/1.1.1/ApplicationProfilesLibrary_ReleaseNotes_r1-1-1_clean.pdf
+    local_path: cgmes/corpus/standards/entsoe/ApplicationProfilesLibrary_ReleaseNotes_r1-1-1_clean.pdf
+    sha256: 2e4156199125ca8eb8078b036fd13c1a078df29c23cf4f29cded797b267ca205
+  - id: entsoe_apl_1_1_1_package
+    authority: ENTSO-E
+    role: frozen_machine_readable_artifact_package
+    url: https://www.entsoe.eu/Documents/CIM_documents/Grid_Model_CIM/APL/1.1.1/application-profiles-library_v1-1-1.zip
+    local_path: cgmes/corpus/standards/entsoe/application-profiles-library_v1-1-1.zip
+    extracted_path: cgmes/apl111
+    sha256: 9c0ad5b96f94309fd1c10286534c1e2d05d26da62cd744d9486cde43e9d62425
+    license: Apache-2.0
+  - id: entsoe_qocdc_4_1_4
+    authority: ENTSO-E
+    role: applicable_quality_validation_ladder
+    discovery_url: https://www.entsoe.eu/data/cim/cim-for-grid-models-exchange/
+    version: 4.1.4
+    url: https://eepublicdownloads.azureedge.net/clean-documents/digital/Quality%20Of%20CGMES%20Datasets%20and%20Calculations%20v4.1.4_clean.pdf
+    local_path: cgmes/corpus/standards/entsoe/Quality_Of_CGMES_Datasets_and_Calculations_v4.1.4_clean.pdf
+    sha256: 0374009d97a459a5bb7dd675ab572825c6ab2081ec189e3f4434c6744942d0af
+    document_date: 2025-10-07
+    published_date: 2025-11-10
+    validation_levels: 8
+    required_interpretation: apply only checks supported by the public artifacts and report excluded levels explicitly
+    coverage_protocol: protocols/qocdc_4_1_4_coverage_v1.yaml
+    executable_subset_result: outputs/qocdc_414_applicable_subset/summary.json
+    forbidden_claim: full_QoCDC_compliance
+  - id: entsoe_cas_3_0_2
+    authority: ENTSO-E
+    role: conformity_and_interoperability_context
+    url: https://www.entsoe.eu/data/cim/cim-conformity-and-interoperability/
+    scheme_version: 3.0.2
+    test_configuration_version: 3.0.3
+    limitation: conformity attestation is not evidence of complete task-specific business-process preservation
+  - id: entsoe_cas_test_configurations_3_0_3
+    authority: ENTSO-E
+    role: official_positive_control_candidates
+    url: https://www.entsoe.eu/Documents/CIM_documents/Grid_Model_CIM/CGMES_ConformityAssessmentScheme_TestConfigurations_v3-0-3.zip
+    local_path: cgmes/corpus/standards/entsoe/CGMES_ConformityAssessmentScheme_TestConfigurations_v3-0-3.zip
+    extracted_path: cgmes/cas303
+    sha256: 03c917c1a05508988c5a44961dfb6dab1b1039b8f86dfdb2f7637f3784b7ed9e
+    license: CC-BY-SA-4.0
+  - id: cas303_fullgrid_merged_derived_package
+    authority: local_byte_preserving_repackage_of_ENTSO-E_test_configuration
+    role: shacl_positive_control_candidate
+    source: entsoe_cas_test_configurations_3_0_3
+    local_path: cgmes/corpus/cas303_fullgrid_merged.zip
+    sha256: 8e025cbe6b710f05d6fcd4de317d9341191790cb060d8ce2523dfb52dc063c1e
+    members: [FullGrid_EQ.xml, FullGrid_EQBD.xml, FullGrid_OP.xml, FullGrid_SC.xml, FullGrid_SSH.xml, FullGrid_SV.xml, FullGrid_TP.xml]
+  - id: cas303_svedala_eqbd_positive_control
+    authority: local_byte_preserving_repackage_of_ENTSO-E_test_configuration
+    role: apl_1_1_1_conforming_positive_control
+    source: entsoe_cas_test_configurations_3_0_3
+    local_path: cgmes/corpus/cas303_svedala_eqbd.zip
+    sha256: 0f5b322c32105a8c3e622ca5d3e9cada6c0b1953af92a4d39c3ef76c4f1277a1
+    validation_result: 0_SHACL_results_and_conforms_true
+    orthogonal_experiment: outputs/cgmes_apl111_pcc_separation/separation_summary.json
+  - id: epsr_scope
+    authority: Elsevier
+    role: journal_fit_and_submission_requirements
+    url: https://www.sciencedirect.com/journal/electric-power-systems-research
+    guide_url: https://www.sciencedirect.com/journal/electric-power-systems-research/publish/guide-for-authors
+    fit: applied research, new procedures, optimization, security assessment, and system studies
+
+local_current_baseline:
+  source: cgmes/results/cgmes_shacl_validation_summary.json
+  application_profiles: 3.0.2
+  shacl: 3.0.0
+  status: legacy_internal_validation_only
+  conforming_artifacts: 0
+  replacement_required_before_submission: true
+
+extraction_notes:
+  valid_apl_directory: cgmes/apl111
+  invalid_partial_directory: cgmes/corpus/standards/entsoe/application-profiles-library_v1-1-1
+  invalid_partial_directory_policy: never_use; retained because recursive cleanup was denied by the execution safety policy

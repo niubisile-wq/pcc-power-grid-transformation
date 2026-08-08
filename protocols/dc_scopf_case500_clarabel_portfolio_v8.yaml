@@ -1,0 +1,76 @@
+protocol: pcc_v2_dc_scopf_case500_clarabel_portfolio_v8
+frozen_date: 2026-08-07
+status: frozen_before_portfolio_case500_execution
+parent_amendment: protocols/dc_scopf_case500_hybrid_exact_solver_v7.yaml
+
+trigger:
+  retained_v7_failure: case500_offset1_branch_00081
+  primary_outcome: strong_regularization_returned_AlmostSolved_and_was_rejected
+  fallback_outcome: highs_row_relaxation_reached_300_second_time_limit_and_was_rejected
+  v7_runner_sha256_before_v8_edit: c3ab99fbf149db328aeed51779fce0477274ffe47ddb2522aed7b7454569ddd7
+  parent_amendment_sha256: 83c71772009d4b9336d580de59ce231aa83ef17c21af275662cd9991814054de
+  archived_attempt_log: outputs/pcc_v2_dc_scopf_case500_hybrid_exact/aborted_v7_offset1_hybrid_attempts.jsonl
+  archived_attempt_log_sha256: 6c2c8f5ef44c2a79418416c74e324f5dd3bf526f67ee2d94892980bbe822c061
+  archived_checkpoint: outputs/pcc_v2_dc_scopf_case500_hybrid_exact/aborted_v7_offset1_hybrid_checkpoint.json
+
+pre_freeze_portfolio_diagnostic:
+  summary: outputs/case500_clarabel_portfolio_offset1_diagnostic/summary.json
+  sha256: 0be0e4f3da012c33dd1f6dad3675c4ca06af25da8b56241908417416d8351a41
+  failed_master: case500_offset1_branch00081_master2
+  default_settings:
+    status: Solved
+    objective: 400836.352699739
+    maximum_original_constraint_violation: 1.6370904631912708e-11
+  strong_settings:
+    status: AlmostSolved_rejected
+  complementary_prior_diagnostic: >-
+    The offset-2 branch-00407 master that failed under default settings was
+    solved under strong settings and reached zero terminal violations in three
+    top-one iterations.
+
+unchanged_scientific_design:
+  networks_states_candidates_active_screening_unchanged: true
+  finite_leave_one_out_constraint_sets_unchanged: true
+  costs_network_equations_gate_and_thresholds_unchanged: true
+  every_non_omitted_candidate_checked_at_terminal_solution: true
+  AlmostSolved_InsufficientProgress_NumericalError_and_time_limit_forbidden: true
+  thresholds_relaxed: false
+
+deterministic_clarabel_portfolio_per_master:
+  order:
+    - name: default
+      settings: Clarabel_0_11_1_defaults_with_frozen_tolerances
+    - name: strong_regularization
+      settings:
+        static_regularization_constant: 1.0e-7
+        dynamic_regularization_delta: 1.0e-6
+  retries_per_setting: 1
+  acceptance:
+    status_required: Solved
+    maximum_original_model_constraint_violation: 1.0e-5
+    tol_gap_abs: 1.0e-7
+    tol_gap_rel: 1.0e-8
+    tol_feas: 1.0e-8
+  top_one_maximum_iterations: 100
+  terminal_non_omitted_loading_max_pu: 1.000001
+
+last_resort_exact_fallback:
+  solver: HiGHS_1_11_0_warm_start_row_relaxation
+  trigger: both_clarabel_settings_fail_for_a_master
+  acceptance_and_restore_checks: unchanged_from_parent_v7
+  time_limit_is_not_success: true
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v8
+  protocol_version: pcc_v2_native_dc_scopf_case500_clarabel_portfolio_v8
+  output_directory: outputs/pcc_v2_dc_scopf_case500_clarabel_portfolio
+  checkpoint_granularity: one_candidate_row
+  per_master_setting_and_failure_logged: true
+  all_v2_through_v7_attempts_retained: true
+
+promotion_requirements:
+  completed_states: 10
+  rows_per_state: 582
+  terminal_all_non_omitted_constraints_feasible: true
+  harmful_solver_starts: 0
+  active_screening_recall_over_prior_four_networks: 1.0

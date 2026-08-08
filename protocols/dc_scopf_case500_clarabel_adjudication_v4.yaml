@@ -1,0 +1,52 @@
+protocol: pcc_v2_dc_scopf_case500_clarabel_adjudication_v4
+frozen_date: 2026-08-07
+status: frozen_before_clarabel_case500_execution
+parent_amendment: protocols/dc_scopf_case500_constraint_generation_v3.yaml
+
+trigger:
+  retained_v4_attempt: case500_offset0_branch_00407_constraint_generation_master2
+  outcome: highs_time_limit_300_seconds_rejected
+  v4_runner_sha256_before_v5_edit: 29a70038006a3695bff1bcd039f80943fb8764b5aee817043bf6c36b58a19053
+  parent_amendment_sha256: b4ba801e5eaf128ae91ebeed0c6c03656a2c1f4d85003077874f4231e6e741b5
+  archived_attempt_log: outputs/pcc_v2_dc_scopf_case500_constraint_generation/aborted_v4_highs_cg_timeout_attempts.jsonl
+  archived_checkpoint: outputs/pcc_v2_dc_scopf_case500_constraint_generation/aborted_v4_highs_cg_timeout_offset0_checkpoint.json
+
+solver_adjudication:
+  full_model_and_activity_solver: HiGHS_1_11_0
+  restricted_master_solver: Clarabel_0_11_1
+  osqp_1_1_3_negative_adjudicator_retained: >-
+    OSQP reached its iteration limit in the validation problem and is not used
+    for confirmatory outcomes.
+  clarabel_acceptance:
+    status_required: Solved
+    feasibility_tolerance: 1.0e-5
+    tol_gap_abs: 1.0e-7
+    tol_gap_rel: 1.0e-8
+    tol_feas: 1.0e-8
+    solved_inaccurate_forbidden: true
+  initial_validation_case39:
+    highs_objective: 6673532.812216336
+    clarabel_objective: 6673532.812245373
+    objective_relative_difference: 4.351035058703492e-12
+    maximum_dispatch_absolute_difference_mw: 2.1344135348044802e-7
+    clarabel_maximum_constraint_violation: 2.1600499167107046e-12
+
+unchanged_scientific_design:
+  finite_leave_one_out_constraint_set_unchanged: true
+  constraint_generation_separation_oracle_unchanged: true
+  every_non_omitted_candidate_checked_at_termination: true
+  omitted_candidate_never_enforced: true
+  costs_and_network_equations_unchanged: true
+  thresholds_relaxed: false
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v5
+  protocol_version: pcc_v2_native_dc_scopf_case500_clarabel_cg_v5
+  checkpoint_granularity: one_candidate_row
+  highs_failures_and_timeouts_retained: true
+
+validation_required_before_promotion:
+  clarabel_vs_highs_objective_relative_difference_max: 1.0e-6
+  clarabel_vs_highs_dispatch_absolute_difference_mw_max: 1.0e-4
+  terminal_non_omitted_loading_max_pu: 1.000001
+  historical_active_screening_recall: 1.0

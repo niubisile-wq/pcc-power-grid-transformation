@@ -1,0 +1,54 @@
+protocol: pcc_v2_native_dc_scopf_confirmatory_v1
+frozen_date: 2026-08-06
+status: confirmatory_execution_transformer_explicit_v2
+task: DC_SCOPF
+
+networks:
+  source: PGLib-OPF v23.07
+  cases:
+    - pglib_opf_case39_epri.m
+    - pglib_opf_case73_ieee_rts.m
+    - pglib_opf_case118_ieee.m
+    - pglib_opf_case300_ieee.m
+    - pglib_opf_case500_goc.m
+
+states:
+  load_scale: [0.90, 0.9222222222, 0.9444444444, 0.9666666667, 0.9888888889, 1.0111111111, 1.0333333333, 1.0555555556, 1.0777777778, 1.10]
+  selection: fixed_grid_no_outcome_dependent_state_selection
+
+contingencies:
+  component: in_service_line_or_transformer
+  islanding_rule: exclude_graph_bridges_before_optimization
+  omission_mode: exhaustive_leave_one_candidate_out
+  post_contingency_check: PyPSA_linear_power_flow_with_fixed_dispatch
+  transformer_taps_and_phase_shifts: explicit_in_loader
+
+optimization:
+  formulation: PyPSA_security_constrained_linear_optimal_power_flow
+  solver: HiGHS
+  feasibility_relaxation:
+    type: dispatchable_load_shedding
+    marginal_cost_per_mwh: 100000
+    report_mw_separately: true
+  full_and_omitted_models_share_identical_network_and_costs: true
+
+primary_endpoints:
+  - false_secure_dispatch_rate
+  - post_contingency_max_loading_pu
+  - relative_cost_understatement
+  - hidden_load_shedding_mw
+  - harmful_solver_starts_after_pcc_gate
+  - prevented_false_secure_dispatches
+
+claim_limits:
+  - linearized_steady_state_security_only
+  - public_benchmark_networks_not_field_prevalence
+  - transformer_taps_and_phase_shifts_are_explicit_but_control_modes_are_not_field_validated
+  - results_are_not_submission_ready_until_all_five_cases_and_ten_states_are_complete
+
+reproducibility:
+  loader_revision: pglib-pypsa-transformer-explicit-v2
+  result_schema: pcc-v2-dc-scopf-result-v2
+  one_case_and_one_state_per_checkpoint: true
+  failures_timeouts_and_infeasible_states_remain_in_denominator: true
+  reruns_replace_the_same_case_state_in_dashboard_aggregation: true

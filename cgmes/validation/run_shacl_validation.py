@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import subprocess
 import sys
 import time
@@ -15,6 +16,7 @@ import psutil
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "corpus" / "validation_model_registry.csv"
 SHAPES_ROOT = ROOT / "corpus" / "extracted" / "cgmes3_profiles"
+SHAPES_VERSION = "CGMES CAS Application Profiles 3.0.2 / SHACL 3.0.0"
 WORKER = ROOT / "validation" / "run_shacl_worker.py"
 WORKER_RESULTS = ROOT / "logs" / "stage5_shacl_workers"
 CONSOLE_LOGS = ROOT / "logs" / "stage5_shacl_console"
@@ -97,6 +99,8 @@ def _run(
         str(source),
         "--shapes-root",
         str(SHAPES_ROOT),
+        "--shapes-version",
+        SHAPES_VERSION,
         "--result-output",
         str(result_path),
         "--report-graph-output",
@@ -199,10 +203,28 @@ def _run(
 
 
 def main() -> None:
+    global SHAPES_ROOT, SHAPES_VERSION, WORKER_RESULTS, CONSOLE_LOGS, REPORTS, SELECTIONS
     parser = argparse.ArgumentParser()
     parser.add_argument("--timeout-seconds", type=int, default=1800)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--shapes-root", type=Path, default=SHAPES_ROOT)
+    parser.add_argument("--shapes-version", default=SHAPES_VERSION)
+    parser.add_argument(
+        "--output-tag",
+        default="",
+        help="Optional safe suffix keeping a standards release independent of legacy results.",
+    )
     args = parser.parse_args()
+    if args.output_tag and not re.fullmatch(r"[a-z0-9_-]+", args.output_tag):
+        raise ValueError("output-tag must contain only lowercase letters, digits, '_' or '-'")
+    SHAPES_ROOT = args.shapes_root.resolve()
+    SHAPES_VERSION = args.shapes_version
+    suffix = f"_{args.output_tag}" if args.output_tag else ""
+    if suffix:
+        WORKER_RESULTS = ROOT / "logs" / f"stage5_shacl_workers{suffix}"
+        CONSOLE_LOGS = ROOT / "logs" / f"stage5_shacl_console{suffix}"
+        REPORTS = ROOT / "results" / f"stage5_shacl_reports{suffix}"
+        SELECTIONS = ROOT / "results" / f"stage5_shacl_selections{suffix}"
     for path in (WORKER_RESULTS, CONSOLE_LOGS, REPORTS, SELECTIONS):
         path.mkdir(parents=True, exist_ok=True)
     with REGISTRY.open(encoding="utf-8", newline="") as stream:
@@ -212,7 +234,7 @@ def main() -> None:
             if row["included"].lower() == "true"
         ]
     rows: list[dict[str, object]] = []
-    output = ROOT / "results" / "cgmes_shacl_validation_results.csv"
+    output = ROOT / "results" / f"cgmes_shacl_validation_results{suffix}.csv"
     for index, row in enumerate(models, 1):
         print(f"[{index}/{len(models)}] {row['case_id']}", flush=True)
         result = _run(row, args.timeout_seconds, args.resume)
@@ -229,7 +251,8 @@ def main() -> None:
     summary = {
         "evidence_role": "internal_validation_not_untouched_final_holdout",
         "official_shapes": True,
-        "official_shapes_source": "ENTSO-E CGMES Conformity Assessment Scheme Application Profiles v3.0.2, SHACL v3.0.0",
+        "official_shapes_source": SHAPES_VERSION,
+        "official_shapes_root": SHAPES_ROOT.relative_to(ROOT).as_posix(),
         "validation_engine": "pyshacl",
         "expected_artifacts": len(models),
         "recorded_artifacts": len(frame),
@@ -258,7 +281,7 @@ def main() -> None:
             "source archives remain byte-identical"
         ),
     }
-    (ROOT / "results" / "cgmes_shacl_validation_summary.json").write_text(
+    (ROOT / "results" / f"cgmes_shacl_validation_summary{suffix}.json").write_text(
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"
     )
     print(json.dumps(summary, indent=2), flush=True)

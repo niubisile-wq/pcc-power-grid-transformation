@@ -1,0 +1,86 @@
+protocol: pcc_v2_dc_scopf_case500_hybrid_exact_solver_v7
+frozen_date: 2026-08-07
+status: frozen_before_hybrid_case500_execution
+parent_amendment: protocols/dc_scopf_case500_top1_constraint_generation_v5.yaml
+
+trigger:
+  retained_v6_failure: case500_offset2_branch_00407_clarabel_default_master2
+  outcome: clarabel_numerical_error_three_attempts_rejected
+  v6_runner_sha256_before_v7_edit: 37d93be759d236063fa39b9263ef760093c985113c39ddcaf50a58236507ccb3
+  parent_amendment_sha256: 517547ce06afdc205597011076ca50848d9767a8229cd37a861c73dfd343a0cb
+  archived_attempt_log: outputs/pcc_v2_dc_scopf_case500_clarabel_top1/aborted_v6_offset2_clarabel_top1_attempts.jsonl
+  archived_attempt_log_sha256: 49d7c3b3478f3a6d2f7ed40502d52b1e0ea3f54769f00ac1462ff8403633da75
+  archived_checkpoint: outputs/pcc_v2_dc_scopf_case500_clarabel_top1/aborted_v6_offset2_clarabel_top1_checkpoint.json
+
+pre_freeze_diagnostics:
+  clarabel_settings:
+    summary: outputs/case500_clarabel_settings_offset2_diagnostic/summary.json
+    sha256: a373828cce0e4aafc380d77d5676f73868fa4b05475627d3b0a84bda46303364
+    finding: stronger_KKT_regularization_solved_failed_master
+  clarabel_terminal:
+    summary: outputs/case500_clarabel_strong_top1_offset2_diagnostic/summary.json
+    sha256: 2257679c9c04818f59f83421734b8dc2550edb6cb6dcc5dcb8c2929d120d4acd
+    iterations: 3
+    terminal_max_non_omitted_loading_pu: 0.9999999999999759
+  highs_row_relaxation_small_network:
+    summary: outputs/highs_row_relaxation_validation/summary.json
+    sha256: de678fd28eb984660a94fa0825e20ec7757f76294f938f98ae0650ce9802d638
+    direct_objective_relative_difference: 6.839851805884104e-15
+    direct_dispatch_max_absolute_difference_mw: 4.547473508864641e-13
+  highs_row_relaxation_case500:
+    summary: outputs/case500_highs_row_relaxation_offset2_diagnostic/summary.json
+    sha256: 65f4f0ddf57b09eda991ad2038da108d133a6b91071a2d3d0861ded76df20e2f
+    terminal_max_non_omitted_loading_pu: 1.0000000000000777
+    restored_full_objective_relative_difference: 0.0
+  cross_path_alias_objective_relative_difference: 3.42495735329818e-10
+
+unchanged_scientific_design:
+  all_case500_states_and_582_candidates_unchanged: true
+  active_outage_definition_unchanged: true
+  inactive_full_optimum_reuse_theorem_unchanged: true
+  omitted_candidate_never_enforced: true
+  every_other_581_candidate_checked_at_terminal_alias_solution: true
+  costs_network_equations_gate_and_effect_thresholds_unchanged: true
+  thresholds_relaxed: false
+  prior_v2_through_v6_attempts_retained: true
+
+primary_solver_path:
+  solver: Clarabel_0_11_1
+  algorithm: top_one_exact_finite_constraint_generation
+  settings:
+    static_regularization_constant: 1.0e-7
+    dynamic_regularization_delta: 1.0e-6
+    tol_gap_abs: 1.0e-7
+    tol_gap_rel: 1.0e-8
+    tol_feas: 1.0e-8
+  maximum_iterations: 100
+  violation_threshold_pu: 1.000001
+  required_status: Solved
+  maximum_original_model_constraint_violation: 1.0e-5
+
+deterministic_fallback:
+  trigger: three_primary_solver_attempts_fail_for_any_master
+  solver: HiGHS_1_11_0
+  algorithm: >-
+    start from the solved complete SCOPF model, relax exactly all upper and
+    lower security rows indexed by the omitted outage, warm-start reoptimization,
+    verify all retained original constraints, then restore the rows and recover
+    the complete-model objective before the next candidate
+  maximum_retained_model_constraint_violation: 1.0e-5
+  terminal_non_omitted_loading_max_pu: 1.000001
+  restored_full_objective_relative_difference_max: 1.0e-8
+  fallback_is_same_leave_one_out_problem: true
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v7
+  protocol_version: pcc_v2_native_dc_scopf_case500_hybrid_exact_v7
+  output_directory: outputs/pcc_v2_dc_scopf_case500_hybrid_exact
+  checkpoint_granularity: one_candidate_row
+  solver_path_and_terminal_checks_recorded_per_active_candidate: true
+
+promotion_requirements:
+  completed_states: 10
+  rows_per_state: 582
+  terminal_all_non_omitted_constraints_feasible: true
+  harmful_solver_starts: 0
+  active_screening_recall_over_prior_four_networks: 1.0

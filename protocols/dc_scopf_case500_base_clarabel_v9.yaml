@@ -1,0 +1,63 @@
+protocol: pcc_v2_dc_scopf_case500_base_clarabel_v9
+frozen_date: 2026-08-07
+status: frozen_before_v9_case500_execution
+parent_protocol: protocols/dc_scopf_case500_clarabel_portfolio_v8.yaml
+
+trigger:
+  failed_state: case500_offset3_base_opf
+  retained_attempts: 3
+  attempt_time_limit_seconds: 300
+  outcomes:
+    - time_limit_rejected
+    - time_limit_rejected
+    - time_limit_rejected
+  converged_objectives_without_optimal_certificate:
+    - 420586.22818811843
+    - 420586.2281879347
+    - 420586.2281880032
+  interpretation: >-
+    The HiGHS primal objective was numerically stable, but no optimal
+    certificate was returned under the frozen resource limit; all three
+    attempts remain invalid and are retained in solver_attempts.jsonl.
+
+unchanged_scientific_design:
+  networks_states_candidates_active_screening_unchanged: true
+  finite_leave_one_out_constraint_sets_unchanged: true
+  costs_network_equations_gate_and_thresholds_unchanged: true
+  complete_scopf_control_solver: HiGHS_1_11_0
+  alias_solver_portfolio: Clarabel_0_11_1_default_then_strong_with_exact_HiGHS_fallback
+  every_non_omitted_candidate_checked_at_terminal_solution: true
+  AlmostSolved_InsufficientProgress_NumericalError_and_time_limit_forbidden: true
+  thresholds_relaxed: false
+
+base_opf_amendment_only:
+  role: descriptive_pre_contingency_loading_rank_and_base_objective
+  solver: Clarabel_0_11_1_settings_portfolio
+  order:
+    - default
+    - strong_regularization
+  acceptance:
+    status_required: Solved
+    maximum_original_model_constraint_violation: 1.0e-5
+    tol_gap_abs: 1.0e-7
+    tol_gap_rel: 1.0e-8
+    tol_feas: 1.0e-8
+  validation_basis: outputs/clarabel_highs_scopf_validation/summary.json
+  validation_pairs: 10
+  maximum_objective_relative_difference: 1.2218982260495656e-10
+  maximum_constraint_violation: 1.4097167877480388e-10
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v9
+  protocol_version: pcc_v2_native_dc_scopf_case500_base_clarabel_v9
+  output_directory: outputs/pcc_v2_dc_scopf_case500_clarabel_portfolio
+  filename_suffix: v9
+  rerun_all_offsets_zero_through_nine: true
+  v8_outputs_and_failed_v9_trigger_attempts_retained: true
+
+promotion_requirements:
+  completed_states: 10
+  rows_per_state: 582
+  terminal_all_non_omitted_constraints_feasible: true
+  harmful_solver_starts: 0
+  active_screening_recall_over_prior_four_networks: 1.0

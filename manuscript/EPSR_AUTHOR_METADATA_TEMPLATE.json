@@ -1,0 +1,33 @@
+{
+  "final_author_order": "Zixuan Liu",
+  "full_names": "Zixuan Liu",
+  "affiliations_and_postal_addresses": "",
+  "author_affiliation_mapping": "Zixuan Liu — Detroit Green Technology Institute, Hubei University of Technology",
+  "corresponding_author": "Zixuan Liu",
+  "corresponding_email": "",
+  "orcid_identifiers": "Zixuan Liu — 0009-0008-4941-5641",
+  "credit_roles": [
+    "Conceptualization",
+    "Methodology",
+    "Software",
+    "Validation",
+    "Formal analysis",
+    "Investigation",
+    "Data curation",
+    "Writing—original draft",
+    "Writing—review and editing",
+    "Visualization"
+  ],
+  "funding_statement": "",
+  "competing_interests_statement": "",
+  "acknowledgements": "",
+  "generative_ai_disclosure": "",
+  "all_author_approval": "",
+  "not_under_review_elsewhere": "",
+  "final_zenodo_concept_doi": "10.5281/zenodo.21796488",
+  "final_release_doi": "",
+  "release_tag": "",
+  "code_license": "No open-source license has yet been assigned.",
+  "source_data_license": "Copyright remains with the author.",
+  "third_party_dataset_confirmation": "yes"
+}

@@ -1,0 +1,26 @@
+protocol: cgmes_untouched_holdout_powsybl_starter_v1
+frozen_at: 2026-08-07T04:05:20.7438596+08:00
+inspection_status_at_freeze: remote_HEAD_only_no_archive_or_tree_inspection
+source:
+  repository: https://github.com/powsybl/powsybl-starter
+  frozen_commit: 0f3fb7e17743fd92d6ef02e2a53137d47d4c5841
+  discovery_basis: public repository documentation states that it contains a CGMES model example
+  archive_url: https://github.com/powsybl/powsybl-starter/archive/0f3fb7e17743fd92d6ef02e2a53137d47d4c5841.tar.gz
+  local_archive: cgmes/corpus/holdout/powsybl-starter-0f3fb7e17743fd92d6ef02e2a53137d47d4c5841.tar.gz
+  archive_sha256: d3a3325edf0890783f137751702a58cf755bca223b4622045d3646d42c26593f
+  archive_bytes: 3377
+selection_rule:
+  - after hash freeze, locate every CGMES RDF/XML example in the frozen archive
+  - use all discovered CGMES example members; no outcome-dependent file selection
+  - retain parse, profile, official-standard, PCC, and tool-import terminal outcomes
+  - never mix these artifacts into development or threshold tuning
+reporting_contract:
+  frozen_before_inspection: true
+  official_SHACL_and_QoCDC_results_reported_separately: true
+  PCC_task_semantic_decisions_reported_separately: true
+  full_QoCDC_compliance_claim_forbidden: true
+  no_outcome_dependent_exclusion: true
+terminal_result_after_inspection:
+  usable_cgmes_artifacts: 0
+  status: retained_failed_discovery_candidate
+  reason: frozen archive contains README.md and pom.xml but no CGMES instance files

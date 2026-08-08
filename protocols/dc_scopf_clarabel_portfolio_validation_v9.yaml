@@ -1,0 +1,40 @@
+protocol: pcc_v2_dc_scopf_clarabel_portfolio_validation_v9
+frozen_date: 2026-08-07
+status: frozen_before_portfolio_validation_rerun
+parents:
+  - protocols/dc_scopf_clarabel_optimal_face_validation_v6.yaml
+  - protocols/dc_scopf_case500_clarabel_portfolio_v8.yaml
+
+trigger:
+  retained_attempt_1: outputs/clarabel_highs_scopf_validation/failed_optimal_face_rerun_checkpoint_attempt1.json
+  retained_attempt_2: outputs/clarabel_highs_scopf_validation/failed_optimal_face_rerun_checkpoint_attempt2.json
+  retained_attempt_2_sha256: c235706d6a7344a28bc0c636b4c9f0b5daea38fcbbb7656db7724f95212ff250
+  outcome: repeated_default_setting_InsufficientProgress_rejected
+  validation_v2_script_sha256_before_portfolio_edit: b7eb8bd7c96cf01ca316f7d557274059d72f97fafe4ba0175a8e70df1dd023a3
+  optimal_face_parent_sha256: ee53c31169f47a784d9a62f250e9d6ddaeaadf1762ac8f4e1adf531afbcc3c15
+  execution_portfolio_parent_sha256: 6d41e558150f1f2d26a704e08cc1af8adba04b6eb100ba6707275ce14385b081
+
+unchanged_validation_claim:
+  ten_network_state_pairs_unchanged: true
+  objective_feasibility_equivalence_criteria_unchanged: true
+  component_dispatch_identity_remains_descriptive: true
+  failed_attempts_retained: true
+  thresholds_relaxed: false
+
+solver_settings_portfolio_per_pair:
+  order:
+    - default
+    - strong_regularization
+  strong_regularization:
+    static_regularization_constant: 1.0e-7
+    dynamic_regularization_delta: 1.0e-6
+  retries_per_setting: 1
+  only_status_Solved_is_accepted: true
+
+promotion:
+  protocol_version_required: clarabel_portfolio_vs_highs_scopf_optimal_face_validation_v3
+  objective_relative_difference_max: 1.0e-6
+  original_model_constraint_violation_max: 1.0e-5
+  aggregate_generation_absolute_difference_mw_max: 1.0e-4
+  aggregate_load_shed_absolute_difference_mw_max: 1.0e-4
+  required_equivalent_pairs: 10

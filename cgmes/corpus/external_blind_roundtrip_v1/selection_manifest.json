@@ -1,0 +1,260 @@
+{
+  "protocol": "external_tool_blind_roundtrip_v1",
+  "source_commit": "61842900c40e19accb9528503a8591d4ff2004ee",
+  "archive_path": "cgmes/corpus/holdout/pandapower-61842900c40e19accb9528503a8591d4ff2004ee.tar.gz",
+  "archive_sha256": "d3ba575ab6f2be7068d816da22b40c6d8ead0343b3bf925770aba87a8197ebcf",
+  "archive_bytes": 40892305,
+  "candidate_count": 16,
+  "selected_count": 9,
+  "maximum_selected_bundles": 10,
+  "selected_bundle_ids": [
+    "ext01_CGMES_v2.4.15_FullGridTestConfiguration_BB_BE_v1",
+    "ext02_CGMES_v2.4.15_FullGridTestConfiguration_NB_BE_v3",
+    "ext03_CGMES_v2.4.15_MicroGridTestConfiguration_T4_BE_NB_Complete_v2",
+    "ext04_CGMES_v2.4.15_MiniGridTestConfiguration_T1_Complete_v3_mod_in_service_ext_grid",
+    "ext05_CGMES_v2.4.15_RealGridTestConfiguration_v2",
+    "ext06_CGMES_v3.0_FullGrid-Merged_v3.0.2",
+    "ext07_SimBench_1-HVMV-mixed-1.105-0-sw_modified",
+    "ext08_Simbench_1-EHV-mixed--2-no_sw",
+    "ext09_example_multivoltage"
+  ],
+  "records": [
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_FullGridTestConfiguration_BB_BE_v1.zip",
+      "sha256": "7c4a41104f52cb6912718f7f522742e55fb4a5bd54bdb4eb29f33f5c66e907b9",
+      "bytes": 68242,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 4,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext01_CGMES_v2.4.15_FullGridTestConfiguration_BB_BE_v1",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext01_CGMES_v2.4.15_FullGridTestConfiguration_BB_BE_v1.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_FullGridTestConfiguration_BD_v1.zip",
+      "sha256": "0b0dfe63b5e07e555a1890b9b4be91a3dfcf5c9139891b42576f3c3eda020aa7",
+      "bytes": 4802,
+      "profiles_from_member_names": [
+        "EQ",
+        "TP"
+      ],
+      "nested_member_count": 2,
+      "eligible": false,
+      "selection_reason": "missing_required_EQ_SSH_TP_profiles"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_FullGridTestConfiguration_NB_BE_v3.zip",
+      "sha256": "bcd33671d0da9b305e657ea7ab771fdc51907d40c51bffbd49bb083b176badf1",
+      "bytes": 84497,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 4,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext02_CGMES_v2.4.15_FullGridTestConfiguration_NB_BE_v3",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext02_CGMES_v2.4.15_FullGridTestConfiguration_NB_BE_v3.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_MicroGridTestConfiguration_T4_BE_NB_Complete_v2.zip",
+      "sha256": "2017363d232386cc60347b7d37abac80190de02544cfa6ec88642f537626d2b9",
+      "bytes": 78374,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 7,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext03_CGMES_v2.4.15_MicroGridTestConfiguration_T4_BE_NB_Complete_v2",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext03_CGMES_v2.4.15_MicroGridTestConfiguration_T4_BE_NB_Complete_v2.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_MiniGridTestConfiguration_T1_Complete_v3.zip",
+      "sha256": "27a55654fa98ae468397fe3e29bf91550145a3d139d38a0d4d9d9f6b10b4e77f",
+      "bytes": 105931,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 5,
+      "eligible": false,
+      "selection_reason": "byte_identical_prior_local_artifact"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_MiniGridTestConfiguration_T1_Complete_v3_mod_in_service_ext_grid.zip",
+      "sha256": "d1f0ab8cc7ec03c58230fea4f6239559f80fcf0b4ade80b3393bd034f1e5f858",
+      "bytes": 118886,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 5,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext04_CGMES_v2.4.15_MiniGridTestConfiguration_T1_Complete_v3_mod_in_service_ext_grid",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext04_CGMES_v2.4.15_MiniGridTestConfiguration_T1_Complete_v3_mod_in_service_ext_grid.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_RealGridTestConfiguration_v2.zip",
+      "sha256": "960025ef0f4aba40b6989c8c61736d551062a6d042d20a9089dbc0224eb7e100",
+      "bytes": 3858390,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 4,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext05_CGMES_v2.4.15_RealGridTestConfiguration_v2",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext05_CGMES_v2.4.15_RealGridTestConfiguration_v2.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_SmallGridTestConfiguration_BaseCase_Complete_v3.0.0.zip",
+      "sha256": "015355b3dcb22eed26286679bf9094746817f6fa12e2a4d8e237a3fd812a43bb",
+      "bytes": 219517,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 6,
+      "eligible": false,
+      "selection_reason": "byte_identical_prior_local_artifact"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v2.4.15_SmallGridTestConfiguration_Boundary_v3.0.0.zip",
+      "sha256": "130b098ea3c2d17675323ccdf70ea1bfab91ae5982de76b13458536abfd51938",
+      "bytes": 4115,
+      "profiles_from_member_names": [
+        "EQ",
+        "TP"
+      ],
+      "nested_member_count": 2,
+      "eligible": false,
+      "selection_reason": "missing_required_EQ_SSH_TP_profiles"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/CGMES_v3.0_FullGrid-Merged_v3.0.2.zip",
+      "sha256": "6d2525a80177a9085ef6fde0621b91c33145bcbb4228aa9e2400365913f48b23",
+      "bytes": 152686,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 7,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext06_CGMES_v3.0_FullGrid-Merged_v3.0.2",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext06_CGMES_v3.0_FullGrid-Merged_v3.0.2.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/SimBench_1-HVMV-mixed-1.105-0-sw_modified.zip",
+      "sha256": "ca5dbbbc36c28b827f2d722e277896258a8c4100506c20c4db730fc39f5fc0dc",
+      "bytes": 802033,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 8,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext07_SimBench_1-HVMV-mixed-1.105-0-sw_modified",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext07_SimBench_1-HVMV-mixed-1.105-0-sw_modified.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/Simbench_1-EHV-mixed--2-no_sw.zip",
+      "sha256": "e704a525028c61c5ce1da5393c2815afc0f4738f1f688bf21fd66a88328ea61e",
+      "bytes": 2036181,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 8,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext08_Simbench_1-EHV-mixed--2-no_sw",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext08_Simbench_1-EHV-mixed--2-no_sw.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/pandapower/test/test_files/example_cim/example_multivoltage.zip",
+      "sha256": "ac53890be49868df2f39af9f41a2a28ea75a6796d5f679cb5b58d81cc14babed",
+      "bytes": 93019,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 8,
+      "eligible": true,
+      "selection_reason": "eligible",
+      "bundle_id": "ext09_example_multivoltage",
+      "selected_path": "cgmes/corpus/external_blind_roundtrip_v1/ext09_example_multivoltage.zip"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/tutorials/example_cim/CGMES_v2.4.15_SmallGridTestConfiguration_BaseCase_Complete_v3.0.0.zip",
+      "sha256": "015355b3dcb22eed26286679bf9094746817f6fa12e2a4d8e237a3fd812a43bb",
+      "bytes": 219517,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 6,
+      "eligible": false,
+      "selection_reason": "byte_identical_prior_local_artifact"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/tutorials/example_cim/CGMES_v2.4.15_SmallGridTestConfiguration_Boundary_v3.0.0.zip",
+      "sha256": "130b098ea3c2d17675323ccdf70ea1bfab91ae5982de76b13458536abfd51938",
+      "bytes": 4115,
+      "profiles_from_member_names": [
+        "EQ",
+        "TP"
+      ],
+      "nested_member_count": 2,
+      "eligible": false,
+      "selection_reason": "missing_required_EQ_SSH_TP_profiles"
+    },
+    {
+      "repository_member": "pandapower-61842900c40e19accb9528503a8591d4ff2004ee/tutorials/example_cim/SimBench_1-HVMV-mixed-1.105-0-sw_modified.zip",
+      "sha256": "ca5dbbbc36c28b827f2d722e277896258a8c4100506c20c4db730fc39f5fc0dc",
+      "bytes": 802033,
+      "profiles_from_member_names": [
+        "EQ",
+        "SSH",
+        "SV",
+        "TP"
+      ],
+      "nested_member_count": 8,
+      "eligible": false,
+      "selection_reason": "byte_identical_earlier_candidate"
+    }
+  ],
+  "selection_used_no_PCC_or_operational_outcomes": true
+}

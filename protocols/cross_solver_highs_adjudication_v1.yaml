@@ -1,0 +1,26 @@
+protocol: cross_solver_highs_adjudication_v1
+recorded_at: 2026-08-07T05:20:00+08:00
+status: post_confirmatory_diagnostic_adjudication
+trigger:
+  - PowerModels/Ipopt and PYPOWER/PIPS agreed on status for 9/9 planned pairs
+  - total generation agreed for all 8 mutually optimal pairs after correcting a documented per-unit output-label error
+  - objective agreement at relative tolerance 1.0e-5 held for 3/8 pairs
+  - the three quadratic-cost case73 pairs agreed at approximately 2.0e-8 relative error
+  - the five discrepant case39/case118 pairs use linear generation costs, for which an interior-point solution can terminate at a near-optimal interior point
+adjudicator:
+  stack: WSL Ubuntu 24.04 + Julia 1.12.6 + PowerModels 0.21.6 + HiGHS
+  reason: native LP/QP solver used to distinguish formulation disagreement from Ipopt barrier termination on linear-cost cases
+inputs:
+  cases: [case39, case73, case118]
+  load_scales: [0.9, 1.0, 1.1]
+endpoints:
+  - status versus both preregistered stacks
+  - objective relative error versus PYPOWER/PIPS
+  - objective relative error versus PowerModels/Ipopt
+  - total generation relative error
+rules:
+  no_replacement_of_failed_v1_gate: true
+  all_v1_results_retained: true
+  no_threshold_relaxation: true
+  numerical_tolerance: 1.0e-5
+claim_boundary: adjudication evidence only; cannot retroactively convert the v1 exact-objective gate into a pass

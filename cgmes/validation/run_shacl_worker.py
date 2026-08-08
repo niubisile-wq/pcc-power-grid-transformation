@@ -197,11 +197,17 @@ def main() -> None:
     parser.add_argument("--case-id", required=True)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--shapes-root", type=Path, required=True)
+    parser.add_argument(
+        "--shapes-version",
+        default="CGMES CAS Application Profiles 3.0.2 / SHACL 3.0.0",
+    )
     parser.add_argument("--result-output", type=Path, required=True)
     parser.add_argument("--report-graph-output", type=Path, required=True)
     parser.add_argument("--report-text-output", type=Path, required=True)
     parser.add_argument("--selection-output", type=Path, required=True)
     args = parser.parse_args()
+    args.source = args.source.resolve()
+    args.shapes_root = args.shapes_root.resolve()
     for path in (
         args.result_output,
         args.report_graph_output,
@@ -217,7 +223,8 @@ def main() -> None:
         "source_path": args.source.as_posix(),
         "source_sha256": _sha256(args.source),
         "official_shapes": True,
-        "official_shapes_version": "CGMES CAS Application Profiles 3.0.2 / SHACL 3.0.0",
+        "official_shapes_version": args.shapes_version,
+        "official_shapes_root": args.shapes_root.as_posix(),
         "validation_engine": "pyshacl",
         "inference": "none",
         "advanced": True,

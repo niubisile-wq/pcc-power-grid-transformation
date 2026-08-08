@@ -1,0 +1,12 @@
+{
+  "n": 3000,
+  "legal_split_accepts": 3000,
+  "lawful_merge_accepts": 3000,
+  "tampered_signature_rejects": 3000,
+  "feature_only_merge_rejects": 3000,
+  "signed_ed25519": true,
+  "limitations": [
+    "public substitute lockbox",
+    "asset-level property audit, not downstream model inference"
+  ]
+}

@@ -1,0 +1,72 @@
+protocol: pcc_v2_dc_scopf_case500_tight_dual_v11
+frozen_date: 2026-08-07
+status: frozen_before_v11_case500_execution
+parent_protocol: protocols/dc_scopf_case500_full_clarabel_v10.yaml
+
+trigger:
+  state: case500_offset7
+  v10_full_objective: 35594559.64124385
+  v10_full_maximum_original_constraint_violation: 1.0260237104375847e-10
+  v10_inactive_constraint_slack_pu: 0.3000000180810617
+  v10_inactive_constraint_dual_noise: 3.43225152184208e-7
+  frozen_activity_dual_threshold: 1.0e-7
+  consequence: 582_candidates_conservatively_classified_active
+  retained_partial_checkpoint_rows: 2
+
+prefreeze_tight_precision_diagnostic:
+  state: case500_offset7
+  status: Solved
+  objective: 35594559.64106872
+  elapsed_seconds: 45.105202600003395
+  iterations: 80
+  primal_residual: 1.4657977200483218e-16
+  dual_residual: 1.7259965521203247e-13
+  maximum_original_constraint_violation: 1.0277290130034089e-10
+  inactive_dual_noise: 3.872217632321001e-9
+  active_candidates: 15
+  dual_above_frozen_threshold: 15
+  slack_below_frozen_threshold: 15
+  interpretation: >-
+    Tight solver tolerances remove numerical dual noise while the activity
+    threshold remains unchanged. All promoted active candidates are confirmed
+    independently by both dual magnitude and primal slack.
+
+unchanged_scientific_design:
+  networks_states_candidates_unchanged: true
+  finite_leave_one_out_constraint_sets_unchanged: true
+  costs_network_equations_gate_and_activity_thresholds_unchanged: true
+  alias_solver_portfolio_and_terminal_separation_unchanged: true
+  every_non_omitted_candidate_checked_at_terminal_solution: true
+  acceptance_status_required: Solved
+  maximum_original_model_constraint_violation: 1.0e-5
+  thresholds_relaxed: false
+
+tight_full_scopf_portfolio:
+  order:
+    - name: tight_default
+      tol_gap_abs: 1.0e-9
+      tol_gap_rel: 1.0e-10
+      tol_feas: 1.0e-9
+      max_iter: 2000
+    - name: tight_strong_regularization
+      tol_gap_abs: 1.0e-9
+      tol_gap_rel: 1.0e-10
+      tol_feas: 1.0e-9
+      max_iter: 2000
+      static_regularization_constant: 1.0e-7
+      dynamic_regularization_delta: 1.0e-6
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v11
+  protocol_version: pcc_v2_native_dc_scopf_case500_tight_dual_v11
+  output_directory: outputs/pcc_v2_dc_scopf_case500_clarabel_portfolio
+  filename_suffix: v11
+  rerun_all_offsets_zero_through_nine: true
+  v2_through_v10_outputs_and_attempts_retained: true
+
+promotion_requirements:
+  completed_states: 10
+  rows_per_state: 582
+  terminal_all_non_omitted_constraints_feasible: true
+  harmful_solver_starts: 0
+  active_screening_recall_over_prior_four_networks: 1.0

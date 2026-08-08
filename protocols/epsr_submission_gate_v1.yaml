@@ -1,0 +1,89 @@
+protocol: epsr_submission_gate_v1
+frozen_date: 2026-08-07
+target_journal: Electric Power Systems Research
+working_title: Task-semantic proof-carrying validation for fail-closed execution of transformed power-system models
+submission_policy: fail_closed
+
+paper_logic:
+  problem: structurally valid transformed grid models can silently change the task-relevant identity and semantics of network assets
+  method: bind a task contract, transformation evidence, source and target snapshots, and a signed PCC v2 certificate to the solver launch
+  success_criterion: harmful transformed inputs are stopped before solver execution while lawful transformations remain usable
+  application_value: prevent false-secure security-analysis and distorted dispatch results from entering operational workflows
+
+required_gates:
+  semantic_confirmatory:
+    lawful_acceptance_min: 0.99
+    harmful_accepts_max: 0
+    harmful_accept_one_sided_95_upper_max: 0.0025
+    unsafe_release_absolute_reduction_vs_strongest_task_agnostic_min: 0.20
+  ac_n1:
+    paired_valid_min: 50
+    harmful_solver_starts_max: 0
+    retain_all_failures: true
+  ac_opf:
+    paired_valid_min: 20
+    harmful_solver_starts_max: 0
+    report_cost_and_feasibility_consequences: true
+  dc_scopf:
+    protocol: protocols/dc_scopf_protocol_v1.yaml
+    cases: [case39, case73, case118, case300, case500]
+    states_per_case: 10
+    terminal_records_required: 50
+    comparable_fraction_min: 0.90
+    harmful_solver_starts_max: 0
+    retain_failures_timeouts_and_infeasible_states: true
+  scaling:
+    largest_asset_count_min: 13000
+    report_p50_p95_and_environment: true
+  official_cgmes_separation:
+    official_application_profiles_release: 1.1.1
+    applicable_qocdc_release: 4.1.4
+    require_positive_conforming_control: true
+    require_standard_pass_pcc_reject_case: true
+    report_standard_and_pcc_decisions_separately: true
+  dual_solver:
+    primary: PyPSA 1.0.4 with HiGHS 1.11.0 on Windows
+    secondary: PowerModels 0.21.x with PowerModelsSecurityConstrained on Ubuntu 24.04 WSL
+    gate_decision_agreement_min: 1.0
+    safety_label_agreement_min: 0.99
+    relative_objective_difference_max: 0.0001
+  untouched_holdout:
+    freeze_before_inspection: true
+    official_validation_reported_separately: true
+    pcc_decision_reported_separately: true
+
+amendments:
+  dual_solver_implementation_2026_08_07:
+    original_plan_retained_above: true
+    reason: >-
+      The planned PowerModelsSecurityConstrained route was not the implemented
+      comparison available in the frozen local stack. The executed comparison
+      uses the same PGLib DC-OPF cases in Windows PYPOWER/PIPS and WSL Julia
+      PowerModels. An initial DCPPowerModel run exposed omitted transformer
+      tap/shift semantics and is retained as a negative formulation control.
+      The corrective DCMPPowerModel plus HiGHS run matches PYPOWER makeBdc.
+    executed_protocol: protocols/cross_solver_powermodels_dcmp_v2.yaml
+    status_pairs_required: 9
+    mutually_optimal_pairs_min: 8
+    status_agreement_min: 1.0
+    objective_relative_difference_max: 1.0e-5
+    generation_relative_difference_max: 1.0e-6
+    thresholds_relaxed: false
+    v1_negative_result_retained: true
+
+statistics:
+  binary_paired: exact_mcnemar
+  proportions: exact_binomial_confidence_intervals
+  multiplicity: holm
+  clustered_uncertainty: network_cluster_bootstrap
+  continuous_paired: wilcoxon_with_effect_size
+  report: [denominators, medians, interquartile_ranges, confidence_intervals, effect_sizes]
+
+manuscript_constraints:
+  research_paper_page_limit: 24
+  abstract_word_limit: 250
+  keywords_max: 7
+  figures_main: 5
+  tables_main: 4
+  legacy_gridsfm_lumina: supplement_or_remove
+  prohibit_claims_from_incomplete_gates: true

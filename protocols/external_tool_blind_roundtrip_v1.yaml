@@ -1,0 +1,112 @@
+protocol: external_tool_blind_roundtrip_v1
+status: frozen_before_archive_or_tree_inspection
+frozen_at: 2026-08-07T11:56:24.3337835+08:00
+purpose: >-
+  External-tool, leave-source-out validation of the frozen PCC v2 execution gate.
+  The experiment tests whether task-relevant anomalies produced by software routes
+  outside the PCC implementation are stopped before a named N-1 task starts, while
+  exact task-preserving round trips remain usable.
+
+source:
+  repository: https://github.com/e2nIEE/pandapower.git
+  branch_used_only_for_commit_discovery: develop
+  frozen_commit: 61842900c40e19accb9528503a8591d4ff2004ee
+  archive_url: https://github.com/e2nIEE/pandapower/archive/61842900c40e19accb9528503a8591d4ff2004ee.tar.gz
+  inspection_status_at_freeze: remote_ref_only_no_archive_or_tree_inspection
+  evidence_role: external_software_corpus_not_utility_field_data
+
+selection:
+  candidate_rule:
+    - archive member is a regular .zip file
+    - member path contains cim or cgmes, case-insensitive
+    - the nested archive contains RDF/XML members representing at least EQ, SSH and TP profiles
+    - byte-identical duplicates of any pre-existing local corpus artifact are excluded by SHA-256 only
+  ordering: lexicographic_repository_relative_path
+  maximum_selected_bundles: 10
+  no_outcome_dependent_selection: true
+  retain_all_parse_import_export_solver_failures: true
+
+frozen_software_routes:
+  - source_cgmes_to_pypowsybl_to_cgmes_to_pypowsybl
+  - source_cgmes_to_veragrid_to_cgmes_to_pypowsybl
+  route_failure_is_an_endpoint: true
+  no_manual_target_editing: true
+
+task_definition:
+  kind: N-1
+  intervention_type: outage
+  eligible_assets:
+    - in-service AC line or two-winding transformer present in the source importer
+    - stable source identity available
+    - non-islanding under the source-tool topology screen when that screen is available
+  maximum_tasks_per_bundle: 20
+  deterministic_task_selection: lowest_SHA256_of_bundle_id_pipe_asset_id
+  required_attributes:
+    - asset_type
+    - terminal_set
+    - reactance
+    - rating
+    - in_service
+  numeric_absolute_tolerances:
+    reactance: 1.0e-9
+    rating: 1.0e-6
+
+identity_evidence_policy:
+  exact_preserved_mrid: authoritative_for_exact_relation
+  converter_emitted_relation: authoritative_if_present_and_hash_bound
+  inferred_rename_without_converter_trace: unresolved
+  missing_task_asset: reject
+  changed_required_attribute_beyond_tolerance: reject
+  ambiguous_or_reused_target_identity: reject
+
+blinding:
+  phase_1: generate route artifacts, hashes and opaque scenario identifiers without PCC outcomes
+  phase_2: freeze challenge manifest and its SHA-256
+  phase_3: execute the unchanged PCC v2 verifier and protected gate without downstream labels
+  phase_4: lock receipts before operational consequence adjudication
+  phase_5: reveal mapping and N-1 consequence labels and compute endpoints
+  generator_and_evaluator_files_must_be_distinct: true
+
+primary_endpoints:
+  - harmful_task_transformations_accepted
+  - harmful_solver_starts
+  - lawful_exact_roundtrips_accepted
+  - lawful_false_rejects
+  - unresolved_roundtrips
+
+secondary_endpoints:
+  - named_N-1_candidate_loss
+  - source_target_security_class_disagreement
+  - maximum_post_contingency_loading_difference
+  - source_target_solver_status_disagreement
+  - verification_latency
+
+success_criteria:
+  harmful_solver_starts: 0
+  lawful_exact_acceptance_rate: 1.0
+  at_least_one_external_tool_generated_task_relevant_anomaly: true
+  at_least_one_operationally_consequential_anomaly: true
+
+statistics:
+  binary_decisions: exact_numerators_denominators_and_Clopper_Pearson_intervals
+  paired_baseline_comparison: exact_McNemar_with_Holm_adjustment_when_estimable
+  continuous_effects: bundle_cluster_bootstrap_95_percent_CI_when_two_or_more_bundles_contribute
+  zero_event_bound: one_sided_exact_95_percent_upper_bound
+
+claim_limits:
+  - no natural_prevalence claim
+  - no utility_production_deployment claim
+  - no independence claim for the evaluator authors; independence refers only to external software routes and frozen source artifacts
+  - missing converter trace may produce unresolved rather than reject
+  - a failed success criterion remains a retained result and cannot trigger threshold or selection changes
+
+rerun_policy:
+  allowed_before_any_PCC_endpoint:
+    - network_download_failure
+    - disk_exhaustion
+    - interpreter_or_process_crash
+    - syntax_error_that_prevents_challenge_manifest_creation
+  forbidden_after_endpoint_release:
+    - threshold_tuning
+    - outcome_dependent_bundle_or_task_exclusion
+    - verifier_modification

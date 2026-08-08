@@ -1,0 +1,29 @@
+{
+  "lock_version": "pcc-v2-confirmatory-lock-v1",
+  "frozen_at": "2026-08-06T12:00:00+08:00",
+  "git_base_commit": "a1e9166",
+  "scope": "22-network six-family semantic confirmatory benchmark",
+  "protocol_sha256": "2585a835e88d6db36f4711d7bbfe1e8fb8c71d4b09a9c437179eb3d206b70180",
+  "implementation_sha256": {
+    "cgmes/validation/pcc_v2.py": "75730add21b9f131f151bc39d49f6ba8e01faf9b11af0d4683b827e190749593",
+    "cgmes/validation/execution_gate.py": "b0c9cf05231959c4c81291a662fc368f348ab08a077757c512e223a264393a33",
+    "cgmes/validation/evidence_schema.py": "e152294a068180f303d296e7399514cc8b50cdac6523fe09463e2b8b6a540bfa",
+    "cgmes/validation/proof_guided_repair.py": "24f8a663ccd7ffd6837283ddf2779c1df01081a0b4c9ae2f52d627558915fbe9",
+    "experiments/run_pcc_v2_attack_matrix.py": "238b8260eda5c19382a45b66a4d20eaf79a1cab3a13fc13f3379ef3f1ccc1acf",
+    "experiments/run_pcc_v2_dc_scopf_gate.py": "80aaa3c4e463007c047c03a005c1c9ccfa3b8370cc038d25496c6d321ecca88c"
+  },
+  "dc_scopf_protocol_sha256": "e30ed625b39e9118a8cad303f73de0726288844919d3c0b94b6f57713eb9fa1d",
+  "result_sha256": {
+    "outputs/pcc_v2_attack_matrix/attack_matrix_results.csv": "09354b983a937e701d79c0698517984ef029a355be177fef214b101e7fa45b58",
+    "outputs/pcc_v2_attack_matrix/evidence_rows.csv": "67e7985307b3df2fd14c355b31de6991d440eb78a5637103acd32a408c6bd20c",
+    "outputs/pcc_v2_attack_matrix/attack_matrix_summary.json": "29f1d70fe02cc224772b2b66f73e29cde739edf26d4f2cff1c32843df93cae15"
+  },
+  "denominators": {
+    "networks": 22,
+    "lawful": 660,
+    "harmful": 1320,
+    "serialized_evidence_rows": 3960
+  },
+  "outcome_dependent_case_selection": false,
+  "claim_limit": "Controlled semantic attacks on public network records; not field prevalence."
+}

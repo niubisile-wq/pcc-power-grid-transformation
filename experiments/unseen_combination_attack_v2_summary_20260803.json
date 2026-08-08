@@ -1,0 +1,96 @@
+{
+  "experiment": "unseen_combination_attacks_v2",
+  "date": "20260803",
+  "attack_classes": 12,
+  "trials_per_class": 1000,
+  "total_trials": 12000,
+  "total_accepts": 0,
+  "by_attack": [
+    {
+      "attack_class": "combo_provenance_task_version",
+      "mutation_chain": "provenance_forge+task_escalation+version_downgrade",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_id_chain",
+      "mutation_chain": "source_id_collision+chain_digest_tamper",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_signature_target",
+      "mutation_chain": "signature_strip+target_rewrite",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_empty_relation",
+      "mutation_chain": "empty_target+relation_type_replacement",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_unknown_provenance",
+      "mutation_chain": "unknown_source+provenance_forge",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_chain_signature",
+      "mutation_chain": "chain_append+signature_tamper",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_authorization_signature",
+      "mutation_chain": "missing_authorization+signature_tamper",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_version_task_id",
+      "mutation_chain": "version_downgrade+task_escalation+source_id_collision",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_provenance_signature",
+      "mutation_chain": "missing_provenance+signature_tamper",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_authorization_chain",
+      "mutation_chain": "missing_authorization+chain_append",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_target_version",
+      "mutation_chain": "target_rewrite+version_downgrade",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    },
+    {
+      "attack_class": "combo_unknown_signature_chain",
+      "mutation_chain": "unknown_source+signature_strip+chain_append",
+      "n": 1000,
+      "accepted": 0,
+      "upper_95_if_zero": 0.00368208389686564
+    }
+  ],
+  "scope_limit": "protocol-level unseen combination audit; not power-grid downstream validation",
+  "primary_evidence": "unseen_combination_attack_v2_results_20260803.csv"
+}

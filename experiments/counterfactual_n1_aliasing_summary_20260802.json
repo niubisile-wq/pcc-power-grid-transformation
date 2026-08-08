@@ -1,0 +1,30 @@
+{
+  "experiment": "counterfactual_n1_representation_aliasing",
+  "date": "20260802",
+  "n_networks_attempted": 35,
+  "n_networks_completed": 32,
+  "n_networks_failed": 3,
+  "feature_only_accepts": 32,
+  "pcc_accepts": 0,
+  "harmful_aliases": 32,
+  "false_safe_cases": 0,
+  "errors": [
+    {
+      "network": "case300",
+      "stress_factor": 0.05,
+      "error": "LoadflowNotConverged: Power Flow iwamoto_nr did not converge after 100 iterations!"
+    },
+    {
+      "network": "case300",
+      "stress_factor": 0.08,
+      "error": "LoadflowNotConverged: Power Flow iwamoto_nr did not converge after 100 iterations!"
+    },
+    {
+      "network": "case300",
+      "stress_factor": 0.1,
+      "error": "LoadflowNotConverged: Power Flow iwamoto_nr did not converge after 100 iterations!"
+    }
+  ],
+  "interpretation": "Public mechanism benchmark only; not H39 lockbox or field validation.",
+  "primary_evidence": "counterfactual_n1_aliasing_results_20260802.csv"
+}

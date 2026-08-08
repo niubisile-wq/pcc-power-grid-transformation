@@ -1,0 +1,36 @@
+protocol: cross_solver_powermodels_dcmp_v2
+recorded_at: 2026-08-07T05:35:00+08:00
+status: corrective_formulation_alignment_before_execution
+trigger:
+  observed_v1: 9_of_9_status_agreement_8_of_8_generation_agreement_3_of_8_objective_agreement
+  source_level_cause: >-
+    PowerModels solve_dc_opf selects DCPPowerModel. In PowerModels 0.21.6,
+    DCPPowerModel uses p=-b*(theta_from-theta_to) and omits transformer tap and
+    phase shift, whereas DCMPPowerModel explicitly uses
+    p=(theta_from-theta_to-shift)/(x*tap). PYPOWER makeBdc includes tap and
+    shift. Cross-feasibility checks found up to 2.94 MW PYPOWER branch-limit
+    excess for the unaligned case118 PowerModels dispatch.
+  threshold_changed: false
+  sample_changed: false
+  v1_results_retained: true
+inputs:
+  cases: [case39, case73, case118]
+  load_scales: [0.9, 1.0, 1.1]
+stacks:
+  reference: Windows Python 3.12 + PYPOWER/PIPS DC-OPF with makeBdc
+  independent: WSL Ubuntu 24.04 + Julia 1.12.6 + PowerModels 0.21.6 DCMPPowerModel + HiGHS 1.24.1
+endpoints:
+  - status_agreement_over_all_planned_pairs
+  - objective_relative_error_over_mutually_optimal_pairs
+  - total_generation_relative_error_over_mutually_optimal_pairs
+tolerances:
+  objective_relative: 1.0e-5
+  total_generation_relative: 1.0e-6
+gate:
+  required_pairs: 9
+  mutually_optimal_pairs_min: 8
+  status_agreement_min: 1.0
+  objective_agreement_min: 1.0
+  total_generation_agreement_min: 1.0
+  unexplained_differences_max: 0
+claim_boundary: corrective same-sample replication after source-level formulation alignment; v1 remains reported as a negative formulation-control

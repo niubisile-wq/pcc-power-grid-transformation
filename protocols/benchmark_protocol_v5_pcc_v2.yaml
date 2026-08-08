@@ -1,0 +1,63 @@
+protocol: pcc_v2_task_semantic_confirmatory_v1
+frozen_date: 2026-08-06
+contract_version: pcc-cgmes-v2
+primary_task: N1_AC
+
+public_source:
+  repository: https://github.com/power-grid-lib/pglib-opf
+  release: v23.07
+  cache_directory: downloads/pglib-opf-v23.07
+  cases:
+    - pglib_opf_case73_ieee_rts.m
+    - pglib_opf_case162_ieee_dtc.m
+    - pglib_opf_case1888_rte.m
+    - pglib_opf_case1951_rte.m
+    - pglib_opf_case2848_rte.m
+    - pglib_opf_case89_pegase.m
+    - pglib_opf_case1354_pegase.m
+    - pglib_opf_case2869_pegase.m
+    - pglib_opf_case179_goc.m
+    - pglib_opf_case500_goc.m
+    - pglib_opf_case793_goc.m
+    - pglib_opf_case588_sdet.m
+    - pglib_opf_case2853_sdet.m
+    - pglib_opf_case4661_sdet.m
+    - pglib_opf_case197_snem.m
+    - pglib_opf_case1803_snem.m
+    - pglib_opf_case240_pserc.m
+    - pglib_opf_case200_activ.m
+
+sampling:
+  task_assets_per_network: 16
+  lawful_transformations_per_network: 30
+  harmful_transformations_per_network: 60
+  lawful_rule: one_to_one_authoritative_rename
+  harmful_families:
+    - task_asset_drop
+    - independent_merge
+    - wrong_one_to_many
+    - target_id_reuse
+    - endpoint_parameter_swap
+    - source_snapshot_mismatch
+  harmful_transformations_per_family_network: 10
+
+baselines:
+  - pcc_v1_without_task_footprint
+  - pcc_v2_task_semantic
+
+primary_endpoints:
+  - unsafe_release_rate
+  - lawful_acceptance_rate
+  - task_selector_preservation
+  - one_sided_clopper_pearson_upper_95
+
+go_no_go:
+  pcc_v2_harmful_accepts_max: 0
+  pcc_v2_lawful_acceptance_min: 0.99
+  minimum_absolute_unsafe_release_reduction_vs_v1: 0.20
+
+execution:
+  preserve_download_sha256: true
+  preserve_all_rows: true
+  generated_output_directory: outputs/pcc_v2_semantic_benchmark
+  no_outcome_dependent_case_selection: true

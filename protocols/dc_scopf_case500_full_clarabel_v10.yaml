@@ -1,0 +1,81 @@
+protocol: pcc_v2_dc_scopf_case500_full_clarabel_v10
+frozen_date: 2026-08-07
+status: frozen_before_v10_case500_execution
+parent_protocol: protocols/dc_scopf_case500_base_clarabel_v9.yaml
+
+trigger:
+  failed_state: case500_offset3_full_scopf
+  retained_attempts: 3
+  attempt_time_limit_seconds: 300
+  outcomes:
+    - time_limit_rejected
+    - time_limit_rejected
+    - time_limit_rejected
+  converged_objectives_without_optimal_certificate:
+    - 1836071.064367827
+    - 1836071.064367607
+    - 1836071.0643677444
+  interpretation: >-
+    HiGHS returned a stable primal objective but no optimal certificate under
+    the frozen resource limit. None of these attempts is promoted.
+
+unchanged_scientific_design:
+  networks_states_candidates_unchanged: true
+  finite_leave_one_out_constraint_sets_unchanged: true
+  costs_network_equations_gate_and_thresholds_unchanged: true
+  every_non_omitted_candidate_checked_at_terminal_solution: true
+  AlmostSolved_InsufficientProgress_NumericalError_and_time_limit_forbidden: true
+  thresholds_relaxed: false
+
+strict_full_scopf_amendment:
+  solver: Clarabel_0_11_1_settings_portfolio
+  order:
+    - default
+    - strong_regularization
+  acceptance:
+    status_required: Solved
+    maximum_original_model_constraint_violation: 1.0e-5
+    tol_gap_abs: 1.0e-7
+    tol_gap_rel: 1.0e-8
+    tol_feas: 1.0e-8
+  primal_and_dual_assignment: >-
+    Original Linopy constraint duals are reconstructed from Clarabel cone
+    duals; original greater-than rows receive the inverse sign after row
+    conversion. Variable-bound cone duals are excluded from constraint labels.
+  activity_rule: absolute_dual_above_1e-7_or_absolute_slack_at_or_below_1e-6
+  validation_basis: outputs/clarabel_highs_scopf_validation/summary.json
+  validation_pairs: 10
+  maximum_objective_relative_difference: 1.2218982260495656e-10
+  maximum_constraint_violation: 1.4097167877480388e-10
+  prefreeze_dual_smoke_test:
+    network: case39
+    load_scale: 0.9
+    candidates_with_complete_activity_records: 35
+    active_constraints: 4
+    nan_dual_records: 0
+
+alias_solution:
+  method: exact_top_one_constraint_generation
+  solver_portfolio: unchanged_Clarabel_default_then_strong
+  last_resort_fallback: fresh_exact_HiGHS_full_constraint_set_without_omitted_outage
+  fallback_note: >-
+    Row relaxation requires a retained HiGHS solver model and is therefore not
+    applicable when the full control was solved by Clarabel. The replacement
+    constructs the exact finite leave-one-out constraint set from scratch and
+    retains the same strict HiGHS optimal-only acceptance rule.
+  terminal_non_omitted_loading_max_pu: 1.000001
+
+execution:
+  result_schema: pcc-v2-dc-scopf-result-v10
+  protocol_version: pcc_v2_native_dc_scopf_case500_full_clarabel_v10
+  output_directory: outputs/pcc_v2_dc_scopf_case500_clarabel_portfolio
+  filename_suffix: v10
+  rerun_all_offsets_zero_through_nine: true
+  v2_through_v9_outputs_and_attempts_retained: true
+
+promotion_requirements:
+  completed_states: 10
+  rows_per_state: 582
+  terminal_all_non_omitted_constraints_feasible: true
+  harmful_solver_starts: 0
+  active_screening_recall_over_prior_four_networks: 1.0

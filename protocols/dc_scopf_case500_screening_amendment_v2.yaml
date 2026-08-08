@@ -1,0 +1,69 @@
+protocol: pcc_v2_dc_scopf_case500_screening_amendment_v2
+frozen_date: 2026-08-07
+status: frozen_before_any_case500_candidate_outcome
+parent_protocol: protocols/dc_scopf_protocol_v1.yaml
+
+trigger:
+  retained_attempt: case500_offset0_v2
+  retained_outcome: internal_solver_error_with_zero_rows_and_zero_harmful_solver_starts
+  diagnosis:
+    - the full 582-contingency model solves optimally in an isolated diagnostic run
+    - all 582 selected BODF columns are finite
+    - state-atomic buffering loses completed candidate rows if a later leave-one-out solve fails
+    - exhaustive leave-one-out construction is unnecessarily expensive for inactive convex constraints
+
+unchanged_scientific_design:
+  network: pglib_opf_case500_goc.m
+  input_hash_unchanged: true
+  load_scales_unchanged: true
+  all_582_graph_nonislanding_line_and_transformer_candidates_evaluated: true
+  optimization_formulation: PyPSA_security_constrained_convex_linear_power_flow_OPF
+  solver: HiGHS
+  transformer_explicit_loader_revision: pglib-pypsa-transformer-explicit-v2
+  gate_and_certificate_logic_unchanged: true
+  thresholds_relaxed: false
+
+exact_screening_rule:
+  mathematical_basis: >-
+    For a convex program, removing a constraint that is strictly slack at an
+    optimum leaves that optimum feasible and optimal. Only outage groups with
+    a binding security constraint or a nonzero dual can change the optimum.
+  active_outage_if:
+    - any_absolute_security_constraint_dual_gt_1.0e-7
+    - any_absolute_security_constraint_slack_lte_1.0e-6
+  active_outage_action: solve_the_exact_leave_one_out_model
+  inactive_outage_action: reuse_the_full_solution_as_a_valid_optimum_of_the_relaxed_model
+  post_contingency_check:
+    active_outage: PyPSA_explicit_remove_and_linear_power_flow_with_fixed_dispatch
+    inactive_outage: PyPSA_BODF_security_equation_at_the_reused_full_dispatch
+    rationale: >-
+      Inactive omissions reuse the identical full dispatch, so full and alias
+      consequences are identical by construction; the BODF equation is the
+      exact equation enforced by the PyPSA security-constrained model.
+  validation_requirement: >-
+    Before case500 evidence is promoted, the rule must recover every strict
+    false-secure event in every already-completed exhaustive v2 state.
+
+execution_reliability:
+  checkpoint_granularity: one_candidate_row
+  resume_key: [network, state_offset, omitted_candidate]
+  strict_solver_success: status_ok_and_condition_optimal
+  maximum_identical_solver_attempts: 3
+  every_attempt_logged: true
+  exhausted_retry_becomes_retained_terminal_failure: true
+  original_v2_failure_remains_archived: true
+
+analysis_amendment:
+  strict_false_secure_definition:
+    full_post_contingency_max_loading_pu_lte: 1.0001
+    alias_post_contingency_max_loading_pu_gt: 1.0001
+  legacy_alias_overlimit_field_retained: true
+  existing_overload_exacerbation_reported_separately: true
+  reason: >-
+    An alias overlimit is attributable to the omission as false-secure only
+    when the full intended model passes the same post-contingency threshold.
+
+claim_boundary:
+  - screening_is_an_exact_convex_active_constraint_reduction_not_candidate_subsampling
+  - candidate_rows_are_repeated_measurements_and_network_is_the_confirmatory_unit
+  - case500_v2_failure_and_v2_to_v3_amendment_must_be_reported
