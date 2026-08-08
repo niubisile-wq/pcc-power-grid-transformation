@@ -1,5 +1,5 @@
 {
-  "title": "Proof-Carrying Contracts for Task-Preserving Power-System Model Transformation",
+  "title": "Proof-Carrying Contracts for Task-Safe Power-System Model Transformation",
   "upload_type": "software",
   "description": "Research code and evidence package for task-bound proof-carrying contracts and controlled power-grid model-transformation experiments, including N-1 contingency analysis, AC optimal power flow, DC security-constrained optimal power flow, and CGMES interoperability checks.",
   "creators": [

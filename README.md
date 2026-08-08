@@ -189,7 +189,7 @@ Wei Xiong, School of Electrical and Electronic Engineering, Hubei University of 
 
 Please cite the archived release used in the manuscript:
 
-> Liu, Z. & Xiong, W. (2026). *Proof-Carrying Contracts for Task-Preserving Power-System
+> Liu, Z. & Xiong, W. (2026). *Proof-Carrying Contracts for Task-Safe Power-System
 > Model Transformation* (v1.0.0) [Software]. Zenodo.
 > https://doi.org/10.5281/zenodo.21796488
 

@@ -4,7 +4,7 @@
 
 Dear Editor,
 
-Please consider our manuscript, "Proof-Carrying Contracts for Task-Preserving Power-System Model Transformation," for publication as a Research Article in *Electric Power Systems Research*.
+Please consider our manuscript, "Proof-Carrying Contracts for Task-Safe Power-System Model Transformation," for publication as a Research Article in *Electric Power Systems Research*.
 
 Power-system studies increasingly depend on model conversion between exchange formats, internal representations, and optimization formulations. We identify an operationally consequential gap: a transformed model can remain parseable, signed, and numerically solvable while no longer representing the contingency or optimization task that the operator intended. Existing structural validation and solver-convergence checks do not close this gap.
 
